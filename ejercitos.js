@@ -76,12 +76,16 @@ export const AVAILABLE_ARMIES = ARMY_REGISTRY.map(army => ({ id: army.id, name: 
  * Helper function to handle the necessary merging logic that existed in the original loadArmyData.
  */
 function processArmyModule(armyModule, armyId) {
+    // The server now returns common magic items in a property called COMMON_MAGIC_ITEMS
+    const commonItems = armyModule.COMMON_MAGIC_ITEMS || commonMagicItemsDB; 
+
     // Centrally handle the merging of magic items
     if (armyModule.magicItemsDB) {
-        // deepMerge and commonMagicItemsDB are assumed to be imported or available globally in ejercitos.js
-        armyModule.magicItemsDB = deepMerge(JSON.parse(JSON.stringify(armyModule.magicItemsDB)), commonMagicItemsDB);
+        // USE the common items returned by the server
+        armyModule.magicItemsDB = deepMerge(JSON.parse(JSON.stringify(armyModule.magicItemsDB)), commonItems); 
     } else {
-        armyModule.magicItemsDB = JSON.parse(JSON.stringify(commonMagicItemsDB));
+        // USE the common items returned by the server
+        armyModule.magicItemsDB = JSON.parse(JSON.stringify(commonItems));
     }
 
     // --- RULESET MERGING (Copied from original logic) ---

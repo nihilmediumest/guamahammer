@@ -34,6 +34,20 @@ function initialize() {
 }
 
 function attachEventListeners() {
+    // Delegate all input changes through the editor container
+    editorContainer.addEventListener('change', (e) => {
+        const target = e.target;
+        if (target.hasAttribute('data-db-key')) {
+            if (target.hasAttribute('data-prop')) {
+                if (target.dataset.prop === 'mounts') {
+                    handleStringArrayChange(e);
+                } else {
+                    handleDataChange(e);
+                }
+            }
+        }
+    });
+
     fileLoader.addEventListener('change', handleFileLoad);
     deleteBtn.addEventListener('click', handleDelete);
     resetBtn.addEventListener('click', handleReset);
@@ -248,28 +262,28 @@ function buildUnitsUI(unitsDB) {
 
         let profileHtml = '<h4>Perfiles</h4><table><thead><tr><th>Nombre</th><th>M</th><th>HA</th><th>HP</th><th>F</th><th>R</th><th>H</th><th>I</th><th>A</th><th>L</th></tr></thead><tbody>';
         (unit.perfiles || []).forEach((p, index) => {
-            profileHtml += `<tr><td><input type="text" value="${p.nombre}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="perfiles[${index}].nombre" onchange="handleDataChange(event)"></td>`;
+            profileHtml += `<tr><td><input type="text" value="${p.nombre}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="perfiles[${index}].nombre"></td>`;
             Object.keys(p.stats).forEach(stat => {
-                 profileHtml += `<td><input type="text" value="${p.stats[stat]}" style="width:30px" data-db-key="${dbKey}" data-id="${unitName}" data-prop="perfiles[${index}].stats.${stat}" onchange="handleDataChange(event)"></td>`;
+                 profileHtml += `<td><input type="text" value="${p.stats[stat]}" style="width:30px" data-db-key="${dbKey}" data-id="${unitName}" data-prop="perfiles[${index}].stats.${stat}"></td>`;
             });
             profileHtml += `</tr>`;
         });
         profileHtml += '</tbody></table>';
 
         let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
-            <label>Points: <input type="number" step="0.5" value="${unit.points}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="points" onchange="handleDataChange(event)"></label>
-            <label>FOC: <select data-db-key="${dbKey}" data-id="${unitName}" data-prop="foc" onchange="handleDataChange(event)">
+            <label>Points: <input type="number" step="0.5" value="${unit.points}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="points"></label>
+            <label>FOC: <select data-db-key="${dbKey}" data-id="${unitName}" data-prop="foc">
                 ${['Lord','Hero','Core','Special','Rare'].map(foc => `<option value="${foc}" ${unit.foc === foc ? 'selected' : ''}>${foc}</option>`).join('')}
             </select></label>
-            <label>Subfaction: <input type="text" value="${unit.subfaction || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="subfaction" onchange="handleDataChange(event)"></label>
-            <label>Min: <input type="number" value="${unit.min || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min" onchange="handleDataChange(event)"></label>
-            <label>Max: <input type="number" value="${unit.max || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max" onchange="handleDataChange(event)"></label>
-            <label>Max Regalos: <input type="number" value="${unit.maxRegalos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxRegalos" onchange="handleDataChange(event)"></label>
-            <label>Max Iconos: <input type="number" value="${unit.maxIconos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxIconos" onchange="handleDataChange(event)"></label>
-            <label>Magic Banner: <input type="number" value="${unit.magicBanner || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="magicBanner" onchange="handleDataChange(event)"></label>
-            <label>Champ Items: <input type="number" value="${unit.champItems || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="champItems" onchange="handleDataChange(event)"></label>
-            <label>Max Magic Items: <input type="number" value="${unit.maxMagicItems || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxMagicItems" onchange="handleDataChange(event)"></label>
-            <label>Max Relics: <input type="number" value="${unit.maxRelics || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxRelics" onchange="handleDataChange(event)"></label>
+            <label>Subfaction: <input type="text" value="${unit.subfaction || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="subfaction"></label>
+            <label>Min: <input type="number" value="${unit.min || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min"></label>
+            <label>Max: <input type="number" value="${unit.max || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max"></label>
+            <label>Max Regalos: <input type="number" value="${unit.maxRegalos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxRegalos"></label>
+            <label>Max Iconos: <input type="number" value="${unit.maxIconos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxIconos"></label>
+            <label>Magic Banner: <input type="number" value="${unit.magicBanner || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="magicBanner"></label>
+            <label>Champ Items: <input type="number" value="${unit.champItems || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="champItems"></label>
+            <label>Max Magic Items: <input type="number" value="${unit.maxMagicItems || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxMagicItems"></label>
+            <label>Max Relics: <input type="number" value="${unit.maxRelics || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxRelics"></label>
         </div>`;
 
         let commandHtml = '<h4>Grupo de Mando</h4><div class="command-grid">';
@@ -287,20 +301,20 @@ function buildUnitsUI(unitsDB) {
         commandHtml += '</div>';
         
         const textAreasHtml = `
-            <div><label>Equipo:</label><textarea data-db-key="${dbKey}" data-id="${unitName}" data-prop="equipo" onchange="handleDataChange(event)">${unit.equipo || ''}</textarea></div>
-            <div><label>Reglas Especiales:</label><textarea data-db-key="${dbKey}" data-id="${unitName}" data-prop="reglasEspeciales" onchange="handleDataChange(event)">${unit.reglasEspeciales || ''}</textarea></div>`;
+            <div><label>Equipo:</label><textarea data-db-key="${dbKey}" data-id="${unitName}" data-prop="equipo">${unit.equipo || ''}</textarea></div>
+            <div><label>Reglas Especiales:</label><textarea data-db-key="${dbKey}" data-id="${unitName}" data-prop="reglasEspeciales">${unit.reglasEspeciales || ''}</textarea></div>`;
 
         let optionsHtml = '<h4>Opciones</h4><table><thead><tr><th>Nombre (n)</th><th>Coste (p)</th><th>Resumen (summary)</th></tr></thead><tbody>';
         (unit.options || []).forEach((opt, index) => {
             optionsHtml += `<tr>
-                <td><input type="text" value="${opt.n || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="options[${index}].n" onchange="handleDataChange(event)"></td>
-                <td><input type="number" value="${opt.p || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="options[${index}].p" onchange="handleDataChange(event)" style="width: 70px;"></td>
-                <td><input type="text" value="${opt.summary || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="options[${index}].summary" onchange="handleDataChange(event)"></td>
+                <td><input type="text" value="${opt.n || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="options[${index}].n"></td>
+                <td><input type="number" value="${opt.p || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="options[${index}].p" style="width: 70px;"></td>
+                <td><input type="text" value="${opt.summary || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="options[${index}].summary"></td>
             </tr>`;
         });
         optionsHtml += '</tbody></table>';
 
-        const mountsHtml = `<div><label>Monturas (separadas por coma):</label><input type="text" value="${(unit.mounts || []).join(', ')}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="mounts" onchange="handleStringArrayChange(event)"></div>`;
+        const mountsHtml = `<div><label>Monturas (separadas por coma):</label><input type="text" value="${(unit.mounts || []).join(', ')}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="mounts"></div>`;
         
 
        card.innerHTML = `${warningHtml}${header}<div class="unit-layout"><div>${profileHtml}</div><div>${attributesHtml}${commandHtml}</div></div>${textAreasHtml}${optionsHtml}${mountsHtml}`;
@@ -326,14 +340,14 @@ function buildMagicItemsUI(magicItemsDB) {
                     <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}"> Mark for Deletion</label>
                 </div>
                 <div class="attributes-grid">
-                    <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="points" onchange="handleDataChange(event)"></label>
-                    <label>Relic: <select data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="relic" onchange="handleDataChange(event)">
+                    <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="points"></label>
+                    <label>Relic: <select data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="relic">
                         <option value="true" ${item.relic === true ? 'selected' : ''}>Yes</option>
                         <option value="false" ${item.relic !== true ? 'selected' : ''}>No</option>
                     </select></label>
                 </div>
                 <label>Summary:</label>
-                <textarea data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="summary" onchange="handleDataChange(event)">${item.summary || ''}</textarea>
+                <textarea data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>
             `;
             editorContainer.appendChild(card);
         }
@@ -352,8 +366,8 @@ function buildSimpleUI(db, dbKey) {
         const card = document.createElement('div');
         card.className = 'entry-card';
         card.innerHTML = `<div class="entry-header"><h3>${itemName}</h3><label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Mark for Deletion</label></div>
-        <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="points" onchange="handleDataChange(event)"></label>
-        <label>Summary:</label><textarea data-db-key="${dbKey}" data-id="${itemName}" data-prop="summary" onchange="handleDataChange(event)">${item.summary || ''}</textarea>`;
+        <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="points"></label>
+        <label>Summary:</label><textarea data-db-key="${dbKey}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>`;
         editorContainer.appendChild(card);
     }
 }
