@@ -65,7 +65,7 @@ app.get('/api/get-army', async (req, res) => {
     }
 
     const tempFilePath = path.join(os.tmpdir(), `${factionId}-${Date.now()}.mjs`);
-    const comunFilePath = path.join(__dirname, 'comun.js'); // Path to comun.js
+    const comunFilePath = path.join(__dirname, 'comun.js');
 
     try {
         let originalFilePath;
@@ -77,34 +77,33 @@ app.get('/api/get-army', async (req, res) => {
 
         let fileContent = await fs.readFile(originalFilePath, 'utf8');
 
-        // Remove the problematic import AND the problematic definition
+        // --- STEP 1: Remove the client-side import statement ---
         fileContent = fileContent.replace(/^import.*comun\.js.*?;/gm, '');
 
-        // Temporarily comment out the line that causes the ReferenceError when parsing Necrarca or Strigoi data
-        const importRegex = /commonMagicItemsDB/g;
-        if (importRegex.test(fileContent)) {
-            fileContent = fileContent.replace(/commonMagicItemsDB/g, 'window.commonMagicItemsDB');
+        // --- STEP 2: Handle the structural dependency issue (The final fix) ---
+        // This targets files (like cvstr.js) that attempt to use commonMagicItemsDB in their local scope.
+        // It replaces the usage with an empty object literal '{}', allowing Node to parse the file.
+        const structuralFixRegex = /commonMagicItemsDB/g;
+        if (originalFilePath.includes('cvstr.js') || originalFilePath.includes('cvnec.js')) {
+            fileContent = fileContent.replace(structuralFixRegex, '{}');
         }
 
+        // --- FINAL STEP: Dynamic Import ---
+        const moduleUrl = url.pathToFileURL(tempFilePath).href;
         await fs.writeFile(tempFilePath, fileContent);
 
-        // Convert the local path to a valid file:// URL
-        const moduleUrl = url.pathToFileURL(tempFilePath).href;
         const armyModule = await import(moduleUrl + '?' + Date.now());
         let dataObject = armyModule.default;
-        
-        // Read comun.js data and add it to the response object
+
+        // Read comun.js data and attach it (for ejercitos.js to merge later).
         const comunContent = await fs.readFile(comunFilePath, 'utf8');
         const comunTempPath = path.join(os.tmpdir(), `comun-${Date.now()}.mjs`);
-        
         await fs.writeFile(comunTempPath, comunContent);
-        // Convert the comun.js path to a valid file:// URL
-        const comunModuleUrl = url.pathToFileURL(comunTempPath).href;
-        const comunModule = await import(comunModuleUrl + '?' + Date.now());
-        const commonItems = comunModule.commonMagicItemsDB;
+        const comunModule = await import(url.pathToFileURL(comunTempPath).href + '?' + Date.now());
+        dataObject.COMMON_MAGIC_ITEMS = comunModule.commonMagicItemsDB;
 
-        // Attach the common magic items separately to the response object
-        dataObject.COMMON_MAGIC_ITEMS = commonItems;
+        // Clean up the temporary comun file
+        await fs.unlink(comunTempPath);
 
         return res.status(200).json(dataObject);
 
