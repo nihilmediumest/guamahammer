@@ -202,8 +202,15 @@ function render() {
             editorContainer.innerHTML += '<h2>Iconos Demoníacos</h2>';
             buildSimpleUI(currentData.iconosDemoniacosDB || {}, 'iconosDemoniacosDB');
             break;
+        case 'specialProfiles': // <-- ADD THIS LINE
+            const dbKey = getDbKeyForCategory(mainCategory, currentData);
+            buildComplexEntryUI(currentData[dbKey] || {}, dbKey);
+        break;
         default:
             buildSimpleUI(currentData[dbKey] || {}, dbKey);
+    }
+     if (category === 'specialProfiles') {
+        return Object.keys(data).find(k => k.startsWith('specialProfilesDB')) || 'specialProfilesDB';
     }
 }
 
@@ -228,6 +235,10 @@ function updateSubFilters() {
                 filters = [...new Set(Object.values(currentData.armySkillsDB).map(s => s.type))];
             }
             break;
+        case 'specialProfiles': // <-- ADD THIS CASE BLOCK
+            break;
+    default:
+        subFilterHtml = '';
     }
 
     subFilterGroup.innerHTML = html || filters.map(f => createCheckboxHtml(f)).join('');
@@ -286,7 +297,22 @@ function buildComplexEntryUI(db, dbKey) {
             profileHtml += '</tbody></table>';
             profileHtml += `<button class="add-row-btn" data-action="add-profile" data-db-key="${dbKey}" data-id="${entryName}">+ Add Profile</button>`;
         }
-
+let specialAddonsHtml = '';
+// Only build this section if the main category is 'units'
+if (activeFilters.mainCategory === 'units' && entry.hasOwnProperty('specialAddons')) {
+    specialAddonsHtml = '<h4>Unidades Complementarias (Addons)</h4><table><thead><tr><th>Nombre (name)</th><th>Coste (points)</th><th>Max (max)</th><th>Clave de Perfil (profileKey)</th><th></th></tr></thead><tbody>';
+    (entry.specialAddons || []).forEach((addon, index) => {
+        specialAddonsHtml += `<tr>
+            <td><input type="text" value="${addon.name || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].name"></td>
+            <td><input type="number" value="${addon.points || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].points" style="width: 70px;"></td>
+            <td><input type="number" value="${addon.max || 1}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].max" style="width: 70px;"></td>
+            <td><input type="text" value="${addon.profileKey || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].profileKey" placeholder="e.g., Fanático"></td>
+            <td><button class="delete-row-btn" data-action="delete-addon" data-db-key="${dbKey}" data-id="${entryName}" data-index="${index}">Delete</button></td>
+        </tr>`;
+    });
+    specialAddonsHtml += '</tbody></table>';
+    specialAddonsHtml += `<button class="add-row-btn" data-action="add-addon" data-db-key="${dbKey}" data-id="${entryName}">+ Add Addon</button>`;
+}
 
    let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
         <label>Points: <input type="number" step="0.5" value="${entry.points || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="points"></label>
@@ -353,7 +379,9 @@ optionsHtml += '</tbody></table>';
 optionsHtml += `<button class="add-row-btn" data-action="add-option" data-db-key="${dbKey}" data-id="${entryName}">+ Add Option</button>`;
         const mountsHtml = entry.mounts ? `<div><label>Monturas (separadas por coma):</label><input type="text" value="${(entry.mounts || []).join(', ')}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="mounts"></div>` : '';
         
-       card.innerHTML = `${warningHtml}${header}<div class="unit-layout"><div>${profileHtml}</div><div>${attributesHtml}${commandHtml}</div></div>${textAreasHtml}${optionsHtml}${mountsHtml}`;
+       // Corrected final assembly line
+        card.innerHTML = `${warningHtml}${header}<div class="unit-layout"><div>${profileHtml}</div><div>${attributesHtml}${commandHtml}</div></div>${textAreasHtml}${optionsHtml}${specialAddonsHtml}${mountsHtml}`;
+
         editorContainer.appendChild(card);
     }
 }
@@ -512,6 +540,19 @@ function handleRowAction(event) {
         case 'delete-option':
             targetItem.options.splice(index, 1);
             break;
+           // --- ADD THE TWO CASES BELOW ---
+case 'add-addon':
+    if (!targetItem.specialAddons) {
+        targetItem.specialAddons = []; // Initialize if it doesn't exist
+    }
+    targetItem.specialAddons.push({ name: "Nuevo Addon", points: 0, max: 1, profileKey: "" });
+    break;
+
+case 'delete-addon':
+    targetItem.specialAddons.splice(index, 1);
+    break;
+ 
+
     }
 
     // Re-render to show the changes
@@ -629,6 +670,7 @@ function handleAddNew() {
 function createNewTemplate(category) {
     if (category === 'units') return { faction: "new", foc: "Core", points: 10, min: 1, max: 20, equipo: "", reglasEspeciales: "", options: [], perfiles: [{ nombre: "Nuevo Perfil", stats: { M: 4, HA: 3, HP: 3, F: 3, R: 3, H: 1, I: 3, A: 1, L: 7 } }] };
     if (category === 'mounts') return { foc: "Character", points: 15, equipo: "", reglasEspeciales: "", perfiles: [{ nombre: "Nueva Montura", stats: { M: 8, HA: 3, HP: 0, F: 4, R: 4, H: 1, I: 3, A: 1, L: 6 } }] };
+      if (category === 'specialProfiles') return { perfiles: [{ nombre: "Nuevo Perfil", stats: {} }] };
     if (category === 'magicItems') return { points: 5, relic: false, summary: "Nueva descripción." };
     return { points: 5, summary: "Nueva descripción." };
 }
