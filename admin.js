@@ -587,20 +587,7 @@ function formatDataForSaving(data) {
 }
 
 // REPLACE the existing handleDownloadFromServer function
-function handleDownloadFromServer() {
-    if (!currentData || !currentData.FACTION_ID) {
-        alert("No server-side army is currently loaded.");
-        return;
-    }
-    const factionId = currentData.FACTION_ID;
-    const fileName = `${factionId}-${getFormattedTimestamp()}.js`;
-    const a = document.createElement('a');
-    a.href = `/armies/${factionId}.js`; 
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
+handleDownloadFromServer
 // admin.js
 
 // ... (your existing handleDownloadAsFile function should be right above this)
