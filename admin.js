@@ -19,7 +19,7 @@ let currentFileName = 'edited-army.js';
 let isDataFromLocalFile = false;
 let activeFilters = { mainCategory: '', subCategories: new Set(), faction: '' };
 // ===================================================================================
-// --- UI STATE HELPERS --- (ADD THIS NEW SECTION)
+// --- UI STATE HELPERS ---
 // ===================================================================================
 function disableButtons() {
     deleteBtn.disabled = true;
@@ -52,14 +52,22 @@ function attachEventListeners() {
     // Delegate all input changes through the editor container
     editorContainer.addEventListener('change', (e) => {
         const target = e.target;
-        if (target.hasAttribute('data-db-key')) {
-            if (target.hasAttribute('data-prop')) {
-                if (target.dataset.prop === 'mounts') {
-                    handleStringArrayChange(e);
-                } else {
-                    handleDataChange(e);
-                }
+        if (target.matches('.entry-title-input')) {
+            handleRename(e);
+        } else if (target.hasAttribute('data-db-key')) {
+            if (target.dataset.prop === 'mounts') {
+                handleStringArrayChange(e);
+            } else {
+                handleDataChange(e);
             }
+        }
+    });
+
+    // NEW: Add a click listener for dynamic row buttons
+    editorContainer.addEventListener('click', (e) => {
+        const target = e.target;
+        if (target.matches('.add-row-btn') || target.matches('.delete-row-btn')) {
+            handleRowAction(e);
         }
     });
 
@@ -101,24 +109,6 @@ function attachEventListeners() {
             render();
         }
     });
-    // In admin.js
-
-function populateFactionSelector() {
-    const previousSelection = factionSelector.value;
-    factionSelector.innerHTML = '<option value="">-- Select Army --</option>';
-    
-    // 1. Load all the real armies from ejercitos.js
-    ARMY_REGISTRY.forEach(army => {
-        factionSelector.innerHTML += `<option value="${army.id}">${army.name}</option>`;
-    });
-
-    // 2. Unconditionally add the "Objetos Comunes" option to the list.
-    // This makes it editable in the admin panel at all times.
-    factionSelector.innerHTML += `<option value="comun">Objetos Mágicos Comunes</option>`;
-
-    // Restore the previous selection if it exists and we're not loading a local file
-    factionSelector.value = isDataFromLocalFile ? '' : previousSelection;
-}
 }
 
 // ===================================================================================
@@ -200,7 +190,8 @@ function render() {
     
     switch (activeFilters.mainCategory) {
         case 'units':
-            buildUnitsUI(currentData[dbKey] || {});
+        case 'mounts': // NEW: Mounts use the same complex UI builder
+            buildComplexEntryUI(currentData[dbKey] || {}, dbKey);
             break;
         case 'magicItems':
             buildMagicItemsUI(currentData.magicItemsDB || {});
@@ -224,6 +215,7 @@ function updateSubFilters() {
 
     switch (activeFilters.mainCategory) {
         case 'units': filters = ['Lord', 'Hero', 'Core', 'Special', 'Rare']; break;
+        case 'mounts': filters = ['Character', 'Chariot', 'Monstrous']; break; // Example filters for mounts
         case 'magicItems': filters = ['Arma Mágica', 'Armadura Mágica', 'Talismán', 'Artefacto Arcano', 'Objeto Hechizado', 'Estandarte Mágico']; break;
         case 'demonicGifts':
             html = `<strong>Regalos:</strong>`;
@@ -239,7 +231,6 @@ function updateSubFilters() {
     }
 
     subFilterGroup.innerHTML = html || filters.map(f => createCheckboxHtml(f)).join('');
-    populateFactionSelector();
 }
 
 function createCheckboxHtml(value) {
@@ -250,16 +241,12 @@ function populateFactionSelector() {
     const previousSelection = factionSelector.value;
     factionSelector.innerHTML = '<option value="">-- Select Army --</option>';
     
-    // 1. Load all the real armies from ejercitos.js
     ARMY_REGISTRY.forEach(army => {
         factionSelector.innerHTML += `<option value="${army.id}">${army.name}</option>`;
     });
 
-    // 2. Unconditionally add the "Objetos Comunes" option to the list.
-    // This makes it editable in the admin panel at all times.
     factionSelector.innerHTML += `<option value="comun">Objetos Mágicos Comunes</option>`;
 
-    // Restore the previous selection if it exists and we're not loading a local file
     factionSelector.value = isDataFromLocalFile ? '' : previousSelection;
 }
 
@@ -267,101 +254,113 @@ function populateFactionSelector() {
 // --- UI BUILDERS ---
 // ===================================================================================
 
-function buildUnitsUI(unitsDB) {
-    for (const unitName in unitsDB) {
-        const unit = unitsDB[unitName];
-        if (activeFilters.subCategories.size > 0 && !activeFilters.subCategories.has(unit.foc)) continue;
+/**
+ * NEW: Generalized UI builder for complex entries like Units and Mounts.
+ * @param {object} db - The database object (e.g., unitsDB, mountsDB).
+ * @param {string} dbKey - The key for the database (e.g., 'unitsDB').
+ */
+function buildComplexEntryUI(db, dbKey) {
+    for (const entryName in db) {
+        const entry = db[entryName];
+        if (activeFilters.subCategories.size > 0 && !activeFilters.subCategories.has(entry.foc)) continue;
 
         const card = document.createElement('div');
         card.className = 'entry-card';
-        const dbKey = getDbKeyForCategory('units');
         
-        const warningHtml = unit.warning ? `<p class="warning-text" style="color: #FBBF24; font-style: italic;">${unit.warning}</p>` : '';
-        const header = `<div class="entry-header"><h3>${unitName}</h3><label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${unitName}"> Mark for Deletion</label></div>`;
+        const warningHtml = entry.warning ? `<p class="warning-text" style="color: #FBBF24; font-style: italic;">${entry.warning}</p>` : '';
+        const header = `<div class="entry-header">
+            <input type="text" class="entry-title-input" value="${entryName}" data-db-key="${dbKey}" data-id="${entryName}">
+            <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${entryName}"> Mark for Deletion</label>
+        </div>`;
 
-        let profileHtml = '<h4>Perfiles</h4><table><thead><tr><th>Nombre</th><th>M</th><th>HA</th><th>HP</th><th>F</th><th>R</th><th>H</th><th>I</th><th>A</th><th>L</th></tr></thead><tbody>';
-        (unit.perfiles || []).forEach((p, index) => {
-            profileHtml += `<tr><td><input type="text" value="${p.nombre}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="perfiles[${index}].nombre"></td>`;
-            Object.keys(p.stats).forEach(stat => {
-                 profileHtml += `<td><input type="text" value="${p.stats[stat]}" style="width:30px" data-db-key="${dbKey}" data-id="${unitName}" data-prop="perfiles[${index}].stats.${stat}"></td>`;
+        let profileHtml = '';
+        if (entry.perfiles) {
+            profileHtml = '<h4>Perfiles</h4><table><thead><tr><th>Nombre</th><th>M</th><th>HA</th><th>HP</th><th>F</th><th>R</th><th>H</th><th>I</th><th>A</th><th>L</th><th></th></tr></thead><tbody>';
+            (entry.perfiles || []).forEach((p, index) => {
+                profileHtml += `<tr><td><input type="text" value="${p.nombre}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="perfiles[${index}].nombre"></td>`;
+                Object.keys(p.stats).forEach(stat => {
+                     profileHtml += `<td><input type="text" value="${p.stats[stat]}" style="width:30px" data-db-key="${dbKey}" data-id="${entryName}" data-prop="perfiles[${index}].stats.${stat}"></td>`;
+                });
+                profileHtml += `<td><button class="delete-row-btn" data-action="delete-profile" data-db-key="${dbKey}" data-id="${entryName}" data-index="${index}">Delete</button></td></tr>`;
             });
-            profileHtml += `</tr>`;
-        });
-        profileHtml += '</tbody></table>';
-
+            profileHtml += '</tbody></table>';
+            profileHtml += `<button class="add-row-btn" data-action="add-profile" data-db-key="${dbKey}" data-id="${entryName}">+ Add Profile</button>`;
+        }
 
 
    let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
-        <label>Points: <input type="number" step="0.5" value="${unit.points || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="points"></label>
-        <label>FOC: <select data-db-key="${dbKey}" data-id="${unitName}" data-prop="foc">
-            ${['Lord','Hero','Core','Special','Rare'].map(foc => `<option value="${foc}" ${unit.foc === foc ? 'selected' : ''}>${foc}</option>`).join('')}
+        <label>Points: <input type="number" step="0.5" value="${entry.points || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="points"></label>
+        <label>FOC: <select data-db-key="${dbKey}" data-id="${entryName}" data-prop="foc">
+            ${['Lord','Hero','Core','Special','Rare','Character','Chariot','Monstrous'].map(foc => `<option value="${foc}" ${entry.foc === foc ? 'selected' : ''}>${foc}</option>`).join('')}
         </select></label>
-        <label>Subfaction: <input type="text" value="${unit.subfaction || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="subfaction"></label>
+        <label>Subfaction: <input type="text" value="${entry.subfaction || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="subfaction"></label>
         
        
         ${
-            (unit.composition && unit.composition.type === 'ratioBased')
+            (entry.composition && entry.composition.type === 'ratioBased')
             ? `
                 <div class="composition-group">
-                    <label>Min Primary: <input type="number" value="${unit.min?.primary || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min.primary"></label>
-                    <label>Min Secondary: <input type="number" value="${unit.min?.secondary || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min.secondary"></label>
-                    <label>Max Primary: <input type="number" value="${unit.max?.primary || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max.primary"></label>
-                    <label>Max Secondary: <input type="number" value="${unit.max?.secondary || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max.secondary"></label>
+                    <label>Min Primary: <input type="number" value="${entry.min?.primary || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min.primary"></label>
+                    <label>Min Secondary: <input type="number" value="${entry.min?.secondary || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min.secondary"></label>
+                    <label>Max Primary: <input type="number" value="${entry.max?.primary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max.primary"></label>
+                    <label>Max Secondary: <input type="number" value="${entry.max?.secondary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max.secondary"></label>
                 </div>
             `
             : `
-                <label>Min: <input type="number" value="${unit.min || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min"></label>
-                <label>Max: <input type="number" value="${unit.max || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max"></label>
+                <label>Min: <input type="number" value="${entry.min || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min"></label>
+                <label>Max: <input type="number" value="${entry.max || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max"></label>
             `
         }
 
-        <label>Max Regalos: <input type="number" value="${unit.maxRegalos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxRegalos"></label>
-        <label>Max Iconos: <input type="number" value="${unit.maxIconos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxIconos"></label>
-        <label>Magic Banner: <input type="number" value="${unit.magicBanner || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="magicBanner"></label>
-        <label>Champ Items: <input type="number" value="${unit.champItems || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="champItems"></label>
-        <label>Max Magic Items: <input type="number" value="${unit.maxMagicItems || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxMagicItems"></label>
-        <label>Max Relics: <input type="number" value="${unit.maxRelics || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxRelics"></label>
+        <label>Max Regalos: <input type="number" value="${entry.maxRegalos || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxRegalos"></label>
+        <label>Max Iconos: <input type="number" value="${entry.maxIconos || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxIconos"></label>
+        <label>Magic Banner: <input type="number" value="${entry.magicBanner || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="magicBanner"></label>
+        <label>Champ Items: <input type="number" value="${entry.champItems || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="champItems"></label>
+        <label>Max Magic Items: <input type="number" value="${entry.maxMagicItems || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxMagicItems"></label>
+        <label>Max Relics: <input type="number" value="${entry.maxRelics || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxRelics"></label>
     </div>`;
 
 
-
-        let commandHtml = '<h4>Grupo de Mando</h4><div class="command-grid">';
-        if (unit.command) {
+        let commandHtml = '';
+        if (entry.command) {
+            commandHtml = '<h4>Grupo de Mando</h4><div class="command-grid">';
             ['c', 's', 'm'].forEach(cmdType => {
-                const cmd = unit.command[cmdType];
-               // CORRECTED CODE:
-if (cmd) {
-    commandHtml += `<div>
-        <label><b>${cmdType.toUpperCase()}:</b> Nombre: <input type="text" value="${cmd.n || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="command.${cmdType}.n"></label>
-        <label>Coste: <input type="number" value="${cmd.p || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="command.${cmdType}.p"></label>
-    </div>`;
-}
-
+                const cmd = entry.command[cmdType];
+                if (cmd) {
+                    commandHtml += `<div>
+                        <label><b>${cmdType.toUpperCase()}:</b> Nombre: <input type="text" value="${cmd.n || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="command.${cmdType}.n"></label>
+                        <label>Coste: <input type="number" value="${cmd.p || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="command.${cmdType}.p"></label>
+                    </div>`;
+                }
             });
+            commandHtml += '</div>';
         }
-        commandHtml += '</div>';
         
         const textAreasHtml = `
-            <div><label>Equipo:</label><textarea data-db-key="${dbKey}" data-id="${unitName}" data-prop="equipo">${unit.equipo || ''}</textarea></div>
-            <div><label>Reglas Especiales:</label><textarea data-db-key="${dbKey}" data-id="${unitName}" data-prop="reglasEspeciales">${unit.reglasEspeciales || ''}</textarea></div>`;
+            <div><label>Equipo:</label><textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="equipo">${entry.equipo || ''}</textarea></div>
+            <div><label>Reglas Especiales:</label><textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="reglasEspeciales">${entry.reglasEspeciales || ''}</textarea></div>`;
 
-        let optionsHtml = '<h4>Opciones</h4><table><thead><tr><th>Nombre (n)</th><th>Coste (p)</th><th>Resumen (summary)</th></tr></thead><tbody>';
-        (unit.options || []).forEach((opt, index) => {
-            optionsHtml += `<tr>
-                <td><input type="text" value="${opt.n || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="options[${index}].n"></td>
-                <td><input type="number" value="${opt.p || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="options[${index}].p" style="width: 70px;"></td>
-                <td><input type="text" value="${opt.summary || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="options[${index}].summary"></td>
-            </tr>`;
-        });
-        optionsHtml += '</tbody></table>';
-
-        const mountsHtml = `<div><label>Monturas (separadas por coma):</label><input type="text" value="${(unit.mounts || []).join(', ')}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="mounts"></div>`;
+        let optionsHtml = '';
+        if (entry.options) {
+             optionsHtml = '<h4>Opciones</h4><table><thead><tr><th>Nombre (n)</th><th>Coste (p)</th><th>Resumen (summary)</th><th></th></tr></thead><tbody>';
+            (entry.options || []).forEach((opt, index) => {
+                optionsHtml += `<tr>
+                    <td><input type="text" value="${opt.n || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].n"></td>
+                    <td><input type="number" value="${opt.p || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].p" style="width: 70px;"></td>
+                    <td><input type="text" value="${opt.summary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].summary"></td>
+                    <td><button class="delete-row-btn" data-action="delete-option" data-db-key="${dbKey}" data-id="${entryName}" data-index="${index}">Delete</button></td>
+                </tr>`;
+            });
+            optionsHtml += '</tbody></table>';
+            optionsHtml += `<button class="add-row-btn" data-action="add-option" data-db-key="${dbKey}" data-id="${entryName}">+ Add Option</button>`;
+        }
+        const mountsHtml = entry.mounts ? `<div><label>Monturas (separadas por coma):</label><input type="text" value="${(entry.mounts || []).join(', ')}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="mounts"></div>` : '';
         
-
        card.innerHTML = `${warningHtml}${header}<div class="unit-layout"><div>${profileHtml}</div><div>${attributesHtml}${commandHtml}</div></div>${textAreasHtml}${optionsHtml}${mountsHtml}`;
         editorContainer.appendChild(card);
     }
 }
+
 
 function buildMagicItemsUI(magicItemsDB) {
     for (const categoryName in magicItemsDB) {
@@ -377,7 +376,7 @@ function buildMagicItemsUI(magicItemsDB) {
             const dbKey = getDbKeyForCategory('magicItems');
             card.innerHTML = `
                 <div class="entry-header">
-                    <h4>${itemName}</h4>
+                    <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">
                     <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}"> Mark for Deletion</label>
                 </div>
                 <div class="attributes-grid">
@@ -406,7 +405,10 @@ function buildSimpleUI(db, dbKey) {
 
         const card = document.createElement('div');
         card.className = 'entry-card';
-        card.innerHTML = `<div class="entry-header"><h3>${itemName}</h3><label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Mark for Deletion</label></div>
+        card.innerHTML = `<div class="entry-header">
+            <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-id="${itemName}">
+            <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Mark for Deletion</label>
+        </div>
         <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="points"></label>
         <label>Summary:</label><textarea data-db-key="${dbKey}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>`;
         editorContainer.appendChild(card);
@@ -417,8 +419,6 @@ function buildSimpleUI(db, dbKey) {
 // --- DATA MANIPULATION ---
 // ===================================================================================
 
-
-// REPLACE this function to simplify it again.
 function handleDataChange(event) {
     const input = event.target;
     const { dbKey, category, id, prop } = input.dataset;
@@ -428,30 +428,80 @@ function handleDataChange(event) {
     if (input.tagName === 'SELECT' && input.value === 'true') value = true;
     if (input.tagName === 'SELECT' && input.value === 'false') value = false;
     
-    const keys = prop.replace(/\[(\d+)\]/g, '.$1').split('.');
+    const keys = prop.replace(/$$(\d+)$$/g, '.\$1').split('.');
     let target = category ? currentData[dbKey]?.[category]?.[id] : currentData[dbKey]?.[id];
     if (!target) return;
 
     for (let i = 0; i < keys.length - 1; i++) {
-        // Safety check to create nested objects if they don't exist
         if (!target[keys[i]]) target[keys[i]] = {}; 
         target = target[keys[i]];
     }
     target[keys[keys.length - 1]] = value;
 }
 
+// NEW: Handles renaming of an entry (changing the object key)
+function handleRename(event) {
+    const input = event.target;
+    const { dbKey, category } = input.dataset;
+    const oldName = input.dataset.id;
+    const newName = input.value.trim();
 
-function handleJsonDataChange(event) {
-    const textarea = event.target;
-    try {
-        const jsonData = JSON.parse(textarea.value);
-        const fakeEvent = { target: { ...textarea.dataset, value: jsonData } };
-        handleDataChange(fakeEvent);
-        textarea.style.borderColor = '';
-    } catch (e) {
-        textarea.style.borderColor = 'red';
+    if (newName === oldName || !newName) {
+        input.value = oldName; // Revert if name is empty or unchanged
+        return;
     }
+
+    const targetDb = category ? currentData[dbKey][category] : currentData[dbKey];
+
+    if (targetDb[newName]) {
+        alert(`Error: An entry with the name "${newName}" already exists.`);
+        input.value = oldName; // Revert
+        return;
+    }
+
+    // Perform the rename
+    targetDb[newName] = targetDb[oldName];
+    delete targetDb[oldName];
+
+    // CRITICAL: Re-render the entire UI.
+    // This is necessary because all data attributes on child elements of the
+    // renamed card are now incorrect (they still reference the old name).
+    // A full re-render is the safest way to update everything.
+    render();
 }
+
+// NEW: Handles adding/deleting rows in profiles/options arrays
+function handleRowAction(event) {
+    const button = event.target;
+    const { action, dbKey, id, index } = button.dataset;
+
+    const targetItem = currentData[dbKey]?.[id];
+    if (!targetItem) return;
+
+    switch (action) {
+        case 'add-profile':
+            if (!targetItem.perfiles) targetItem.perfiles = [];
+            targetItem.perfiles.push({
+                nombre: "Nuevo Perfil",
+                stats: { M: 4, HA: 3, HP: 3, F: 3, R: 3, H: 1, I: 3, A: 1, L: 7 }
+            });
+            break;
+        case 'delete-profile':
+            targetItem.perfiles.splice(index, 1);
+            break;
+        case 'add-option':
+             if (!targetItem.options) targetItem.options = [];
+            targetItem.options.push({ n: 'Nueva Opción', p: 0, summary: '' });
+            break;
+        case 'delete-option':
+            targetItem.options.splice(index, 1);
+            break;
+    }
+
+    // Re-render to show the changes
+    render();
+}
+
 
 function handleStringArrayChange(event) {
     const input = event.target;
@@ -477,9 +527,6 @@ function handleDelete() {
     }
 }
 
-
-
-// REPLACE the entire handleAddNew function with this final, enhanced version
 function handleAddNew() {
     const count = document.getElementById('new-item-count').valueAsNumber || 1;
     const mainCategory = activeFilters.mainCategory;
@@ -489,19 +536,13 @@ function handleAddNew() {
     if (mainCategory === 'magicItems') {
         const db = currentData[dbKey] || {};
         const existingCategories = Object.keys(db);
-        
-        // --- NEW: Determine the default value ---
         const defaultValue = existingCategories.length > 0 ? existingCategories[0] : '';
-
         const promptMessage = `Enter the item category.\n\nExisting: ${existingCategories.join(', ')}\n\nOr type a new category name.`;
-        
-        // --- MODIFIED: Pass defaultValue to prompt ---
         let targetCategory = prompt(promptMessage, defaultValue);
         
-        if (!targetCategory) return; // User cancelled
-
+        if (!targetCategory) return;
         targetCategory = targetCategory.trim();
-        if (!targetCategory) return; // User entered empty string
+        if (!targetCategory) return;
 
         if (!currentData[dbKey]) currentData[dbKey] = {};
         if (!currentData[dbKey][targetCategory]) {
@@ -519,19 +560,13 @@ function handleAddNew() {
         
         const categorizationKey = existingSkills.length > 0 && existingSkills[0].skillSource ? 'skillSource' : 'type';
         const existingCategories = [...new Set(existingSkills.map(skill => skill[categorizationKey]).filter(Boolean))];
-        
-        // --- NEW: Determine the default value ---
         const defaultValue = existingCategories.length > 0 ? existingCategories[0] : '';
-        
         const promptMessage = `Enter the skill category (${categorizationKey}).\n\nExisting: ${existingCategories.join(', ')}\n\nOr type a new category name.`;
-
-        // --- MODIFIED: Pass defaultValue to prompt ---
         let targetCategory = prompt(promptMessage, defaultValue);
 
-        if (!targetCategory) return; // User cancelled
-
+        if (!targetCategory) return;
         targetCategory = targetCategory.trim();
-        if (!targetCategory) return; // User entered empty string
+        if (!targetCategory) return;
         
         if (!currentData[dbKey]) currentData[dbKey] = {};
 
@@ -572,14 +607,12 @@ function handleAddNew() {
         }
     }
 
-    render(); // Re-render the UI with the new data
+    render();
 }
 
-
-
-
 function createNewTemplate(category) {
-    if (category === 'units') return { faction: "new", foc: "Core", points: 10, min: 1, max: 20, equipo: "", reglasEspeciales: "", perfiles: [{ nombre: "Nuevo Perfil", stats: { M: 4, HA: 3, HP: 3, F: 3, R: 3, H: 1, I: 3, A: 1, L: 7 } }] };
+    if (category === 'units') return { faction: "new", foc: "Core", points: 10, min: 1, max: 20, equipo: "", reglasEspeciales: "", options: [], perfiles: [{ nombre: "Nuevo Perfil", stats: { M: 4, HA: 3, HP: 3, F: 3, R: 3, H: 1, I: 3, A: 1, L: 7 } }] };
+    if (category === 'mounts') return { foc: "Character", points: 15, equipo: "", reglasEspeciales: "", perfiles: [{ nombre: "Nueva Montura", stats: { M: 8, HA: 3, HP: 0, F: 4, R: 4, H: 1, I: 3, A: 1, L: 6 } }] };
     if (category === 'magicItems') return { points: 5, relic: false, summary: "Nueva descripción." };
     return { points: 5, summary: "Nueva descripción." };
 }
@@ -593,12 +626,15 @@ function handleReset() {
 
 function getDbKeyForCategory(category) {
     if (category === 'units') {
-        if (currentData?.unitsDB) return 'unitsDB';
-        return Object.keys(currentData).find(k => k.startsWith('unitsDB_')) || 'unitsDB';
+        return Object.keys(currentData).find(k => k.startsWith('unitsDB')) || 'unitsDB';
     }
-    const keyMap = { 'magicItems': 'magicItemsDB', 'armySkills': 'armySkillsDB', 'mounts': 'mountsDB', 'demonicGifts': 'regalosDemoniacosDB' };
+     if (category === 'mounts') {
+        return Object.keys(currentData).find(k => k.startsWith('mountsDB')) || 'mountsDB';
+    }
+    const keyMap = { 'magicItems': 'magicItemsDB', 'armySkills': 'armySkillsDB', 'demonicGifts': 'regalosDemoniacosDB' };
     return keyMap[category];
 }
+
 
 // ===================================================================================
 // --- SAVE & UTILITIES ---
@@ -761,4 +797,4 @@ function handleDownloadAsFile() {
     URL.revokeObjectURL(url);
 }
 
-// ... rest of the file stays the same ...
+

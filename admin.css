@@ -50,7 +50,6 @@ button, input[type="file"]::file-selector-button {
 button:hover { background-color: #718096; }
 button:disabled { background-color: #2d3748; cursor: not-allowed; opacity: 0.6; }
 
-/* FIX: Make faction selector width auto */
 #faction-selector {
     width: auto;
     min-width: 250px;
@@ -73,26 +72,35 @@ button:disabled { background-color: #2d3748; cursor: not-allowed; opacity: 0.6; 
     justify-content: space-between;
     align-items: center;
 }
-.entry-header h3 { margin: 0; color: #fBBF24; }
-.entry-header h4 { margin: 0; font-weight: normal; }
+/* NEW: Editable title input styling */
+.entry-title-input {
+    background: transparent;
+    border: 1px solid transparent; /* Hidden border */
+    color: #FBBF24;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 4px 6px;
+    margin: 0;
+    flex-grow: 1; /* Take available space */
+}
+.entry-title-input:hover, .entry-title-input:focus {
+    background-color: #1a202c;
+    border-color: #718096; /* Show border on focus/hover */
+}
 
-/* Add these new rules to admin.css */
 
-/* 3. Make the editor container a two-column grid on wide screens */
 #editor-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
-/* On smaller screens, revert to a single column */
 @media (max-width: 1024px) {
     #editor-container {
         grid-template-columns: 1fr;
     }
 }
 
-/* NEW: Grid for attributes to align them cleanly */
 .attributes-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -103,16 +111,39 @@ button:disabled { background-color: #2d3748; cursor: not-allowed; opacity: 0.6; 
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
 }
+/* NEW: Grid for unit layout */
+.unit-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
 
 @media (max-width: 900px) {
     .unit-layout { grid-template-columns: 1fr; }
 }
 
 /* --- Tables for Profiles --- */
-table { width: 100%; border-collapse: collapse; }
+table { width: 100%; border-collapse: collapse; margin-top: 5px;}
 th, td { text-align: left; padding: 4px; border-bottom: 1px solid #4a5568; }
 th { font-size: 0.8rem; color: #a0aec0; }
 td input { padding: 4px; }
+
+/* NEW: Styles for add/delete row buttons */
+.add-row-btn {
+    background-color: #38a169; /* Green */
+    padding: 5px 10px;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+.delete-row-btn {
+    background-color: #c53030; /* Red */
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 0.8em;
+}
 
 /* --- Footer --- */
 footer {
