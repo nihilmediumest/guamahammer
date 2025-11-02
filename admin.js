@@ -18,6 +18,21 @@ let originalData = null;
 let currentFileName = 'edited-army.js';
 let isDataFromLocalFile = false;
 let activeFilters = { mainCategory: '', subCategories: new Set(), faction: '' };
+// ===================================================================================
+// --- UI STATE HELPERS --- (ADD THIS NEW SECTION)
+// ===================================================================================
+function disableButtons() {
+    deleteBtn.disabled = true;
+    resetBtn.disabled = true;
+    saveBtn.disabled = true;
+}
+
+function enableButtons() {
+    deleteBtn.disabled = false;
+    resetBtn.disabled = false;
+    saveBtn.disabled = false;
+}
+
 
 // ===================================================================================
 // --- INITIALIZATION ---
@@ -235,13 +250,16 @@ function populateFactionSelector() {
     const previousSelection = factionSelector.value;
     factionSelector.innerHTML = '<option value="">-- Select Army --</option>';
     
+    // 1. Load all the real armies from ejercitos.js
     ARMY_REGISTRY.forEach(army => {
         factionSelector.innerHTML += `<option value="${army.id}">${army.name}</option>`;
     });
 
-    if (activeFilters.mainCategory === 'magicItems') {
-        factionSelector.innerHTML += `<option value="comun">Objetos Comunes</option>`;
-    }
+    // 2. Unconditionally add the "Objetos Comunes" option to the list.
+    // This makes it editable in the admin panel at all times.
+    factionSelector.innerHTML += `<option value="comun">Objetos Mágicos Comunes</option>`;
+
+    // Restore the previous selection if it exists and we're not loading a local file
     factionSelector.value = isDataFromLocalFile ? '' : previousSelection;
 }
 
@@ -273,8 +291,7 @@ function buildUnitsUI(unitsDB) {
 
 
 
-    // REPLACE the entire attributesHtml block with this corrected version:
-     let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
+   let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
         <label>Points: <input type="number" step="0.5" value="${unit.points || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="points"></label>
         <label>FOC: <select data-db-key="${dbKey}" data-id="${unitName}" data-prop="foc">
             ${['Lord','Hero','Core','Special','Rare'].map(foc => `<option value="${foc}" ${unit.foc === foc ? 'selected' : ''}>${foc}</option>`).join('')}
@@ -282,20 +299,22 @@ function buildUnitsUI(unitsDB) {
         <label>Subfaction: <input type="text" value="${unit.subfaction || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="subfaction"></label>
         
        
+        ${
             (unit.composition && unit.composition.type === 'ratioBased')
-            
+            ? `
                 <div class="composition-group">
                     <label>Min Primary: <input type="number" value="${unit.min?.primary || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min.primary"></label>
                     <label>Min Secondary: <input type="number" value="${unit.min?.secondary || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min.secondary"></label>
                     <label>Max Primary: <input type="number" value="${unit.max?.primary || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max.primary"></label>
                     <label>Max Secondary: <input type="number" value="${unit.max?.secondary || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max.secondary"></label>
                 </div>
-           
+            `
+            : `
                 <label>Min: <input type="number" value="${unit.min || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min"></label>
                 <label>Max: <input type="number" value="${unit.max || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max"></label>
-            
+            `
         }
-       
+
         <label>Max Regalos: <input type="number" value="${unit.maxRegalos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxRegalos"></label>
         <label>Max Iconos: <input type="number" value="${unit.maxIconos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxIconos"></label>
         <label>Magic Banner: <input type="number" value="${unit.magicBanner || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="magicBanner"></label>
