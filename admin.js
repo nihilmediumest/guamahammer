@@ -419,6 +419,10 @@ function buildSimpleUI(db, dbKey) {
 // --- DATA MANIPULATION ---
 // ===================================================================================
 
+// --- In the DATA MANIPULATION section ---
+
+// REPLACE the existing handleDataChange function with this corrected version.
+// The only change is the line that processes the 'prop' string to handle arrays correctly.
 function handleDataChange(event) {
     const input = event.target;
     const { dbKey, category, id, prop } = input.dataset;
@@ -428,16 +432,31 @@ function handleDataChange(event) {
     if (input.tagName === 'SELECT' && input.value === 'true') value = true;
     if (input.tagName === 'SELECT' && input.value === 'false') value = false;
     
-    const keys = prop.replace(/$$(\d+)$$/g, '.\$1').split('.');
+    // OLD, INCORRECT LINE:
+    // const keys = prop.replace(/$$(\d+)$$/g, '.\$1').split('.');
+    
+    // NEW, CORRECTED LINE: This correctly handles array paths like "perfiles[0].nombre"
+    const keys = prop.replace(/\[(\d+)\]/g, '.$1').split('.');
+
     let target = category ? currentData[dbKey]?.[category]?.[id] : currentData[dbKey]?.[id];
     if (!target) return;
 
+    // This loop now works correctly with the fixed 'keys' array
     for (let i = 0; i < keys.length - 1; i++) {
-        if (!target[keys[i]]) target[keys[i]] = {}; 
+        // Safety check to create nested objects if they don't exist
+        if (!target[keys[i]]) {
+            // Check if the next key is a number, if so, create an array
+            if (!isNaN(parseInt(keys[i+1], 10))) {
+                 target[keys[i]] = [];
+            } else {
+                 target[keys[i]] = {};
+            }
+        }
         target = target[keys[i]];
     }
     target[keys[keys.length - 1]] = value;
 }
+
 
 // NEW: Handles renaming of an entry (changing the object key)
 function handleRename(event) {
