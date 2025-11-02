@@ -477,17 +477,75 @@ function handleDelete() {
     }
 }
 
+// admin.js
+
+// REPLACE the entire handleAddNew function
 function handleAddNew() {
     const count = document.getElementById('new-item-count').valueAsNumber || 1;
-    const dbKey = getDbKeyForCategory(activeFilters.mainCategory);
-    if (!currentData[dbKey]) currentData[dbKey] = {};
+    const mainCategory = activeFilters.mainCategory;
+    const dbKey = getDbKeyForCategory(mainCategory);
 
-    for (let i = 0; i < count; i++) {
-        const newName = `Nueva Entrada ${Object.keys(currentData[dbKey]).length + i + 1}`;
-        currentData[dbKey][newName] = createNewTemplate(activeFilters.mainCategory);
+    // Case 1: For nested structures like Magic Items / Runes
+    if (mainCategory === 'magicItems') {
+        const db = currentData[dbKey] || {};
+        const existingCategories = Object.keys(db);
+        const promptMessage = `Enter the category for the new item.\n\nExisting: ${existingCategories.join(', ')}\n\nOr type a new category name.`;
+        
+        let targetCategory = prompt(promptMessage);
+        if (!targetCategory) return; // User cancelled the prompt
+
+        targetCategory = targetCategory.trim();
+        if (!targetCategory) return; // User entered empty string
+
+        // Ensure the top-level DB and the target category exist
+        if (!currentData[dbKey]) currentData[dbKey] = {};
+        if (!currentData[dbKey][targetCategory]) {
+            currentData[dbKey][targetCategory] = {}; // Create new category if it doesn't exist
+        }
+
+        // Add the new item(s) to the correct category
+        for (let i = 0; i < count; i++) {
+            const newName = `Nueva Entrada ${Object.keys(currentData[dbKey][targetCategory]).length + i + 1}`;
+            currentData[dbKey][targetCategory][newName] = createNewTemplate(mainCategory);
+        }
+
+    // Case 2: Special handling for Demonic Gifts (which has two separate DBs)
+    } else if (mainCategory === 'demonicGifts') {
+        const giftTypeInput = prompt("What type are you adding? Enter 'Regalo' or 'Icono'").toLowerCase().trim();
+        let targetDbKey;
+
+        if (giftTypeInput.startsWith('regalo')) {
+            targetDbKey = 'regalosDemoniacosDB';
+        } else if (giftTypeInput.startsWith('icono')) {
+            targetDbKey = 'iconosDemoniacosDB';
+        } else {
+            alert("Invalid type. Please enter 'Regalo' or 'Icono'.");
+            return;
+        }
+
+        if (!currentData[targetDbKey]) {
+            currentData[targetDbKey] = {};
+        }
+
+        for (let i = 0; i < count; i++) {
+            const newName = `Nueva Entrada ${Object.keys(currentData[targetDbKey]).length + i + 1}`;
+            currentData[targetDbKey][newName] = createNewTemplate(mainCategory);
+        }
+
+    // Case 3: For all other flat structures (Units, Mounts, etc.)
+    } else {
+        if (!currentData[dbKey]) {
+            currentData[dbKey] = {};
+        }
+        for (let i = 0; i < count; i++) {
+            const newName = `Nueva Entrada ${Object.keys(currentData[dbKey]).length + i + 1}`;
+            currentData[dbKey][newName] = createNewTemplate(mainCategory);
+        }
     }
-    render();
+
+    render(); // Re-render the UI with the new data
 }
+
 
 function createNewTemplate(category) {
     if (category === 'units') return { faction: "new", foc: "Core", points: 10, min: 1, max: 20, equipo: "", reglasEspeciales: "", perfiles: [{ nombre: "Nuevo Perfil", stats: { M: 4, HA: 3, HP: 3, F: 3, R: 3, H: 1, I: 3, A: 1, L: 7 } }] };
