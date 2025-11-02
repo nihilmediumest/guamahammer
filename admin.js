@@ -477,9 +477,7 @@ function handleDelete() {
     }
 }
 
-// admin.js
 
-// REPLACE the entire handleAddNew function
 function handleAddNew() {
     const count = document.getElementById('new-item-count').valueAsNumber || 1;
     const mainCategory = activeFilters.mainCategory;
@@ -489,27 +487,56 @@ function handleAddNew() {
     if (mainCategory === 'magicItems') {
         const db = currentData[dbKey] || {};
         const existingCategories = Object.keys(db);
-        const promptMessage = `Enter the category for the new item.\n\nExisting: ${existingCategories.join(', ')}\n\nOr type a new category name.`;
+        const promptMessage = `Enter the item category.\n\nExisting: ${existingCategories.join(', ')}\n\nOr type a new category name.`;
         
         let targetCategory = prompt(promptMessage);
-        if (!targetCategory) return; // User cancelled the prompt
+        if (!targetCategory) return; // User cancelled
 
         targetCategory = targetCategory.trim();
         if (!targetCategory) return; // User entered empty string
 
-        // Ensure the top-level DB and the target category exist
         if (!currentData[dbKey]) currentData[dbKey] = {};
         if (!currentData[dbKey][targetCategory]) {
             currentData[dbKey][targetCategory] = {}; // Create new category if it doesn't exist
         }
 
-        // Add the new item(s) to the correct category
         for (let i = 0; i < count; i++) {
             const newName = `Nueva Entrada ${Object.keys(currentData[dbKey][targetCategory]).length + i + 1}`;
             currentData[dbKey][targetCategory][newName] = createNewTemplate(mainCategory);
         }
 
-    // Case 2: Special handling for Demonic Gifts (which has two separate DBs)
+    // --- NEW LOGIC for Army Skills ---
+    } else if (mainCategory === 'armySkills') {
+        const db = currentData[dbKey] || {};
+        const existingSkills = Object.values(db);
+        
+        // Determine if skills are categorized by 'skillSource' (esil) or 'type' (nmuert)
+        const categorizationKey = existingSkills.length > 0 && existingSkills[0].skillSource ? 'skillSource' : 'type';
+
+        // Extract unique categories from the determined key
+        const existingCategories = [...new Set(existingSkills.map(skill => skill[categorizationKey]).filter(Boolean))];
+        
+        const promptMessage = `Enter the skill category (${categorizationKey}).\n\nExisting: ${existingCategories.join(', ')}\n\nOr type a new category name.`;
+
+        let targetCategory = prompt(promptMessage);
+        if (!targetCategory) return; // User cancelled
+
+        targetCategory = targetCategory.trim();
+        if (!targetCategory) return; // User entered empty string
+        
+        if (!currentData[dbKey]) currentData[dbKey] = {};
+
+        for (let i = 0; i < count; i++) {
+            const newName = `Nueva Entrada ${Object.keys(currentData[dbKey]).length + i + 1}`;
+            const newSkill = createNewTemplate(mainCategory);
+            
+            // CRITICAL: Assign the new skill to the correct category
+            newSkill[categorizationKey] = targetCategory;
+
+            currentData[dbKey][newName] = newSkill;
+        }
+
+    // Case 3: Special handling for Demonic Gifts (Regalos / Iconos)
     } else if (mainCategory === 'demonicGifts') {
         const giftTypeInput = prompt("What type are you adding? Enter 'Regalo' or 'Icono'").toLowerCase().trim();
         let targetDbKey;
@@ -523,20 +550,17 @@ function handleAddNew() {
             return;
         }
 
-        if (!currentData[targetDbKey]) {
-            currentData[targetDbKey] = {};
-        }
+        if (!currentData[targetDbKey]) currentData[targetDbKey] = {};
 
         for (let i = 0; i < count; i++) {
             const newName = `Nueva Entrada ${Object.keys(currentData[targetDbKey]).length + i + 1}`;
             currentData[targetDbKey][newName] = createNewTemplate(mainCategory);
         }
 
-    // Case 3: For all other flat structures (Units, Mounts, etc.)
+    // Case 4: For all other flat structures (Units, Mounts, etc.)
     } else {
-        if (!currentData[dbKey]) {
-            currentData[dbKey] = {};
-        }
+        if (!currentData[dbKey]) currentData[dbKey] = {};
+        
         for (let i = 0; i < count; i++) {
             const newName = `Nueva Entrada ${Object.keys(currentData[dbKey]).length + i + 1}`;
             currentData[dbKey][newName] = createNewTemplate(mainCategory);
@@ -545,6 +569,7 @@ function handleAddNew() {
 
     render(); // Re-render the UI with the new data
 }
+
 
 
 function createNewTemplate(category) {
