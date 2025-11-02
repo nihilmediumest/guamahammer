@@ -553,6 +553,35 @@ function formatDataForSaving(data) {
     return fileContent;
 }
 
+// --- ADD THIS MISSING FUNCTION BACK IN ---
+/**
+ * Creates a link to download the original, unedited army file directly from the server.
+ */
+function handleDownloadFromServer() {
+    if (!currentData || !currentData.FACTION_ID) {
+        alert("No server-side army is currently loaded.");
+        return;
+    }
+
+    const factionId = currentData.FACTION_ID;
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const fileName = `${factionId}-original-${timestamp}.js`;
+
+    const a = document.createElement('a');
+    // The link points directly to the static file in the /armies/ directory
+    a.href = `/armies/${factionId}.js`; 
+    a.download = fileName; // Suggest a unique name to avoid confusion
+    document.body.appendChild(a); // Required for Firefox compatibility
+    a.click();
+    document.body.removeChild(a);
+}
+// --- END OF THE MISSING FUNCTION ---
+
+
+async function handleSaveToServer() {
+    // ... (rest of the file remains the same) ...
+}
+
 
 async function handleSaveToServer() {
     if (!currentData) return;
