@@ -478,6 +478,8 @@ function handleDelete() {
 }
 
 
+
+// REPLACE the entire handleAddNew function with this final, enhanced version
 function handleAddNew() {
     const count = document.getElementById('new-item-count').valueAsNumber || 1;
     const mainCategory = activeFilters.mainCategory;
@@ -487,9 +489,15 @@ function handleAddNew() {
     if (mainCategory === 'magicItems') {
         const db = currentData[dbKey] || {};
         const existingCategories = Object.keys(db);
+        
+        // --- NEW: Determine the default value ---
+        const defaultValue = existingCategories.length > 0 ? existingCategories[0] : '';
+
         const promptMessage = `Enter the item category.\n\nExisting: ${existingCategories.join(', ')}\n\nOr type a new category name.`;
         
-        let targetCategory = prompt(promptMessage);
+        // --- MODIFIED: Pass defaultValue to prompt ---
+        let targetCategory = prompt(promptMessage, defaultValue);
+        
         if (!targetCategory) return; // User cancelled
 
         targetCategory = targetCategory.trim();
@@ -497,7 +505,7 @@ function handleAddNew() {
 
         if (!currentData[dbKey]) currentData[dbKey] = {};
         if (!currentData[dbKey][targetCategory]) {
-            currentData[dbKey][targetCategory] = {}; // Create new category if it doesn't exist
+            currentData[dbKey][targetCategory] = {};
         }
 
         for (let i = 0; i < count; i++) {
@@ -505,20 +513,21 @@ function handleAddNew() {
             currentData[dbKey][targetCategory][newName] = createNewTemplate(mainCategory);
         }
 
-    // --- NEW LOGIC for Army Skills ---
     } else if (mainCategory === 'armySkills') {
         const db = currentData[dbKey] || {};
         const existingSkills = Object.values(db);
         
-        // Determine if skills are categorized by 'skillSource' (esil) or 'type' (nmuert)
         const categorizationKey = existingSkills.length > 0 && existingSkills[0].skillSource ? 'skillSource' : 'type';
-
-        // Extract unique categories from the determined key
         const existingCategories = [...new Set(existingSkills.map(skill => skill[categorizationKey]).filter(Boolean))];
+        
+        // --- NEW: Determine the default value ---
+        const defaultValue = existingCategories.length > 0 ? existingCategories[0] : '';
         
         const promptMessage = `Enter the skill category (${categorizationKey}).\n\nExisting: ${existingCategories.join(', ')}\n\nOr type a new category name.`;
 
-        let targetCategory = prompt(promptMessage);
+        // --- MODIFIED: Pass defaultValue to prompt ---
+        let targetCategory = prompt(promptMessage, defaultValue);
+
         if (!targetCategory) return; // User cancelled
 
         targetCategory = targetCategory.trim();
@@ -530,13 +539,10 @@ function handleAddNew() {
             const newName = `Nueva Entrada ${Object.keys(currentData[dbKey]).length + i + 1}`;
             const newSkill = createNewTemplate(mainCategory);
             
-            // CRITICAL: Assign the new skill to the correct category
             newSkill[categorizationKey] = targetCategory;
-
             currentData[dbKey][newName] = newSkill;
         }
 
-    // Case 3: Special handling for Demonic Gifts (Regalos / Iconos)
     } else if (mainCategory === 'demonicGifts') {
         const giftTypeInput = prompt("What type are you adding? Enter 'Regalo' or 'Icono'").toLowerCase().trim();
         let targetDbKey;
@@ -557,7 +563,6 @@ function handleAddNew() {
             currentData[targetDbKey][newName] = createNewTemplate(mainCategory);
         }
 
-    // Case 4: For all other flat structures (Units, Mounts, etc.)
     } else {
         if (!currentData[dbKey]) currentData[dbKey] = {};
         
@@ -569,6 +574,7 @@ function handleAddNew() {
 
     render(); // Re-render the UI with the new data
 }
+
 
 
 
