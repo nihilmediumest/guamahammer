@@ -24,32 +24,39 @@ app.use(express.static(path.join(__dirname)));
  * Handles saving the entire army data object back to its respective .js file.
  * This enables the Admin Editor's functionality.
  */
+// server.js
+
+// REPLACE the entire app.post('/api/save-army', ...) route
 app.post('/api/save-army', async (req, res) => {
     try {
-        const data = req.body;
-        const factionId = data.FACTION_ID; //
+        // The client now sends the factionId and the pre-formatted content
+        const { factionId, fileContent } = req.body;
 
-        if (!factionId) {
-            return res.status(400).json({ message: 'Faction ID is missing from data.' }); //
+        if (!factionId || !fileContent) {
+            return res.status(400).json({ message: 'Faction ID or file content is missing.' });
         }
         
-        // Format the content back into an ES module export structure.
-        const finalFileContent = `export default ${JSON.stringify(data, null, 4)};`;
-        
+        // --- THIS IS A CRITICAL FIX FOR SAVING comun.js ---
         // Determine the correct file path. 'comun' is a special case.
         let filePath;
         if (factionId === 'comun') {
+            // It saves to the root directory
             filePath = path.join(__dirname, 'comun.js'); 
         } else {
-            filePath = path.join(__dirname, 'armies', `${factionId}.js`); //
+            // All other armies save to the /armies/ directory
+            filePath = path.join(__dirname, 'armies', `${factionId}.js`);
         }
 
-        await fs.writeFile(filePath, finalFileContent); // Write the data back to the file.
+        // The fileContent is already perfectly formatted by the client,
+        // so we just write it directly.
+        await fs.writeFile(filePath, fileContent);
 
-        return res.status(200).json({ message: `${factionId} saved successfully.` }); //
+        console.log(`Successfully saved ${factionId}.js to ephemeral storage.`);
+        return res.status(200).json({ message: `${factionId} saved successfully.` });
+
     } catch (error) {
         console.error("Error saving file:", error);
-        return res.status(500).json({ message: `Error saving file: ${error.message}` }); //
+        return res.status(500).json({ message: `Error saving file: ${error.message}` });
     }
 });
 
