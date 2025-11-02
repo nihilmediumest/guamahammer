@@ -176,6 +176,8 @@ function processLoadedData(data) {
 // --- UI & FILTERING ---
 // ===================================================================================
 
+// DELETE your old render() function and PASTE this one in its place.
+
 function render() {
     if (!currentData) {
         editorContainer.innerHTML = '<p>Select an army or load a local file to begin editing.</p>';
@@ -190,7 +192,8 @@ function render() {
     
     switch (activeFilters.mainCategory) {
         case 'units':
-        case 'mounts': // NEW: Mounts use the same complex UI builder
+        case 'mounts':
+        case 'specialProfiles': // specialProfiles now correctly uses the complex UI builder
             buildComplexEntryUI(currentData[dbKey] || {}, dbKey);
             break;
         case 'magicItems':
@@ -202,17 +205,14 @@ function render() {
             editorContainer.innerHTML += '<h2>Iconos Demoníacos</h2>';
             buildSimpleUI(currentData.iconosDemoniacosDB || {}, 'iconosDemoniacosDB');
             break;
-        case 'specialProfiles': // <-- ADD THIS LINE
-            const dbKey = getDbKeyForCategory(mainCategory, currentData);
-            buildComplexEntryUI(currentData[dbKey] || {}, dbKey);
-        break;
         default:
-            buildSimpleUI(currentData[dbKey] || {}, dbKey);
-    }
-     if (category === 'specialProfiles') {
-        return Object.keys(data).find(k => k.startsWith('specialProfilesDB')) || 'specialProfilesDB';
+            const defaultDbKey = getDbKeyForCategory(activeFilters.mainCategory);
+            if (defaultDbKey) {
+                 buildSimpleUI(currentData[defaultDbKey] || {}, defaultDbKey);
+            }
     }
 }
+
 
 function updateSubFilters() {
     subFilterGroup.innerHTML = '';
@@ -682,16 +682,29 @@ function handleReset() {
     }
 }
 
+// DELETE your old getDbKeyForCategory() function and PASTE this one in its place.
+
 function getDbKeyForCategory(category) {
+    if (!currentData) return null; // Safety check
+
     if (category === 'units') {
         return Object.keys(currentData).find(k => k.startsWith('unitsDB')) || 'unitsDB';
     }
-     if (category === 'mounts') {
+    if (category === 'mounts') {
         return Object.keys(currentData).find(k => k.startsWith('mountsDB')) || 'mountsDB';
     }
-    const keyMap = { 'magicItems': 'magicItemsDB', 'armySkills': 'armySkillsDB', 'demonicGifts': 'regalosDemoniacosDB' };
+    if (category === 'specialProfiles') {
+        return Object.keys(currentData).find(k => k.startsWith('specialProfilesDB')) || 'specialProfilesDB';
+    }
+
+    const keyMap = { 
+        'magicItems': 'magicItemsDB', 
+        'armySkills': 'armySkillsDB', 
+        'demonicGifts': 'regalosDemoniacosDB' 
+    };
     return keyMap[category];
 }
+
 
 
 // ===================================================================================
