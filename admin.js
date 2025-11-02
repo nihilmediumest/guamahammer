@@ -601,6 +601,49 @@ function handleDownloadFromServer() {
     a.click();
     document.body.removeChild(a);
 }
+// admin.js
+
+// ... (your existing handleDownloadAsFile function should be right above this)
+
+async function handleSaveToServer() {
+    if (!currentData) return;
+
+    const factionId = currentData.FACTION_ID || activeFilters.faction;
+    if (!factionId) {
+        alert("Cannot save: No faction ID is available.");
+        return;
+    }
+
+    // A final confirmation before overwriting a server file.
+    if (!confirm(`Are you sure you want to save changes to ${factionId}.js on the server?`)) {
+        return;
+    }
+
+    const fileContent = formatDataForSaving(currentData);
+
+    try {
+        const response = await fetch('/api/save-army', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ factionId, fileContent }) // Send the pre-formatted content
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `Server responded with status ${response.status}`);
+        }
+
+        alert(`${factionId}.js saved successfully on the server!`);
+        
+        // After a successful save, the original data should be updated to match the new state.
+        // This prevents the user from being prompted to save again if they haven't made new changes.
+        originalData = JSON.parse(JSON.stringify(currentData));
+
+    } catch (error) {
+        console.error('Error saving to server:', error);
+        alert(`Failed to save file: ${error.message}`);
+    }
+}
 
 // ... handleSaveToServer stays the same ...
 
