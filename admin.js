@@ -270,21 +270,38 @@ function buildUnitsUI(unitsDB) {
         });
         profileHtml += '</tbody></table>';
 
-        let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
-            <label>Points: <input type="number" step="0.5" value="${unit.points}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="points"></label>
-            <label>FOC: <select data-db-key="${dbKey}" data-id="${unitName}" data-prop="foc">
-                ${['Lord','Hero','Core','Special','Rare'].map(foc => `<option value="${foc}" ${unit.foc === foc ? 'selected' : ''}>${foc}</option>`).join('')}
-            </select></label>
-            <label>Subfaction: <input type="text" value="${unit.subfaction || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="subfaction"></label>
-            <label>Min: <input type="number" value="${unit.min || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min"></label>
-            <label>Max: <input type="number" value="${unit.max || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max"></label>
-            <label>Max Regalos: <input type="number" value="${unit.maxRegalos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxRegalos"></label>
-            <label>Max Iconos: <input type="number" value="${unit.maxIconos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxIconos"></label>
-            <label>Magic Banner: <input type="number" value="${unit.magicBanner || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="magicBanner"></label>
-            <label>Champ Items: <input type="number" value="${unit.champItems || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="champItems"></label>
-            <label>Max Magic Items: <input type="number" value="${unit.maxMagicItems || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxMagicItems"></label>
-            <label>Max Relics: <input type="number" value="${unit.maxRelics || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxRelics"></label>
-        </div>`;
+
+
+    // REPLACE the entire attributesHtml block with this corrected version:
+    let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
+        <label>Points: <input type="number" step="0.5" value="${unit.points}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="points"></label>
+        <label>FOC: <select data-db-key="${dbKey}" data-id="${unitName}" data-prop="foc">
+            ${['Lord','Hero','Core','Special','Rare'].map(foc => `<option value="${foc}" ${unit.foc === foc ? 'selected' : ''}>${foc}</option>`).join('')}
+        </select></label>
+        <label>Subfaction: <input type="text" value="${unit.subfaction || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="subfaction"></label>
+        
+      
+            (unit.composition && unit.composition.type === 'ratioBased')
+                <div class="composition-group">
+                    <label>Min Primary: <input type="number" value="${unit.min?.primary || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min.primary"></label>
+                    <label>Min Secondary: <input type="number" value="${unit.min?.secondary || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min.secondary"></label>
+                    <label>Max Primary: <input type="number" value="${unit.max?.primary || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max.primary"></label>
+                    <label>Max Secondary: <input type="number" value="${unit.max?.secondary || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max.secondary"></label>
+                </div>
+                <label>Min: <input type="number" value="${unit.min || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min"></label>
+                <label>Max: <input type="number" value="${unit.max || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max"></label>
+            
+        }
+       
+        <label>Max Regalos: <input type="number" value="${unit.maxRegalos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxRegalos"></label>
+        <label>Max Iconos: <input type="number" value="${unit.maxIconos || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxIconos"></label>
+        <label>Magic Banner: <input type="number" value="${unit.magicBanner || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="magicBanner"></label>
+        <label>Champ Items: <input type="number" value="${unit.champItems || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="champItems"></label>
+        <label>Max Magic Items: <input type="number" value="${unit.maxMagicItems || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxMagicItems"></label>
+        <label>Max Relics: <input type="number" value="${unit.maxRelics || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="maxRelics"></label>
+    </div>`;
+
+
 
         let commandHtml = '<h4>Grupo de Mando</h4><div class="command-grid">';
         if (unit.command) {
@@ -378,6 +395,8 @@ function buildSimpleUI(db, dbKey) {
 // --- DATA MANIPULATION ---
 // ===================================================================================
 
+
+// REPLACE this function to simplify it again.
 function handleDataChange(event) {
     const input = event.target;
     const { dbKey, category, id, prop } = input.dataset;
@@ -392,11 +411,13 @@ function handleDataChange(event) {
     if (!target) return;
 
     for (let i = 0; i < keys.length - 1; i++) {
-        if (!target[keys[i]]) target[keys[i]] = {};
+        // Safety check to create nested objects if they don't exist
+        if (!target[keys[i]]) target[keys[i]] = {}; 
         target = target[keys[i]];
     }
     target[keys[keys.length - 1]] = value;
 }
+
 
 function handleJsonDataChange(event) {
     const textarea = event.target;
@@ -472,14 +493,20 @@ function getDbKeyForCategory(category) {
 // --- SAVE & UTILITIES ---
 // ===================================================================================
 
-// REPLACE the existing formatDataForSaving function with this definitive version.
 /**
- * Takes the raw data object and formats it into a clean, well-structured
- * JavaScript module string, perfectly matching the original army file structure with
- * faction-suffixed consts and correct export mapping.
- * @param {object} data - The army data object from currentData.
- * @returns {string} A formatted string ready to be saved to a .js file.
+ * Creates a clean, file-safe timestamp string like "20251102-171048".
+ * @returns {string} The formatted timestamp.
  */
+function getFormattedTimestamp() {
+    const d = new Date();
+    const pad = (n) => n.toString().padStart(2, '0');
+    const date = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+    const time = `${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+    return `${date}-${time}`;
+}
+
+
+// REPLACE the existing formatDataForSaving function with this one (it's the same correct one as before)
 function formatDataForSaving(data) {
     const factionId = data.FACTION_ID || activeFilters.faction || 'comun';
     const generatedDate = new Date().toISOString();
@@ -491,12 +518,8 @@ function formatDataForSaving(data) {
     }
 
     // --- STANDARD ARMY FILE SAVING LOGIC ---
-
-    // STEP 1: Create a deep copy to safely manipulate and explicitly remove the problematic key.
     const dataToSave = JSON.parse(JSON.stringify(data));
     delete dataToSave.COMMON_MAGIC_ITEMS;
-
-    // STEP 2: Purify the magic items DB, removing common items.
     const cleanMagicItemsDB = {};
     const commonItems = originalData.COMMON_MAGIC_ITEMS || {};
     if (dataToSave.magicItemsDB) {
@@ -511,141 +534,69 @@ function formatDataForSaving(data) {
         }
     }
     dataToSave.magicItemsDB = cleanMagicItemsDB;
-
-    // STEP 3: Build the top-level 'const' declarations with faction suffixes.
     const constDbKeys = ['unitsDB', 'mountsDB', 'magicItemsDB', 'armySkillsDB', 'specialProfilesDB', 'regalosDemoniacosDB', 'iconosDemoniacosDB'];
     let constsString = '';
-    const exportMappings = []; // Stores { key: 'unitsDB', varName: 'unitsDB_kis' }
-
+    const exportMappings = [];
     constDbKeys.forEach(key => {
         if (dataToSave[key] && Object.keys(dataToSave[key]).length > 0) {
             const suffixedVarName = `${key}_${factionId}`;
             constsString += `const ${suffixedVarName} = ${JSON.stringify(dataToSave[key], null, 2)};\n\n`;
             exportMappings.push({ key: key, varName: suffixedVarName });
-            delete dataToSave[key]; // Remove from main object to prevent duplication
+            delete dataToSave[key];
         }
     });
-
-    // STEP 4: Build the list of properties for the 'export default' block.
     const exportProperties = [];
-    
-    // Add all remaining top-level properties (ARMY_NAME, FOC_CONFIG, etc.)
     for (const key in dataToSave) {
         const value = (key === 'FOC_CONFIG')
-            ? JSON.stringify(dataToSave[key], null, 4).replace(/\n/g, '\n    ') // Indent FOC for readability
+            ? JSON.stringify(dataToSave[key], null, 4).replace(/\n/g, '\n    ')
             : JSON.stringify(dataToSave[key]);
         exportProperties.push(`    ${key}: ${value}`);
     }
-
-    // Add the correct key: value mappings for our new consts (e.g., `unitsDB: unitsDB_kis,`)
     exportMappings.forEach(mapping => {
         exportProperties.push(`    ${mapping.key}: ${mapping.varName}`);
     });
-
-    // STEP 5: Assemble the final file content in the correct order.
     let fileContent = `// Guamahammer Army File: ${factionId}\n// Generated by Admin Editor @ ${generatedDate}\n\n`;
     fileContent += `import { commonMagicItemsDB } from '../comun.js';\n\n`;
     fileContent += constsString;
     fileContent += `export default {\n`;
     fileContent += exportProperties.join(',\n');
     fileContent += `\n};\n`;
-
     return fileContent;
 }
 
-// --- ADD THIS MISSING FUNCTION BACK IN ---
-/**
- * Creates a link to download the original, unedited army file directly from the server.
- */
+// REPLACE the existing handleDownloadFromServer function
 function handleDownloadFromServer() {
     if (!currentData || !currentData.FACTION_ID) {
         alert("No server-side army is currently loaded.");
         return;
     }
-
     const factionId = currentData.FACTION_ID;
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-    const fileName = `${factionId}-original-${timestamp}.js`;
-
+    const fileName = `${factionId}-${getFormattedTimestamp()}.js`;
     const a = document.createElement('a');
-    // The link points directly to the static file in the /armies/ directory
     a.href = `/armies/${factionId}.js`; 
-    a.download = fileName; // Suggest a unique name to avoid confusion
-    document.body.appendChild(a); // Required for Firefox compatibility
+    a.download = fileName;
+    document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 }
-// --- END OF THE MISSING FUNCTION ---
 
-async function handleSaveToServer() {
-    if (!currentData) return;
-    saveBtn.disabled = true;
-    saveBtn.textContent = 'Saving...';
-    
-    try {
-        // --- THIS IS THE FIX ---
-        // We now format the data BEFORE sending it to the server.
-        // This ensures the server receives the clean, properly structured data.
-        const formattedData = formatDataForSaving(currentData);
+// ... handleSaveToServer stays the same ...
 
-        // The body of the request is now the formatted string.
-        // We change the Content-Type to 'application/json' and send a JSON object
-        // containing the faction ID and the string content.
-        const payload = {
-            factionId: currentData.FACTION_ID,
-            fileContent: formattedData
-        };
-
-        const response = await fetch('/api/save-army', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload) // Send the structured payload
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || `Server responded with status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        alert(result.message);
-        
-        // Update the 'original' state only after a successful save
-        originalData = JSON.parse(JSON.stringify(currentData));
-
-    } catch (error) {
-        alert(`Failed to save changes: ${error.message}`);
-    } finally {
-        saveBtn.disabled = false;
-        saveBtn.textContent = 'Guardar en Servidor';
-    }
-}
-
-
+// REPLACE the existing handleDownloadAsFile function
 function handleDownloadAsFile() {
     if (!currentData) return;
-    
-    // Use our new formatting function
     const finalFileContent = formatDataForSaving(currentData);
-    
     const blob = new Blob([finalFileContent], { type: 'application/javascript' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = currentFileName;
+    
+    // Generate a clean filename instead of using the old one
+    const factionId = currentData.FACTION_ID || activeFilters.faction || 'comun';
+    a.download = `${factionId}-${getFormattedTimestamp()}.js`;
+
     a.click();
     URL.revokeObjectURL(url);
 }
 
-
-function enableButtons() {
-    deleteBtn.disabled = false;
-    resetBtn.disabled = false;
-    saveBtn.disabled = false;
-}
-
-function disableButtons() {
-    deleteBtn.disabled = true;
-    resetBtn.disabled = true;
-    saveBtn.disabled = true;
-}
+// ... rest of the file stays the same ...

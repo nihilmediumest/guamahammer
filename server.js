@@ -66,63 +66,55 @@ app.post('/api/save-army', async (req, res) => {
  * This powers the Army Builder's (main.js) data loading.
  */
 app.get('/api/get-army', async (req, res) => {
-    const factionId = req.query.faction;
+    const { faction: factionId } = req.query; // Use factionId for consistency
     if (!factionId) {
         return res.status(400).json({ message: 'Faction ID is required.' });
     }
 
-    const tempFilePath = path.join(os.tmpdir(), `${factionId}-${Date.now()}.mjs`);
-    const comunFilePath = path.join(__dirname, 'comun.js');
+    const commonItemsFilePath = path.join(__dirname, 'comun.js');
+    const armyFilePath = path.join(__dirname, 'armies', `${factionId}.js`);
 
     try {
-        let originalFilePath;
+        // --- SPECIAL CASE: Client is asking for the common magic items directly ---
         if (factionId === 'comun') {
-            originalFilePath = comunFilePath;
-        } else {
-            originalFilePath = path.join(__dirname, 'armies', `${factionId}.js`);
+            const commonContent = await fs.readFile(commonItemsFilePath, 'utf-8');
+            // Dynamically import the content directly, without creating a temp file
+            const commonModule = await import(`data:text/javascript,${encodeURIComponent(commonContent)}`);
+            
+            // The admin editor expects data in a consistent format. 
+            // We wrap the named export into a structure the editor understands.
+            const responseData = {
+                magicItemsDB: commonModule.commonMagicItemsDB,
+                // Add FACTION_ID so the editor knows what it has loaded
+                FACTION_ID: 'comun' 
+            };
+            return res.json(responseData);
         }
 
-        let fileContent = await fs.readFile(originalFilePath, 'utf8');
+        // --- STANDARD CASE: Client is asking for a normal army file ---
+        let armyFileContent = await fs.readFile(armyFilePath, 'utf-8');
 
-        // --- STEP 1: Remove the client-side import statement ---
-        fileContent = fileContent.replace(/^import.*comun\.js.*?;/gm, '');
+        // To make the file runnable in Node.js, we can't have the browser-style import.
+        // Instead of deleting the line, we replace it with a harmless variable declaration.
+        // This is more robust than the old regex.
+        armyFileContent = armyFileContent.replace(/import.*?from '..\/comun.js';/, 'const commonMagicItemsDB = {};');
 
-        // --- STEP 2: Handle the structural dependency issue (The final fix) ---
-        // This targets files (like cvstr.js) that attempt to use commonMagicItemsDB in their local scope.
-        // It replaces the usage with an empty object literal '{}', allowing Node to parse the file.
-        const structuralFixRegex = /commonMagicItemsDB/g;
-        if (originalFilePath.includes('cvstr.js') || originalFilePath.includes('cvnec.js')) {
-            fileContent = fileContent.replace(structuralFixRegex, '{}');
-        }
+        // Dynamically import the modified army file content
+        const armyModule = await import(`data:text/javascript,${encodeURIComponent(armyFileContent)}`);
+        const armyData = armyModule.default; // This is the main army object
 
-        // --- FINAL STEP: Dynamic Import ---
-        const moduleUrl = url.pathToFileURL(tempFilePath).href;
-        await fs.writeFile(tempFilePath, fileContent);
+        // Now, load the REAL common items and attach them for the editor's filtering logic
+        const commonItemsContent = await fs.readFile(commonItemsFilePath, 'utf-8');
+        const commonModule = await import(`data:text/javascript,${encodeURIComponent(commonItemsContent)}`);
+        
+        // This key 'COMMON_MAGIC_ITEMS' is used by the editor to know which items are shared
+        armyData.COMMON_MAGIC_ITEMS = commonModule.commonMagicItemsDB;
 
-        const armyModule = await import(moduleUrl + '?' + Date.now());
-        let dataObject = armyModule.default;
-
-        // Read comun.js data and attach it (for ejercitos.js to merge later).
-        const comunContent = await fs.readFile(comunFilePath, 'utf8');
-        const comunTempPath = path.join(os.tmpdir(), `comun-${Date.now()}.mjs`);
-        await fs.writeFile(comunTempPath, comunContent);
-        const comunModule = await import(url.pathToFileURL(comunTempPath).href + '?' + Date.now());
-        dataObject.COMMON_MAGIC_ITEMS = comunModule.commonMagicItemsDB;
-
-        // Clean up the temporary comun file
-        await fs.unlink(comunTempPath);
-
-        return res.status(200).json(dataObject);
+        res.json(armyData);
 
     } catch (error) {
         console.error(`Error processing file for faction: ${factionId}`, error);
-        return res.status(500).json({ message: `Server error while processing file for ${factionId}. Check function logs.` });
-    } finally {
-        try {
-            await fs.unlink(tempFilePath);
-        } catch (cleanupError) {
-            console.error('Failed to clean up temp file:', cleanupError);
-        }
+        return res.status(500).json({ message: `Server error while processing file for ${factionId}.` });
     }
 });
 
