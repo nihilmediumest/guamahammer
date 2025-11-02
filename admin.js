@@ -587,10 +587,31 @@ function formatDataForSaving(data) {
 }
 
 // REPLACE the existing handleDownloadFromServer function
-handleDownloadFromServer
-// admin.js
+// PASTE THIS COMPLETE FUNCTION IN ITS PLACE:
 
-// ... (your existing handleDownloadAsFile function should be right above this)
+function handleDownloadFromServer() {
+    if (!currentData || !currentData.FACTION_ID) {
+        alert("No server-side army is currently loaded.");
+        return;
+    }
+
+    const factionId = currentData.FACTION_ID;
+    const fileName = `${factionId}-${getFormattedTimestamp()}.js`;
+    
+    // Determine the correct file path based on the factionId.
+    const filePath = factionId === 'comun' 
+        ? `/${factionId}.js`          // If 'comun', path is root: /comun.js
+        : `/armies/${factionId}.js`;  // Otherwise, path is /armies/faction.js
+
+    const a = document.createElement('a');
+    a.href = filePath; 
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+
 
 async function handleSaveToServer() {
     if (!currentData) return;
