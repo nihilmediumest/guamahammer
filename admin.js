@@ -97,10 +97,11 @@ function populateFactionSelector() {
         factionSelector.innerHTML += `<option value="${army.id}">${army.name}</option>`;
     });
 
-    // 2. Manually add the "Objetos Comunes" option to the end of the list
+    // 2. Unconditionally add the "Objetos Comunes" option to the list.
+    // This makes it editable in the admin panel at all times.
     factionSelector.innerHTML += `<option value="comun">Objetos Mágicos Comunes</option>`;
 
-    // Restore the previous selection if it exists
+    // Restore the previous selection if it exists and we're not loading a local file
     factionSelector.value = isDataFromLocalFile ? '' : previousSelection;
 }
 }
@@ -273,21 +274,23 @@ function buildUnitsUI(unitsDB) {
 
 
     // REPLACE the entire attributesHtml block with this corrected version:
-    let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
-        <label>Points: <input type="number" step="0.5" value="${unit.points}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="points"></label>
+     let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
+        <label>Points: <input type="number" step="0.5" value="${unit.points || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="points"></label>
         <label>FOC: <select data-db-key="${dbKey}" data-id="${unitName}" data-prop="foc">
             ${['Lord','Hero','Core','Special','Rare'].map(foc => `<option value="${foc}" ${unit.foc === foc ? 'selected' : ''}>${foc}</option>`).join('')}
         </select></label>
         <label>Subfaction: <input type="text" value="${unit.subfaction || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="subfaction"></label>
         
-      
+       
             (unit.composition && unit.composition.type === 'ratioBased')
+            
                 <div class="composition-group">
                     <label>Min Primary: <input type="number" value="${unit.min?.primary || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min.primary"></label>
                     <label>Min Secondary: <input type="number" value="${unit.min?.secondary || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min.secondary"></label>
                     <label>Max Primary: <input type="number" value="${unit.max?.primary || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max.primary"></label>
                     <label>Max Secondary: <input type="number" value="${unit.max?.secondary || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max.secondary"></label>
                 </div>
+           
                 <label>Min: <input type="number" value="${unit.min || 0}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="min"></label>
                 <label>Max: <input type="number" value="${unit.max || ''}" data-db-key="${dbKey}" data-id="${unitName}" data-prop="max"></label>
             
