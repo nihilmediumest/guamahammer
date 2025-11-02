@@ -577,12 +577,6 @@ function handleDownloadFromServer() {
 }
 // --- END OF THE MISSING FUNCTION ---
 
-
-async function handleSaveToServer() {
-    // ... (rest of the file remains the same) ...
-}
-
-
 async function handleSaveToServer() {
     if (!currentData) return;
     saveBtn.disabled = true;
