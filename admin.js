@@ -340,20 +340,17 @@ function buildComplexEntryUI(db, dbKey) {
             <div><label>Equipo:</label><textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="equipo">${entry.equipo || ''}</textarea></div>
             <div><label>Reglas Especiales:</label><textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="reglasEspeciales">${entry.reglasEspeciales || ''}</textarea></div>`;
 
-        let optionsHtml = '';
-        if (entry.options) {
-             optionsHtml = '<h4>Opciones</h4><table><thead><tr><th>Nombre (n)</th><th>Coste (p)</th><th>Resumen (summary)</th><th></th></tr></thead><tbody>';
-            (entry.options || []).forEach((opt, index) => {
-                optionsHtml += `<tr>
-                    <td><input type="text" value="${opt.n || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].n"></td>
-                    <td><input type="number" value="${opt.p || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].p" style="width: 70px;"></td>
-                    <td><input type="text" value="${opt.summary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].summary"></td>
-                    <td><button class="delete-row-btn" data-action="delete-option" data-db-key="${dbKey}" data-id="${entryName}" data-index="${index}">Delete</button></td>
-                </tr>`;
-            });
-            optionsHtml += '</tbody></table>';
-            optionsHtml += `<button class="add-row-btn" data-action="add-option" data-db-key="${dbKey}" data-id="${entryName}">+ Add Option</button>`;
-        }
+       let optionsHtml = '<h4>Opciones</h4><table><thead><tr><th>Nombre (n)</th><th>Coste (p)</th><th>Resumen (summary)</th><th></th></tr></thead><tbody>';
+(entry.options || []).forEach((opt, index) => {
+    optionsHtml += `<tr>
+        <td><input type="text" value="${opt.n || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].n"></td>
+        <td><input type="number" value="${opt.p || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].p" style="width: 70px;"></td>
+        <td><input type="text" value="${opt.summary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].summary"></td>
+        <td><button class="delete-row-btn" data-action="delete-option" data-db-key="${dbKey}" data-id="${entryName}" data-index="${index}">Delete</button></td>
+    </tr>`;
+});
+optionsHtml += '</tbody></table>';
+optionsHtml += `<button class="add-row-btn" data-action="add-option" data-db-key="${dbKey}" data-id="${entryName}">+ Add Option</button>`;
         const mountsHtml = entry.mounts ? `<div><label>Monturas (separadas por coma):</label><input type="text" value="${(entry.mounts || []).join(', ')}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="mounts"></div>` : '';
         
        card.innerHTML = `${warningHtml}${header}<div class="unit-layout"><div>${profileHtml}</div><div>${attributesHtml}${commandHtml}</div></div>${textAreasHtml}${optionsHtml}${mountsHtml}`;
