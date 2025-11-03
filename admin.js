@@ -270,9 +270,6 @@ function populateFactionSelector() {
  * @param {object} db - The database object (e.g., unitsDB, mountsDB).
  * @param {string} dbKey - The key for the database (e.g., 'unitsDB').
  */
-
-// REPLACE your entire buildComplexEntryUI function with this one.
-
 function buildComplexEntryUI(db, dbKey) {
     for (const entryName in db) {
         const entry = db[entryName];
@@ -281,11 +278,20 @@ function buildComplexEntryUI(db, dbKey) {
         const card = document.createElement('div');
         card.className = 'entry-card';
 
-        const warningHtml = entry.warning ? `<p class="warning-text" style="color: #FBBF24; font-style: italic;">${entry.warning}</p>` : '';
-        const header = `<div class="entry-header">
-            <input type="text" class="entry-title-input" value="${entryName}" data-db-key="${dbKey}" data-id="${entryName}">
-            <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${entryName}"> Mark for Deletion</label>
-        </div>`;
+        const warningHtml = `
+    <div class="warning-editor">
+        <label>Warning Text: 
+            <input 
+                type="text" 
+                class="warning-input" 
+                value="${entry.warning || ''}" 
+                placeholder="e.g., Only one per army"
+                data-db-key="${dbKey}" 
+                data-id="${entryName}" 
+                data-prop="warning">
+        </label>
+    </div>
+`;
 
         let profileHtml = '';
         if (entry.perfiles) {
