@@ -315,9 +315,20 @@ const header = `<div class="entry-header">
             </div>
         `;
 
+       
+        // --- START PHASE 3: COMPOSITION UNIT LOGIC ---
+        
+        let costAndSizeHtml = '';
+        const isCompositionUnit = entry.composition && entry.composition.type === 'ratioBased';
         let profileHtml = '';
+        // Only create the main H4 header if there are profiles or a command group
+        if (entry.perfiles || entry.command) {
+            profileHtml = '<h4>Perfiles</h4>';
+        }
+
+        // --- PROFILES TABLE ---
         if (entry.perfiles) {
-            profileHtml = '<h4>Perfiles</h4><table><thead><tr><th>Nombre</th><th>M</th><th>HA</th><th>HP</th><th>F</th><th>R</th><th>H</th><th>I</th><th>A</th><th>L</th><th></th></tr></thead><tbody>';
+            profileHtml += '<table><thead><tr><th>Nombre</th><th>M</th><th>HA</th><th>HP</th><th>F</th><th>R</th><th>H</th><th>I</th><th>A</th><th>L</th><th></th></tr></thead><tbody>';
             (entry.perfiles || []).forEach((p, index) => {
                 profileHtml += `<tr><td><input type="text" value="${p.nombre}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="perfiles[${index}].nombre"></td>`;
                 Object.keys(p.stats).forEach(stat => {
@@ -326,13 +337,29 @@ const header = `<div class="entry-header">
                 profileHtml += `<td><button class="delete-row-btn" data-action="delete-profile" data-db-key="${dbKey}" data-id="${entryName}" data-index="${index}">Delete</button></td></tr>`;
             });
             profileHtml += '</tbody></table>';
-            profileHtml += `<button class="add-row-btn" data-action="add-profile" data-db-key="${dbKey}" data-id="${entryName}">+ Add Profile</button>`;
+        }
+
+        // --- COMMAND GROUP (now part of profileHtml) ---
+        if (entry.command) {
+            profileHtml += '<div class="command-group-subsection">'; 
+            profileHtml += '<h5>Grupo de Mando</h5>';
+            profileHtml += '<div class="command-grid">';
+            ['c', 's', 'm'].forEach(cmdType => {
+                const cmd = entry.command[cmdType];
+                if (cmd) {
+                    profileHtml += `<div>
+                        <label><b>${cmdType.toUpperCase()}:</b> Nombre: <input type="text" value="${cmd.n || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="command.${cmdType}.n"></label>
+                        <label>Coste: <input type="number" value="${cmd.p || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="command.${cmdType}.p"></label>
+                    </div>`;
+                }
+            });
+            profileHtml += '</div></div>';
         }
         
-        // --- START PHASE 3: COMPOSITION UNIT LOGIC ---
-        
-        let costAndSizeHtml = '';
-        const isCompositionUnit = entry.composition && entry.composition.type === 'ratioBased';
+        // --- ADD PROFILE BUTTON (at the very end of the section) ---
+        if (entry.perfiles) {
+            profileHtml += `<button class="add-row-btn" data-action="add-profile" data-db-key="${dbKey}" data-id="${entryName}">+ Add Profile</button>`;
+        }
 
         if (isCompositionUnit) {
             // RENDER THE NEW COMPOSITION EDITOR UI
@@ -413,20 +440,7 @@ const header = `<div class="entry-header">
             specialAddonsHtml += `<button class="add-row-btn" data-action="add-addon" data-db-key="${dbKey}" data-id="${entryName}">+ Add Addon</button>`;
         }
         
-        let commandHtml = '';
-        if (entry.command) {
-            commandHtml = '<h4>Grupo de Mando</h4><div class="command-grid">';
-            ['c', 's', 'm'].forEach(cmdType => {
-                const cmd = entry.command[cmdType];
-                if (cmd) {
-                    commandHtml += `<div>
-                        <label><b>${cmdType.toUpperCase()}:</b> Nombre: <input type="text" value="${cmd.n || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="command.${cmdType}.n"></label>
-                        <label>Coste: <input type="number" value="${cmd.p || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="command.${cmdType}.p"></label>
-                    </div>`;
-                }
-            });
-            commandHtml += '</div>';
-        }
+       
         
         const textAreasHtml = `
             <div><label>Equipo:</label><textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="equipo">${entry.equipo || ''}</textarea></div>
@@ -501,7 +515,6 @@ const header = `<div class="entry-header">
                 <div>
                     ${costAndSizeHtml}
                     ${commonAttributesHtml}
-                    ${commandHtml}
                 </div>
             </div>
             ${textAreasHtml}
