@@ -296,7 +296,7 @@ const header = `<div class="entry-header">
     <input type="text" class="entry-title-input" value="${entryName}" data-db-key="${dbKey}" data-id="${entryName}">
     <div class="header-buttons">
         <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${entryName}">{...}</button>
-        <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${entryName}"> Mark for Deletion</label>
+        <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${entryName}"> Borrar</label>
     </div>
 </div>`;
 
@@ -534,7 +534,7 @@ function buildMagicItemsUI(magicItemsDB) {
         <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">
         <div class="header-buttons">
             <button class="raw-edit-btn" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">{...}</button>
-            <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}"> Mark for Deletion</label>
+            <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}"> Borrar</label>
         </div>
     </div>
     <div class="attributes-grid">
@@ -568,7 +568,7 @@ function buildSimpleUI(db, dbKey) {
     <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-id="${itemName}">
     <div class="header-buttons">
         <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${itemName}">{...}</button>
-        <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Mark for Deletion</label>
+        <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Borrar</label>
     </div>
 </div>
 <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="points"></label>
