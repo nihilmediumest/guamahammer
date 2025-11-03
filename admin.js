@@ -270,6 +270,8 @@ function populateFactionSelector() {
  * @param {object} db - The database object (e.g., unitsDB, mountsDB).
  * @param {string} dbKey - The key for the database (e.g., 'unitsDB').
  */
+// PASTE THIS ENTIRE FUNCTION, REPLACING THE OLD ONE in admin.js
+
 function buildComplexEntryUI(db, dbKey) {
     for (const entryName in db) {
         const entry = db[entryName];
@@ -297,55 +299,49 @@ function buildComplexEntryUI(db, dbKey) {
             profileHtml += '</tbody></table>';
             profileHtml += `<button class="add-row-btn" data-action="add-profile" data-db-key="${dbKey}" data-id="${entryName}">+ Add Profile</button>`;
         }
-let specialAddonsHtml = '';
-// Only build this section if the main category is 'units'
-if (activeFilters.mainCategory === 'units' && entry.hasOwnProperty('specialAddons')) {
-    specialAddonsHtml = '<h4>Unidades Complementarias (Addons)</h4><table><thead><tr><th>Nombre (name)</th><th>Coste (points)</th><th>Max (max)</th><th>Clave de Perfil (profileKey)</th><th></th></tr></thead><tbody>';
-    (entry.specialAddons || []).forEach((addon, index) => {
-        specialAddonsHtml += `<tr>
-            <td><input type="text" value="${addon.name || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].name"></td>
-            <td><input type="number" value="${addon.points || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].points" style="width: 70px;"></td>
-            <td><input type="number" value="${addon.max || 1}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].max" style="width: 70px;"></td>
-            <td><input type="text" value="${addon.profileKey || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].profileKey" placeholder="e.g., Fanático"></td>
-            <td><button class="delete-row-btn" data-action="delete-addon" data-db-key="${dbKey}" data-id="${entryName}" data-index="${index}">Delete</button></td>
-        </tr>`;
-    });
-    specialAddonsHtml += '</tbody></table>';
-    specialAddonsHtml += `<button class="add-row-btn" data-action="add-addon" data-db-key="${dbKey}" data-id="${entryName}">+ Add Addon</button>`;
-}
-
-   let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
-        <label>Points: <input type="number" step="0.5" value="${entry.points || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="points"></label>
-        <label>FOC: <select data-db-key="${dbKey}" data-id="${entryName}" data-prop="foc">
-            ${['Lord','Hero','Core','Special','Rare','Character','Chariot','Monstrous'].map(foc => `<option value="${foc}" ${entry.foc === foc ? 'selected' : ''}>${foc}</option>`).join('')}
-        </select></label>
-        <label>Subfaction: <input type="text" value="${entry.subfaction || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="subfaction"></label>
         
-       
-        ${
-            (entry.composition && entry.composition.type === 'ratioBased')
-            ? `
-                <div class="composition-group">
-                    <label>Min Primary: <input type="number" value="${entry.min?.primary || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min.primary"></label>
-                    <label>Min Secondary: <input type="number" value="${entry.min?.secondary || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min.secondary"></label>
-                    <label>Max Primary: <input type="number" value="${entry.max?.primary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max.primary"></label>
-                    <label>Max Secondary: <input type="number" value="${entry.max?.secondary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max.secondary"></label>
-                </div>
-            `
-            : `
-                <label>Min: <input type="number" value="${entry.min || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min"></label>
-                <label>Max: <input type="number" value="${entry.max || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max"></label>
-            `
+        let specialAddonsHtml = '';
+        if (activeFilters.mainCategory === 'units' && entry.hasOwnProperty('specialAddons')) {
+            specialAddonsHtml = '<h4>Unidades Complementarias (Addons)</h4><table><thead><tr><th>Nombre (name)</th><th>Coste (points)</th><th>Max (max)</th><th>Clave de Perfil (profileKey)</th><th></th></tr></thead><tbody>';
+            (entry.specialAddons || []).forEach((addon, index) => {
+                specialAddonsHtml += `<tr>
+                    <td><input type="text" value="${addon.name || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].name"></td>
+                    <td><input type="number" value="${addon.points || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].points" style="width: 70px;"></td>
+                    <td><input type="number" value="${addon.max || 1}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].max" style="width: 70px;"></td>
+                    <td><input type="text" value="${addon.profileKey || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].profileKey" placeholder="e.g., Fanático"></td>
+                    <td><button class="delete-row-btn" data-action="delete-addon" data-db-key="${dbKey}" data-id="${entryName}" data-index="${index}">Delete</button></td>
+                </tr>`;
+            });
+            specialAddonsHtml += '</tbody></table>';
+            specialAddonsHtml += `<button class="add-row-btn" data-action="add-addon" data-db-key="${dbKey}" data-id="${entryName}">+ Add Addon</button>`;
         }
 
-        <label>Max Regalos: <input type="number" value="${entry.maxRegalos || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxRegalos"></label>
-        <label>Max Iconos: <input type="number" value="${entry.maxIconos || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxIconos"></label>
-        <label>Magic Banner: <input type="number" value="${entry.magicBanner || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="magicBanner"></label>
-        <label>Champ Items: <input type="number" value="${entry.champItems || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="champItems"></label>
-        <label>Max Magic Items: <input type="number" value="${entry.maxMagicItems || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxMagicItems"></label>
-        <label>Max Relics: <input type="number" value="${entry.maxRelics || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxRelics"></label>
-    </div>`;
+        let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
+            <label>Points: <input type="number" step="0.5" value="${entry.points || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="points"></label>
+            <label>FOC: <select data-db-key="${dbKey}" data-id="${entryName}" data-prop="foc">
+                ${['Lord','Hero','Core','Special','Rare','Character','Chariot','Monstrous'].map(foc => `<option value="${foc}" ${entry.foc === foc ? 'selected' : ''}>${foc}</option>`).join('')}
+            </select></label>
+            <label>Subfaction: <input type="text" value="${entry.subfaction || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="subfaction"></label>
+            
+            ${
+                (entry.composition && entry.composition.type === 'ratioBased')
+                ? `<div class="composition-group">
+                        <label>Min Primary: <input type="number" value="${entry.min?.primary || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min.primary"></label>
+                        <label>Min Secondary: <input type="number" value="${entry.min?.secondary || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min.secondary"></label>
+                        <label>Max Primary: <input type="number" value="${entry.max?.primary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max.primary"></label>
+                        <label>Max Secondary: <input type="number" value="${entry.max?.secondary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max.secondary"></label>
+                    </div>`
+                : `<label>Min: <input type="number" value="${entry.min || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min"></label>
+                   <label>Max: <input type="number" value="${entry.max || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max"></label>`
+            }
 
+            <label>Max Regalos: <input type="number" value="${entry.maxRegalos || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxRegalos"></label>
+            <label>Max Iconos: <input type="number" value="${entry.maxIconos || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxIconos"></label>
+            <label>Magic Banner: <input type="number" value="${entry.magicBanner || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="magicBanner"></label>
+            <label>Champ Items: <input type="number" value="${entry.champItems || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="champItems"></label>
+            <label>Max Magic Items: <input type="number" value="${entry.maxMagicItems || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxMagicItems"></label>
+            <label>Max Relics: <input type="number" value="${entry.maxRelics || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxRelics"></label>
+        </div>`;
 
         let commandHtml = '';
         if (entry.command) {
@@ -366,25 +362,79 @@ if (activeFilters.mainCategory === 'units' && entry.hasOwnProperty('specialAddon
             <div><label>Equipo:</label><textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="equipo">${entry.equipo || ''}</textarea></div>
             <div><label>Reglas Especiales:</label><textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="reglasEspeciales">${entry.reglasEspeciales || ''}</textarea></div>`;
 
-       let optionsHtml = '<h4>Opciones</h4><table><thead><tr><th>Nombre (n)</th><th>Coste (p)</th><th>Resumen (summary)</th><th></th></tr></thead><tbody>';
-(entry.options || []).forEach((opt, index) => {
-    optionsHtml += `<tr>
-        <td><input type="text" value="${opt.n || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].n"></td>
-        <td><input type="number" value="${opt.p || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].p" style="width: 70px;"></td>
-        <td><input type="text" value="${opt.summary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].summary"></td>
-        <td><button class="delete-row-btn" data-action="delete-option" data-db-key="${dbKey}" data-id="${entryName}" data-index="${index}">Delete</button></td>
-    </tr>`;
-});
-optionsHtml += '</tbody></table>';
-optionsHtml += `<button class="add-row-btn" data-action="add-option" data-db-key="${dbKey}" data-id="${entryName}">+ Add Option</button>`;
+        // --- START: MODIFIED OPTIONS SECTION ---
+        let optionsHtml = '<h4>Opciones</h4>';
+        const optionsTableHead = `<table><thead><tr>
+            <th>Nombre (n)</th>
+            <th>Coste (p)</th>
+            <th>Resumen (summary)</th>
+            <th>Exclusive Group</th>
+            <th></th>
+        </tr></thead><tbody>`;
+        
+        const options = entry.options || [];
+        let optionsTableBodyHtml = '';
+
+        if (options.length > 0) {
+            const exclusiveGroups = {};
+            const nonGroupedOptions = [];
+
+            // Group options by exclusiveGroup while preserving original index
+            options.forEach((opt, index) => {
+                opt.originalIndex = index; // Critical for data binding
+                if (opt.exclusiveGroup) {
+                    if (!exclusiveGroups[opt.exclusiveGroup]) {
+                        exclusiveGroups[opt.exclusiveGroup] = [];
+                    }
+                    exclusiveGroups[opt.exclusiveGroup].push(opt);
+                } else {
+                    nonGroupedOptions.push(opt);
+                }
+            });
+
+            // Function to generate a row
+            const createRow = (opt) => {
+                const index = opt.originalIndex;
+                return `<tr>
+                    <td><input type="text" value="${opt.n || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].n"></td>
+                    <td><input type="number" value="${opt.p || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].p" style="width: 70px;"></td>
+                    <td><input type="text" value="${opt.summary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].summary"></td>
+                    <td><input type="text" value="${opt.exclusiveGroup || ''}" placeholder="e.g., chaosMark" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].exclusiveGroup"></td>
+                    <td><button class="delete-row-btn" data-action="delete-option" data-db-key="${dbKey}" data-id="${entryName}" data-index="${index}">Delete</button></td>
+                </tr>`;
+            };
+
+            // Render grouped options inside fieldsets
+            for (const groupName in exclusiveGroups) {
+                optionsTableBodyHtml += `<fieldset class="exclusive-group-fieldset"><legend>${groupName}</legend>`;
+                exclusiveGroups[groupName].forEach(opt => {
+                    optionsTableBodyHtml += createRow(opt);
+                });
+                optionsTableBodyHtml += `</fieldset>`;
+            }
+
+            // Render non-grouped options
+            nonGroupedOptions.forEach(opt => {
+                optionsTableBodyHtml += createRow(opt);
+            });
+            
+            optionsHtml += optionsTableHead + optionsTableBodyHtml + '</tbody></table>';
+        } else {
+            // Still show the header if there are no options yet
+             optionsHtml += optionsTableHead + '</tbody></table>';
+        }
+        
+        optionsHtml += `<button class="add-row-btn" data-action="add-option" data-db-key="${dbKey}" data-id="${entryName}">+ Add Option</button>`;
+        // --- END: MODIFIED OPTIONS SECTION ---
+
         const mountsHtml = entry.mounts ? `<div><label>Monturas (separadas por coma):</label><input type="text" value="${(entry.mounts || []).join(', ')}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="mounts"></div>` : '';
         
-       // Corrected final assembly line
         card.innerHTML = `${warningHtml}${header}<div class="unit-layout"><div>${profileHtml}</div><div>${attributesHtml}${commandHtml}</div></div>${textAreasHtml}${optionsHtml}${specialAddonsHtml}${mountsHtml}`;
 
         editorContainer.appendChild(card);
     }
 }
+
 
 
 function buildMagicItemsUI(magicItemsDB) {

@@ -88,6 +88,26 @@ button:disabled { background-color: #2d3748; cursor: not-allowed; opacity: 0.6; 
     border-color: #718096; /* Show border on focus/hover */
 }
 
+/* Add this CSS to your admin.html or its stylesheet */
+
+.exclusive-group-fieldset {
+    border: 1px solid #4A5568; /* A dark gray border */
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: #2D3748; /* A slightly lighter background */
+}
+
+.exclusive-group-fieldset legend {
+    padding: 0 0.5rem;
+    font-weight: bold;
+    color: #A0AEC0; /* A light gray for the text */
+}
+
+/* Optional: remove padding from the table inside a fieldset to align it */
+.exclusive-group-fieldset > table {
+    margin: 0;
+}
 
 #editor-container {
     display: grid;
