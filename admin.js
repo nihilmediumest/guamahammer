@@ -295,10 +295,11 @@ function buildComplexEntryUI(db, dbKey) {
 const header = `<div class="entry-header">
     <input type="text" class="entry-title-input" value="${entryName}" data-db-key="${dbKey}" data-id="${entryName}">
     <div class="header-buttons">
-        <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${entryName}">Edición Avanzada</button>
+        <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${entryName}">{...}</button>
         <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${entryName}"> Mark for Deletion</label>
     </div>
 </div>`;
+
    const warningHtml = `
             <div class="warning-editor">
                 <label>Warning Text: 
@@ -528,11 +529,11 @@ function buildMagicItemsUI(magicItemsDB) {
             card.className = 'entry-card';
             const dbKey = getDbKeyForCategory('magicItems');
 
-    card.innerHTML = `
+   card.innerHTML = `
     <div class="entry-header">
         <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">
         <div class="header-buttons">
-            <button class="raw-edit-btn" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">Edición Avanzada</button>
+            <button class="raw-edit-btn" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">{...}</button>
             <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}"> Mark for Deletion</label>
         </div>
     </div>
@@ -566,7 +567,7 @@ function buildSimpleUI(db, dbKey) {
        card.innerHTML = `<div class="entry-header">
     <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-id="${itemName}">
     <div class="header-buttons">
-        <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${itemName}">Edición Avanzada</button>
+        <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${itemName}">{...}</button>
         <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Mark for Deletion</label>
     </div>
 </div>
