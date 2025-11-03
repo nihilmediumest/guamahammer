@@ -1,5 +1,10 @@
 import { ARMY_REGISTRY } from './ejercitos.js';
 // --- DOM Elements ---
+
+const rawEditorModal = document.getElementById('raw-editor-modal');
+const rawJsonTextarea = document.getElementById('raw-json-textarea');
+const saveRawJsonBtn = document.getElementById('save-raw-json-btn');
+const cancelRawJsonBtn = document.getElementById('cancel-raw-json-btn');
 const fileLoader = document.getElementById('fileLoader');
 const mainFilterGroup = document.getElementById('main-filter-group');
 const subFilterGroup = document.getElementById('sub-filter-group');
@@ -48,6 +53,8 @@ function initialize() {
     updateSubFilters();
 }
 
+// REPLACE your existing attachEventListeners function with this one.
+
 function attachEventListeners() {
     // Delegate all input changes through the editor container
     editorContainer.addEventListener('change', (e) => {
@@ -63,11 +70,13 @@ function attachEventListeners() {
         }
     });
 
-    // NEW: Add a click listener for dynamic row buttons
+    // Modified click listener to handle raw editor button
     editorContainer.addEventListener('click', (e) => {
         const target = e.target;
         if (target.matches('.add-row-btn') || target.matches('.delete-row-btn')) {
             handleRowAction(e);
+        } else if (target.matches('.raw-edit-btn')) { // <-- ADD THIS ELSE-IF BLOCK
+            handleOpenRawEditor(e);
         }
     });
 
@@ -109,7 +118,12 @@ function attachEventListeners() {
             render();
         }
     });
+
+    // --- ADD THESE TWO NEW LISTENERS FOR THE MODAL ---
+    saveRawJsonBtn.addEventListener('click', handleSaveRawEditor);
+    cancelRawJsonBtn.addEventListener('click', () => rawEditorModal.close());
 }
+
 
 // ===================================================================================
 // --- DATA LOADING & PROCESSING ---
@@ -274,27 +288,31 @@ function buildComplexEntryUI(db, dbKey) {
     for (const entryName in db) {
         const entry = db[entryName];
         if (activeFilters.subCategories.size > 0 && !activeFilters.subCategories.has(entry.foc)) continue;
-const header = `<div class="entry-header">
-            <input type="text" class="entry-title-input" value="${entryName}" data-db-key="${dbKey}" data-id="${entryName}">
-            <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${entryName}"> Mark for Deletion</label>
-        </div>`;
+
         const card = document.createElement('div');
         card.className = 'entry-card';
 
-        const warningHtml = `
-    <div class="warning-editor">
-        <label>Warning Text: 
-            <input 
-                type="text" 
-                class="warning-input" 
-                value="${entry.warning || ''}" 
-                placeholder="e.g., Only one per army"
-                data-db-key="${dbKey}" 
-                data-id="${entryName}" 
-                data-prop="warning">
-        </label>
+const header = `<div class="entry-header">
+    <input type="text" class="entry-title-input" value="${entryName}" data-db-key="${dbKey}" data-id="${entryName}">
+    <div class="header-buttons">
+        <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${entryName}">Edición Avanzada</button>
+        <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${entryName}"> Mark for Deletion</label>
     </div>
-`;
+</div>`;
+   const warningHtml = `
+            <div class="warning-editor">
+                <label>Warning Text: 
+                    <input 
+                        type="text" 
+                        class="warning-input" 
+                        value="${entry.warning || ''}" 
+                        placeholder="e.g., Only one per army"
+                        data-db-key="${dbKey}" 
+                        data-id="${entryName}" 
+                        data-prop="warning">
+                </label>
+            </div>
+        `;
 
         let profileHtml = '';
         if (entry.perfiles) {
@@ -509,21 +527,26 @@ function buildMagicItemsUI(magicItemsDB) {
             const card = document.createElement('div');
             card.className = 'entry-card';
             const dbKey = getDbKeyForCategory('magicItems');
-            card.innerHTML = `
-                <div class="entry-header">
-                    <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">
-                    <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}"> Mark for Deletion</label>
-                </div>
-                <div class="attributes-grid">
-                    <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="points"></label>
-                    <label>Relic: <select data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="relic">
-                        <option value="true" ${item.relic === true ? 'selected' : ''}>Yes</option>
-                        <option value="false" ${item.relic !== true ? 'selected' : ''}>No</option>
-                    </select></label>
-                </div>
-                <label>Summary:</label>
-                <textarea data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>
-            `;
+
+    card.innerHTML = `
+    <div class="entry-header">
+        <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">
+        <div class="header-buttons">
+            <button class="raw-edit-btn" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">Edición Avanzada</button>
+            <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}"> Mark for Deletion</label>
+        </div>
+    </div>
+    <div class="attributes-grid">
+        <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="points"></label>
+        <label>Relic: <select data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="relic">
+            <option value="true" ${item.relic === true ? 'selected' : ''}>Yes</option>
+            <option value="false" ${item.relic !== true ? 'selected' : ''}>No</option>
+        </select></label>
+    </div>
+    <label>Summary:</label>
+    <textarea data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>
+`;
+
             editorContainer.appendChild(card);
         }
     }
@@ -540,12 +563,15 @@ function buildSimpleUI(db, dbKey) {
 
         const card = document.createElement('div');
         card.className = 'entry-card';
-        card.innerHTML = `<div class="entry-header">
-            <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-id="${itemName}">
-            <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Mark for Deletion</label>
-        </div>
-        <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="points"></label>
-        <label>Summary:</label><textarea data-db-key="${dbKey}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>`;
+       card.innerHTML = `<div class="entry-header">
+    <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-id="${itemName}">
+    <div class="header-buttons">
+        <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${itemName}">Edición Avanzada</button>
+        <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Mark for Deletion</label>
+    </div>
+</div>
+<label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="points"></label>
+<label>Summary:</label><textarea data-db-key="${dbKey}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>`;
         editorContainer.appendChild(card);
     }
 }
@@ -592,8 +618,62 @@ function handleDataChange(event) {
     target[keys[keys.length - 1]] = value;
 }
 
+/**
+ * NEW: Opens the raw JSON editor modal with the data for the selected entry.
+ */
+function handleOpenRawEditor(event) {
+    const button = event.target;
+    const { dbKey, category, id } = button.dataset;
 
-// NEW: Handles renaming of an entry (changing the object key)
+    const entry = category 
+        ? currentData[dbKey]?.[category]?.[id] 
+        : currentData[dbKey]?.[id];
+
+    if (!entry) {
+        alert("Could not find data for this entry.");
+        return;
+    }
+
+    // Store the entry's location on the modal itself for the save function to find
+    rawEditorModal.dataset.dbKey = dbKey;
+    rawEditorModal.dataset.id = id;
+    if (category) {
+        rawEditorModal.dataset.category = category;
+    } else {
+        delete rawEditorModal.dataset.category; // Ensure it's clean for non-category items
+    }
+
+    // Populate the textarea and show the modal
+    rawJsonTextarea.value = JSON.stringify(entry, null, 2);
+    rawEditorModal.showModal();
+}
+
+/**
+ * NEW: Saves the content of the raw JSON editor back to the main data object.
+ */
+function handleSaveRawEditor() {
+    const { dbKey, category, id } = rawEditorModal.dataset;
+    const jsonText = rawJsonTextarea.value;
+
+    let newObject;
+    try {
+        newObject = JSON.parse(jsonText);
+    } catch (error) {
+        alert(`Error: Invalid JSON format.\n\n${error.message}`);
+        return; // Don't save or close
+    }
+
+    // Update the data in the correct location
+    if (category) {
+        currentData[dbKey][category][id] = newObject;
+    } else {
+        currentData[dbKey][id] = newObject;
+    }
+
+    rawEditorModal.close();
+    render(); // Re-render the entire UI to reflect potentially major changes
+}
+// Handles renaming of an entry (changing the object key)
 function handleRename(event) {
     const input = event.target;
     const { dbKey, category } = input.dataset;
@@ -1002,6 +1082,5 @@ function handleDownloadAsFile() {
     a.click();
     URL.revokeObjectURL(url);
 }
-
 
 

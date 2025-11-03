@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guamahammer Admin Editor</title>
+    <title>Guamahammer Editor</title>
     <link rel="stylesheet" href="admin.css">
 </head>
 
@@ -49,5 +49,16 @@
 </footer>
 
     <script type="module" src="admin.js"></script>
+    <!-- PASTE THIS DIALOG ELEMENT AT THE END OF YOUR admin.html FILE, BEFORE </body> -->
+<dialog id="raw-editor-modal">
+    <h2>Edición Avanzada (JSON)</h2>
+    <p>Advertencia: Los cambios aquí pueden romper el formato de datos. Usar con cuidado.</p>
+    <textarea id="raw-json-textarea" spellcheck="false"></textarea>
+    <footer>
+        <button id="cancel-raw-json-btn" type="button">Cancelar</button>
+        <button id="save-raw-json-btn" type="button">Guardar Cambios</button>
+    </footer>
+</dialog>
+
 </body>
 </html>
