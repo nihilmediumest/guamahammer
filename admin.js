@@ -274,7 +274,10 @@ function buildComplexEntryUI(db, dbKey) {
     for (const entryName in db) {
         const entry = db[entryName];
         if (activeFilters.subCategories.size > 0 && !activeFilters.subCategories.has(entry.foc)) continue;
-
+const header = `<div class="entry-header">
+            <input type="text" class="entry-title-input" value="${entryName}" data-db-key="${dbKey}" data-id="${entryName}">
+            <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${entryName}"> Mark for Deletion</label>
+        </div>`;
         const card = document.createElement('div');
         card.className = 'entry-card';
 
@@ -999,5 +1002,6 @@ function handleDownloadAsFile() {
     a.click();
     URL.revokeObjectURL(url);
 }
+
 
 
