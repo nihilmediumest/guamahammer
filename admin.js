@@ -270,7 +270,8 @@ function populateFactionSelector() {
  * @param {object} db - The database object (e.g., unitsDB, mountsDB).
  * @param {string} dbKey - The key for the database (e.g., 'unitsDB').
  */
-// PASTE THIS ENTIRE FUNCTION, REPLACING THE OLD ONE in admin.js
+
+// REPLACE your entire buildComplexEntryUI function with this one.
 
 function buildComplexEntryUI(db, dbKey) {
     for (const entryName in db) {
@@ -279,7 +280,7 @@ function buildComplexEntryUI(db, dbKey) {
 
         const card = document.createElement('div');
         card.className = 'entry-card';
-        
+
         const warningHtml = entry.warning ? `<p class="warning-text" style="color: #FBBF24; font-style: italic;">${entry.warning}</p>` : '';
         const header = `<div class="entry-header">
             <input type="text" class="entry-title-input" value="${entryName}" data-db-key="${dbKey}" data-id="${entryName}">
@@ -300,6 +301,74 @@ function buildComplexEntryUI(db, dbKey) {
             profileHtml += `<button class="add-row-btn" data-action="add-profile" data-db-key="${dbKey}" data-id="${entryName}">+ Add Profile</button>`;
         }
         
+        // --- START PHASE 3: COMPOSITION UNIT LOGIC ---
+        
+        let costAndSizeHtml = '';
+        const isCompositionUnit = entry.composition && entry.composition.type === 'ratioBased';
+
+        if (isCompositionUnit) {
+            // RENDER THE NEW COMPOSITION EDITOR UI
+            // Optional chaining (?.) is used heavily to prevent errors if parts of the object don't exist yet.
+            costAndSizeHtml = `
+                <h4>Atributos (Composición por Ratio)</h4>
+                <div class="composition-editor">
+                    <fieldset>
+                        <legend>Unidad Primaria</legend>
+                        <label>Nombre: <input type="text" value="${entry.composition?.primary?.name || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="composition.primary.name"></label>
+                        <label>Coste: <input type="number" value="${entry.composition?.primary?.cost || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="composition.primary.cost"></label>
+                        <label>Min: <input type="number" value="${entry.min?.primary || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min.primary"></label>
+                        <label>Max: <input type="number" value="${entry.max?.primary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max.primary"></label>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Unidad Secundaria</legend>
+                        <label>Nombre: <input type="text" value="${entry.composition?.secondary?.name || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="composition.secondary.name"></label>
+                        <label>Coste: <input type="number" value="${entry.composition?.secondary?.cost || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="composition.secondary.cost"></label>
+                        <label>Min: <input type="number" value="${entry.min?.secondary || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min.secondary"></label>
+                        <label>Max: <input type="number" value="${entry.max?.secondary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max.secondary"></label>
+                    </fieldset>
+                    <fieldset class="rule-logic-fieldset">
+                        <legend>Regla de Composición</legend>
+                        <label>Texto de la Regla:</label>
+                        <textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="composition.ruleText">${entry.composition?.ruleText || ''}</textarea>
+                        <div class="rule-logic-grid">
+                            <label>Secundarias Min: <input type="number" value="${entry.composition?.ruleLogic?.secondaryMin || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="composition.ruleLogic.secondaryMin" title="Minimum number of secondary units required, regardless of primary count."></label>
+                            <label>Secundarias Max: <input type="number" value="${entry.composition?.ruleLogic?.secondaryMax || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="composition.ruleLogic.secondaryMax" title="Absolute maximum number of secondary units allowed."></label>
+                            <label>por cada Primaria: <input type="number" value="${entry.composition?.ruleLogic?.perPrimary || 1}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="composition.ruleLogic.perPrimary" title="How many secondary units can be taken for each primary unit."></label>
+                        </div>
+                    </fieldset>
+                </div>
+            `;
+        } else {
+            // RENDER THE STANDARD POINTS/MIN/MAX UI (this is the old code)
+            costAndSizeHtml = `
+                <h4>Atributos</h4>
+                <div class="attributes-grid">
+                    <label>Points: <input type="number" step="0.5" value="${entry.points || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="points"></label>
+                    <label>Min: <input type="number" value="${entry.min || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min"></label>
+                    <label>Max: <input type="number" value="${entry.max || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max"></label>
+                </div>`;
+        }
+        
+        // These attributes are common to BOTH standard and composition units.
+        // We define them once to avoid duplicating code inside the if/else block.
+        const commonAttributesHtml = `
+            <div class="attributes-grid common-attributes">
+                <label>FOC: <select data-db-key="${dbKey}" data-id="${entryName}" data-prop="foc">
+                    ${['Lord','Hero','Core','Special','Rare','Character','Chariot','Monstrous'].map(foc => `<option value="${foc}" ${entry.foc === foc ? 'selected' : ''}>${foc}</option>`).join('')}
+                </select></label>
+                <label>Subfaction: <input type="text" value="${entry.subfaction || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="subfaction"></label>
+                <label>Max Regalos: <input type="number" value="${entry.maxRegalos || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxRegalos"></label>
+                <label>Max Iconos: <input type="number" value="${entry.maxIconos || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxIconos"></label>
+                <label>Magic Banner: <input type="number" value="${entry.magicBanner || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="magicBanner"></label>
+                <label>Champ Items: <input type="number" value="${entry.champItems || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="champItems"></label>
+                <label>Max Magic Items: <input type="number" value="${entry.maxMagicItems || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxMagicItems"></label>
+                <label>Max Relics: <input type="number" value="${entry.maxRelics || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxRelics"></label>
+            </div>
+        `;
+
+        // --- END PHASE 3: COMPOSITION UNIT LOGIC ---
+
+
         let specialAddonsHtml = '';
         if (activeFilters.mainCategory === 'units' && entry.hasOwnProperty('specialAddons')) {
             specialAddonsHtml = '<h4>Unidades Complementarias (Addons)</h4><table><thead><tr><th>Nombre (name)</th><th>Coste (points)</th><th>Max (max)</th><th>Clave de Perfil (profileKey)</th><th></th></tr></thead><tbody>';
@@ -315,34 +384,7 @@ function buildComplexEntryUI(db, dbKey) {
             specialAddonsHtml += '</tbody></table>';
             specialAddonsHtml += `<button class="add-row-btn" data-action="add-addon" data-db-key="${dbKey}" data-id="${entryName}">+ Add Addon</button>`;
         }
-
-        let attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">
-            <label>Points: <input type="number" step="0.5" value="${entry.points || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="points"></label>
-            <label>FOC: <select data-db-key="${dbKey}" data-id="${entryName}" data-prop="foc">
-                ${['Lord','Hero','Core','Special','Rare','Character','Chariot','Monstrous'].map(foc => `<option value="${foc}" ${entry.foc === foc ? 'selected' : ''}>${foc}</option>`).join('')}
-            </select></label>
-            <label>Subfaction: <input type="text" value="${entry.subfaction || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="subfaction"></label>
-            
-            ${
-                (entry.composition && entry.composition.type === 'ratioBased')
-                ? `<div class="composition-group">
-                        <label>Min Primary: <input type="number" value="${entry.min?.primary || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min.primary"></label>
-                        <label>Min Secondary: <input type="number" value="${entry.min?.secondary || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min.secondary"></label>
-                        <label>Max Primary: <input type="number" value="${entry.max?.primary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max.primary"></label>
-                        <label>Max Secondary: <input type="number" value="${entry.max?.secondary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max.secondary"></label>
-                    </div>`
-                : `<label>Min: <input type="number" value="${entry.min || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="min"></label>
-                   <label>Max: <input type="number" value="${entry.max || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="max"></label>`
-            }
-
-            <label>Max Regalos: <input type="number" value="${entry.maxRegalos || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxRegalos"></label>
-            <label>Max Iconos: <input type="number" value="${entry.maxIconos || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxIconos"></label>
-            <label>Magic Banner: <input type="number" value="${entry.magicBanner || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="magicBanner"></label>
-            <label>Champ Items: <input type="number" value="${entry.champItems || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="champItems"></label>
-            <label>Max Magic Items: <input type="number" value="${entry.maxMagicItems || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxMagicItems"></label>
-            <label>Max Relics: <input type="number" value="${entry.maxRelics || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="maxRelics"></label>
-        </div>`;
-
+        
         let commandHtml = '';
         if (entry.command) {
             commandHtml = '<h4>Grupo de Mando</h4><div class="command-grid">';
@@ -362,7 +404,6 @@ function buildComplexEntryUI(db, dbKey) {
             <div><label>Equipo:</label><textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="equipo">${entry.equipo || ''}</textarea></div>
             <div><label>Reglas Especiales:</label><textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="reglasEspeciales">${entry.reglasEspeciales || ''}</textarea></div>`;
 
-        // --- START: MODIFIED OPTIONS SECTION ---
         let optionsHtml = '<h4>Opciones</h4>';
         const optionsTableHead = `<table><thead><tr>
             <th>Nombre (n)</th>
@@ -379,9 +420,8 @@ function buildComplexEntryUI(db, dbKey) {
             const exclusiveGroups = {};
             const nonGroupedOptions = [];
 
-            // Group options by exclusiveGroup while preserving original index
             options.forEach((opt, index) => {
-                opt.originalIndex = index; // Critical for data binding
+                opt.originalIndex = index; 
                 if (opt.exclusiveGroup) {
                     if (!exclusiveGroups[opt.exclusiveGroup]) {
                         exclusiveGroups[opt.exclusiveGroup] = [];
@@ -392,7 +432,6 @@ function buildComplexEntryUI(db, dbKey) {
                 }
             });
 
-            // Function to generate a row
             const createRow = (opt) => {
                 const index = opt.originalIndex;
                 return `<tr>
@@ -404,7 +443,6 @@ function buildComplexEntryUI(db, dbKey) {
                 </tr>`;
             };
 
-            // Render grouped options inside fieldsets
             for (const groupName in exclusiveGroups) {
                 optionsTableBodyHtml += `<fieldset class="exclusive-group-fieldset"><legend>${groupName}</legend>`;
                 exclusiveGroups[groupName].forEach(opt => {
@@ -413,27 +451,40 @@ function buildComplexEntryUI(db, dbKey) {
                 optionsTableBodyHtml += `</fieldset>`;
             }
 
-            // Render non-grouped options
             nonGroupedOptions.forEach(opt => {
                 optionsTableBodyHtml += createRow(opt);
             });
             
             optionsHtml += optionsTableHead + optionsTableBodyHtml + '</tbody></table>';
         } else {
-            // Still show the header if there are no options yet
              optionsHtml += optionsTableHead + '</tbody></table>';
         }
         
         optionsHtml += `<button class="add-row-btn" data-action="add-option" data-db-key="${dbKey}" data-id="${entryName}">+ Add Option</button>`;
-        // --- END: MODIFIED OPTIONS SECTION ---
 
         const mountsHtml = entry.mounts ? `<div><label>Monturas (separadas por coma):</label><input type="text" value="${(entry.mounts || []).join(', ')}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="mounts"></div>` : '';
         
-        card.innerHTML = `${warningHtml}${header}<div class="unit-layout"><div>${profileHtml}</div><div>${attributesHtml}${commandHtml}</div></div>${textAreasHtml}${optionsHtml}${specialAddonsHtml}${mountsHtml}`;
+        // Final Assembly of the card's inner HTML
+        card.innerHTML = `${warningHtml}${header}
+            <div class="unit-layout">
+                <div>
+                    ${profileHtml}
+                </div>
+                <div>
+                    ${costAndSizeHtml}
+                    ${commonAttributesHtml}
+                    ${commandHtml}
+                </div>
+            </div>
+            ${textAreasHtml}
+            ${optionsHtml}
+            ${specialAddonsHtml}
+            ${mountsHtml}`;
 
         editorContainer.appendChild(card);
     }
 }
+
 
 
 
