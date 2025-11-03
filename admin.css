@@ -179,3 +179,61 @@ footer {
     justify-content: center;
     box-sizing: border-box;
 }
+/* PASTE THIS AT THE END OF YOUR admin.css FILE */
+
+/* Style for the modal window itself */
+#raw-editor-modal {
+    width: 90%;
+    max-width: 800px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #2d3748; /* Matching the dark theme */
+    color: #edf2f7;
+}
+
+/* Style for the semi-transparent background behind the modal */
+#raw-editor-modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Style for the textarea to make it usable */
+#raw-json-textarea {
+    display: block;
+    width: 100%;
+    min-height: 400px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: #1a202c;
+    color: #a0aec0;
+    border: 1px solid #4a5568;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace; /* Use a monospaced font for code */
+    font-size: 14px;
+    resize: vertical;
+}
+
+/* Style for the footer containing the buttons */
+#raw-editor-modal footer {
+    display: flex;
+    justify-content: flex-end; /* Aligns buttons to the right */
+    gap: 15px; /* Adds space between buttons */
+}
+
+/* Basic styling for the buttons inside the modal */
+#raw-editor-modal button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+#cancel-raw-json-btn {
+    background-color: #718096;
+    color: white;
+}
+
+#save-raw-json-btn {
+    background-color: #38a169; /* Green for save */
+    color: white;
+}
