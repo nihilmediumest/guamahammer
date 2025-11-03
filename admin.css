@@ -164,34 +164,6 @@ td input { padding: 4px; }
     border-radius: 3px;
     font-size: 0.8em;
 }
-
-/* --- Footer --- */
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #2d3748;
-    padding: 10px 20px;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    box-sizing: border-box;
-}
-/* PASTE THIS AT THE END OF YOUR admin.css FILE */
-
-/* Style for the modal window itself */
-#raw-editor-modal {
-    width: 90%;
-    max-width: 800px;
-    border: 1px solid #555;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #2d3748; /* Matching the dark theme */
-    color: #edf2f7;
-}
-
 /* Style for the semi-transparent background behind the modal */
 #raw-editor-modal::backdrop {
     background-color: rgba(0, 0, 0, 0.6);
@@ -237,3 +209,31 @@ footer {
     background-color: #38a169; /* Green for save */
     color: white;
 }
+
+/* --- Footer --- */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2d3748;
+    padding: 10px 20px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    box-sizing: border-box;
+}
+/* PASTE THIS AT THE END OF YOUR admin.css FILE */
+
+/* Style for the modal window itself */
+#raw-editor-modal {
+    width: 90%;
+    max-width: 800px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #2d3748; /* Matching the dark theme */
+    color: #edf2f7;
+}
+
