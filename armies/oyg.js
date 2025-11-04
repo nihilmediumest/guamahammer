@@ -1230,53 +1230,8 @@ const magicItemsDB_oyg = {
             "Tranka Krujehuezoz de Krumpa": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Arma a dos manos. Furia asesina permanente, Odio." },
             "Kacharroz de matar de Owzat": { points: 20, faction: "oyg", relic: false, subfaction: "Orco", summary: "Rebanadoras emparejadas. Odio, Golpe Maestro." },
             "Aplastakráncos": { points: 10, faction: "oyg", relic: false, subfaction: "Orco", summary: "Arma a dos manos. Una vez por batalla: +3 F adicional en una fase de CaC." },
-            "La Ezpada de Borko": { points: 5, faction: "oyg", relic: false, subfaction: "Orco", summary: "Rebanadora. Ignorar primer fallo de Animosidad de la unidad." }
-        },
-        "Armadura Mágica": {
-            "Koraza de Morko": { points: 60, faction: "oyg", relic: true, subfaction: "Orco", summary: "Koraza. Regeneración (4+), Resistencia mágica (2)." },
-            "Koraza de Protekción": { points: 30, faction: "oyg", relic: false, subfaction: "Orco", summary: "Koraza. Regeneración (5+)." },
-            "Ezkudo Pellejo'ierro": { points: 30, faction: "oyg", relic: false, subfaction: "Orco", summary: "Escudo. TSE 5+. Cada TSE exitosa en CaC causa impacto F5 al atacante." },
-            "Koraza de Gorko": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Koraza. Repetir TSA fallidas." },
-            "Kazko de Guerra de Urgluk": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Yelmo (+1 TSA). +6\" rango de influencia para Ni un paso atrás/Liderazgo inspirador." }
-        },
-        "Talismán": {
-            "El Talizman Verde": { points: 45, faction: "oyg", relic: true, subfaction: "Orco", summary: "Regeneración (4+)." },
-            "El Kollar de Zorga": { points: 15, faction: "oyg", relic: false, subfaction: "Orco", summary: "Bestias/Monstruos solo impactan con 6 natural en CaC." },
-            "El mejor Kachivache p'al ke manda": { points: 30, faction: "oyg", relic: false, subfaction: "Orco", summary: "TSE 5+. Una vez por batalla repetir tirada de impacto, herida, salvación o atributo." },
-            "Pintura de guerra mágika": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Solo Orkoz Zalvajez. Sin armadura. TSE 5+, Resistencia mágica (1)." },
-            "Kareto de Morko": { points: 20, faction: "oyg", relic: false, subfaction: "Orco", summary: "Ataques enemigos en CaC tienen -1 para impactar." }
-        },
-        "Artefacto Arcano": {
-            "Bákulo de Baduum": { points: 45, faction: "oyg", relic: true, subfaction: "Orco", summary: "+1 hechizo conocido, +1 al lanzar hechizos." },
-            "Kollar de Huezoz y Kolmilloz": { points: 35, faction: "oyg", relic: false, subfaction: "Orco", summary: "+1D3 dados energía por fase (solo portador). Cada 1 causa herida. Herida por dado no gastado." },
-            "Palo Achicharrador": { points: 30, faction: "oyg", relic: false, subfaction: "Orco", summary: "Portahechizos(4). Hechizo: proyectil 18\", 1D6 impactos F6 (Rayos)." },
-            "El Baztón Rugozo de Buzgob": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "+1 dispersar. Guardar 1 dado no usado para siguiente fase." },
-            "Familiar Bazilón": { points: 15, faction: "oyg", relic: false, subfaction: "Orco", summary: "Un solo uso. Canalizar al 4+, pero 1's pierden nivel de magia temporal." },
-            "Garabatoz Mágikoz": { points: 10, faction: "oyg", relic: false, subfaction: "Orco", summary: "+2 lanzar hechizos si ha perdido al menos 1 herida." }
-        },
-        "Objeto Hechizado": {
-            "Kuerno de Urgok": { points: 40, faction: "oyg", relic: true, subfaction: "Orco", summary: "Portahechizos(6). Hechizo: todas unidades +1L amigas/-1L enemigas por 1 turno." },
-            "Mandíbula de Hierro del Kaudillo Imbaz": { points: 35, faction: "oyg", relic: false, subfaction: "Orco", summary: "Sangre fría, Golpe Maestro." },
-            "Rokaz Verdez": { points: 30, faction: "oyg", relic: false, subfaction: "Orco", summary: "Impactos por carga enemigos se resuelven contra la unidad que los causa." },
-            "Botaz Pateakulog Biggez": { points: 20, faction: "oyg", relic: false, subfaction: "Orco", summary: "+1 Ataque." },
-            "Aro Pegapiñoz de Nibla": { points: 20, faction: "oyg", relic: false, subfaction: "Orco", summary: "Portahechizos(3). Contiene ¡Puñoz de Morko! del Gran Waaagh!" },
-            "Talizman Rabiozo": { points: 10, faction: "oyg", relic: false, subfaction: "Orco", summary: "Solo Orcos Salvajes. No pierden Furia Asesina si derrotados en CaC." }
-        },
-        "Estandarte Mágico": {
-            "Estandarte de Guerra de Morko": { points: 50, faction: "oyg", relic: true, subfaction: "Orco", summary: "Resistencia mágica (1), TSE 5+ vs proyectiles." },
-            "Estandarte de Guerra de Gorko": { points: 50, faction: "oyg", relic: true, subfaction: "Orco", summary: "+1 Impactar en CaC para la unidad." },
-            "Estandarte del Machakador": { points: 40, faction: "oyg", relic: false, subfaction: "Orco", summary: "Poder de penetración, Resistencia mágica (1)." },
-            "Estandarte del Mazakrador": { points: 40, faction: "oyg", relic: false, subfaction: "Orco", summary: "Miedo, Golpe Maestro (6's niegan salvación)." },
-            "Eztandarte Beztia de Nogg": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Un solo uso. +1 Ataque por miniatura en el turno activado." },
-            "Eztandarte de Zombraz": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Disparos contra la unidad tienen -1 para impactar." },
-            "Trapo de Goff": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Solo Guerreros Orcos y Orcos Zalvajes (no grandotes). +1 HA." },
-            "El Trapo Chorreante de Borko": { points: 15, faction: "oyg", relic: false, subfaction: "Orco", summary: "Fallos de Animosidad siempre son ¡¡A por elloz!!." },
-            "Trapo Brillante": { points: 10, faction: "oyg", relic: false, subfaction: "Orco", summary: "Ataques mágicos." }
-        },
-   
-   
-        "Arma Mágica": {
-            "Hacha de chafar taponez": { points: 40, faction: "oyg", relic: true, subfaction: "goblin", summary: "Arma de mano. +2 F, +2 A, Poder de penetración. Vs enanos: Furia asesina." },
+            "La Ezpada de Borko": { points: 5, faction: "oyg", relic: false, subfaction: "Orco", summary: "Rebanadora. Ignorar primer fallo de Animosidad de la unidad." },
+             "Hacha de chafar taponez": { points: 40, faction: "oyg", relic: true, subfaction: "goblin", summary: "Arma de mano. +2 F, +2 A, Poder de penetración. Vs enanos: Furia asesina." },
             "Tranka enorme de Gimlug": { points: 35, faction: "oyg", relic: false, subfaction: "goblin", summary: "Garrote goblin. F+1, Impactos multiples (2), Heridas múltiples (2)." },
             "Hacha zertera de Ulag": { points: 30, faction: "oyg", relic: false, subfaction: "goblin", summary: "Arma de mano. +1 F, repetir tiradas para impactar en CaC." },
             "Puñalez malvadoz": { points: 25, faction: "oyg", relic: false, subfaction: "goblin", summary: "Armas emparejadas. I10, Poder de penetración." },
@@ -1289,20 +1244,38 @@ const magicItemsDB_oyg = {
             "Akuchillador zuertudo": { points: 5, faction: "oyg", relic: false, subfaction: "goblin", summary: "Arma de mano. +1 F por cada objeto mágico que porte el personaje enemigo atacado." }
         },
         "Armadura Mágica": {
+            "Koraza de Morko": { points: 60, faction: "oyg", relic: true, subfaction: "Orco", summary: "Koraza. Regeneración (4+), Resistencia mágica (2)." },
+            "Koraza de Protekción": { points: 30, faction: "oyg", relic: false, subfaction: "Orco", summary: "Koraza. Regeneración (5+)." },
+            "Ezkudo Pellejo'ierro": { points: 30, faction: "oyg", relic: false, subfaction: "Orco", summary: "Escudo. TSE 5+. Cada TSE exitosa en CaC causa impacto F5 al atacante." },
+            "Koraza de Gorko": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Koraza. Repetir TSA fallidas." },
+            "Kazko de Guerra de Urgluk": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Yelmo (+1 TSA). +6\" rango de influencia para Ni un paso atrás/Liderazgo inspirador." },
             "Armadura de loz taponez": { points: 35, faction: "oyg", relic: false, subfaction: "goblin", summary: "Armadura de gromril (TSA 4+). TSE 5+." },
             "Koraza vengativa": { points: 30, faction: "oyg", relic: false, subfaction: "goblin", summary: "Armadura pesada. Cada TSA exitosa en CaC causa impacto F4 al atacante." },
             "Kazko furiozo": { points: 10, faction: "oyg", relic: false, subfaction: "goblin", summary: "Yelmo (+1 TSA). Furia asesina permanente (no se pierde)." },
             "Pellejoz apeztozoz": { points: 5, faction: "oyg", relic: false, subfaction: "goblin", summary: "Armadura ligera. TSA 4+. No puede usar ¡Cuidado, señor!." }
+       
         },
         "Talismán": {
+            "El Talizman Verde": { points: 45, faction: "oyg", relic: true, subfaction: "Orco", summary: "Regeneración (4+)." },
+            "El Kollar de Zorga": { points: 15, faction: "oyg", relic: false, subfaction: "Orco", summary: "Bestias/Monstruos solo impactan con 6 natural en CaC." },
+            "El mejor Kachivache p'al ke manda": { points: 30, faction: "oyg", relic: false, subfaction: "Orco", summary: "TSE 5+. Una vez por batalla repetir tirada de impacto, herida, salvación o atributo." },
+            "Pintura de guerra mágika": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Solo Orkoz Zalvajez. Sin armadura. TSE 5+, Resistencia mágica (1)." },
+            "Kareto de Morko": { points: 20, faction: "oyg", relic: false, subfaction: "Orco", summary: "Ataques enemigos en CaC tienen -1 para impactar." },
             "Piedro de la zuerte": { points: 50, faction: "oyg", relic: true, subfaction: "goblin", summary: "Solo Goblins. Repetir todas tiradas de impacto, herida, salvación y atributo." },
             "Talizmán de Morko": { points: 20, faction: "oyg", relic: false, subfaction: "goblin", summary: "Ataques cuerpo a cuerpo contra portador tienen -1 para impactar." },
             "Pintura de guerra mágika": { points: 25, faction: "oyg", relic: false, subfaction: "goblin", summary: "Solo Goblins silvanos. Sin armadura. TSE 5+, Resistencia mágica (1)." },
             "El mejor Kachivache p'al ke manda": { points: 25, faction: "oyg", relic: false, subfaction: "goblin", summary: "TSE 5+." },
             "Kollar Chungo": { points: 20, faction: "oyg", relic: false, subfaction: "goblin", summary: "Al morir: plantilla pequeña, impacto F6 Heridas múltiples (1D3) a todos." },
             "Korona mágika": { points: 10, faction: "oyg", relic: false, subfaction: "goblin", summary: "Un solo uso. TSE 4+ hasta fin de fase." }
+        
         },
         "Artefacto Arcano": {
+            "Bákulo de Baduum": { points: 45, faction: "oyg", relic: true, subfaction: "Orco", summary: "+1 hechizo conocido, +1 al lanzar hechizos." },
+            "Kollar de Huezoz y Kolmilloz": { points: 35, faction: "oyg", relic: false, subfaction: "Orco", summary: "+1D3 dados energía por fase (solo portador). Cada 1 causa herida. Herida por dado no gastado." },
+            "Palo Achicharrador": { points: 30, faction: "oyg", relic: false, subfaction: "Orco", summary: "Portahechizos(4). Hechizo: proyectil 18\", 1D6 impactos F6 (Rayos)." },
+            "El Baztón Rugozo de Buzgob": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "+1 dispersar. Guardar 1 dado no usado para siguiente fase." },
+            "Familiar Bazilón": { points: 15, faction: "oyg", relic: false, subfaction: "Orco", summary: "Un solo uso. Canalizar al 4+, pero 1's pierden nivel de magia temporal." },
+            "Garabatoz Mágikoz": { points: 10, faction: "oyg", relic: false, subfaction: "Orco", summary: "+2 lanzar hechizos si ha perdido al menos 1 herida." },
             "Muñeko diabóliko": { points: 50, faction: "oyg", relic: false, subfaction: "goblin", summary: "Elegir hechicero enemigo: -1 lanzar y dispersar hechizos." },
             "Bákulo chorizador": { points: 40, faction: "oyg", relic: false, subfaction: "goblin", summary: "Robar 1 dado energía enemigo y añadirlo a tus dados dispersión." },
             "Palo de loz diozez": { points: 30, faction: "oyg", relic: false, subfaction: "goblin", summary: "Señor del conocimiento (Pequeño Waaagh), -1 adicional en tabla disfunciones." },
@@ -1311,6 +1284,12 @@ const magicItemsDB_oyg = {
             "Corona de Piñoz verdez": { points: 15, faction: "oyg", relic: false, subfaction: "goblin", summary: "Canalización verde también para dispersión, Resistencia mágica (1)." }
         },
         "Objeto Hechizado": {
+            "Kuerno de Urgok": { points: 40, faction: "oyg", relic: true, subfaction: "Orco", summary: "Portahechizos(6). Hechizo: todas unidades +1L amigas/-1L enemigas por 1 turno." },
+            "Mandíbula de Hierro del Kaudillo Imbaz": { points: 35, faction: "oyg", relic: false, subfaction: "Orco", summary: "Sangre fría, Golpe Maestro." },
+            "Rokaz Verdez": { points: 30, faction: "oyg", relic: false, subfaction: "Orco", summary: "Impactos por carga enemigos se resuelven contra la unidad que los causa." },
+            "Botaz Pateakulog Biggez": { points: 20, faction: "oyg", relic: false, subfaction: "Orco", summary: "+1 Ataque." },
+            "Aro Pegapiñoz de Nibla": { points: 20, faction: "oyg", relic: false, subfaction: "Orco", summary: "Portahechizos(3). Contiene ¡Puñoz de Morko! del Gran Waaagh!" },
+            "Talizman Rabiozo": { points: 10, faction: "oyg", relic: false, subfaction: "Orco", summary: "Solo Orcos Salvajes. No pierden Furia Asesina si derrotados en CaC." },
             "Kachivache volador de Fuggitt": { points: 35, faction: "oyg", relic: false, subfaction: "goblin", summary: "Volar. Considerado con dos armas de mano (sin otras armas)." },
             "Korona mágika": { points: 25, faction: "oyg", relic: false, subfaction: "goblin", summary: "Un solo uso. Liderazgo 10 hasta fin de turno." },
             "Pózima de hongoz": { points: 25, faction: "oyg", relic: false, subfaction: "goblin", summary: "Al inicio batalla, tirar 1D6 para efecto permanente en personaje y unidad." },
@@ -1318,8 +1297,18 @@ const magicItemsDB_oyg = {
             "Kriztal de vizión": { points: 10, faction: "oyg", relic: false, subfaction: "goblin", summary: "Usar en inicio turno. Superar L: revelar objetos mágicos, hechizos, etc en 24\". Fallar: Estupidez." },
             "Piedro de atraer flechaz": { points: 10, faction: "oyg", relic: false, subfaction: "goblin", summary: "Un solo uso. Unidad enemiga a 12\": repetir tiradas fallidas para impactar contra ella." },
             "Garrapato de atake": { points: 5, faction: "oyg", relic: false, subfaction: "goblin", summary: "Solo goblins nocturnos. +1 Ataque (HA4, F5). 1 al impactar: impacto F5 al portador." }
+        
         },
         "Estandarte Mágico": {
+            "Estandarte de Guerra de Morko": { points: 50, faction: "oyg", relic: true, subfaction: "Orco", summary: "Resistencia mágica (1), TSE 5+ vs proyectiles." },
+            "Estandarte de Guerra de Gorko": { points: 50, faction: "oyg", relic: true, subfaction: "Orco", summary: "+1 Impactar en CaC para la unidad." },
+            "Estandarte del Machakador": { points: 40, faction: "oyg", relic: false, subfaction: "Orco", summary: "Poder de penetración, Resistencia mágica (1)." },
+            "Estandarte del Mazakrador": { points: 40, faction: "oyg", relic: false, subfaction: "Orco", summary: "Miedo, Golpe Maestro (6's niegan salvación)." },
+            "Eztandarte Beztia de Nogg": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Un solo uso. +1 Ataque por miniatura en el turno activado." },
+            "Eztandarte de Zombraz": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Disparos contra la unidad tienen -1 para impactar." },
+            "Trapo de Goff": { points: 25, faction: "oyg", relic: false, subfaction: "Orco", summary: "Solo Guerreros Orcos y Orcos Zalvajes (no grandotes). +1 HA." },
+            "El Trapo Chorreante de Borko": { points: 15, faction: "oyg", relic: false, subfaction: "Orco", summary: "Fallos de Animosidad siempre son ¡¡A por elloz!!." },
+            "Trapo Brillante": { points: 10, faction: "oyg", relic: false, subfaction: "Orco", summary: "Ataques mágicos." },
             "Eztandarte de guerra de Skarsnik": { points: 50, faction: "oyg", relic: true, subfaction: "goblin", summary: "Goblins a 12\": Immune a psicologia, Odio (enanos y skaven)." },
             "Eztandarte de la Luna Malvada": { points: 50, faction: "oyg", relic: false, subfaction: "goblin", summary: "Solo goblins nocturnos. Tozudez, -1 impactar contra unidad, cargadores I mitad." },
             "Eztandarte aráknido": { points: 25, faction: "oyg", relic: false, subfaction: "goblin", summary: "Solo goblins silvanos. Ataques envenenados (o 5+ si ya los tenían)." },
@@ -1329,7 +1318,9 @@ const magicItemsDB_oyg = {
             "Eztandarte de piel de garrapato": { points: 15, faction: "oyg", relic: false, subfaction: "goblin", summary: "+1D3\" a la carga." },
             "Eztandarte de Borko": { points: 10, faction: "oyg", relic: false, subfaction: "goblin", summary: "Activar para superar automáticamente chequeo de Animosidad." },
             "Trapo Brillante": { points: 10, faction: "oyg", relic: false, subfaction: "goblin", summary: "Ataques mágicos." }
-        }
+       
+        },
+ 
     
 };
 
