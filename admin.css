@@ -147,7 +147,17 @@ table { width: 100%; border-collapse: collapse; margin-top: 5px;}
 th, td { text-align: left; padding: 4px; border-bottom: 1px solid #4a5568; }
 th { font-size: 0.8rem; color: #a0aec0; }
 td input { padding: 4px; }
+.command-group-subsection {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #555;
+}
 
+.command-group-subsection h5 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1em; /* Make it smaller than H4 */
+}
 /* NEW: Styles for add/delete row buttons */
 .add-row-btn {
     background-color: #38a169; /* Green */
@@ -163,6 +173,12 @@ td input { padding: 4px; }
     padding: 4px 8px;
     border-radius: 3px;
     font-size: 0.8em;
+}
+.delete-label {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Adds a nice space between the box and the text */
+    cursor: pointer; /* Improves user experience */
 }
 /* Style for the semi-transparent background behind the modal */
 #raw-editor-modal::backdrop {
