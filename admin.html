@@ -41,14 +41,19 @@
         <p>Please load an army file or select an army to begin editing.</p>
     </main>
     
-   <footer>
+    <footer>
+    <button id="backup-all-btn">Descargar Backup Completo</button>
     <button id="download-server-btn" class="hidden">Descargar Archivo del Server</button>
     <button id="delete-btn" disabled>Borrar Seleccionado(s)</button>
     <button id="reset-btn" disabled>Reset Cambios</button>
     <button id="save-btn" disabled>Guardar Cambios</button>
 </footer>
 
+    <!-- JSZip library for creating zip files in the browser -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
     <script type="module" src="admin.js"></script>
+
     <!-- PASTE THIS DIALOG ELEMENT AT THE END OF YOUR admin.html FILE, BEFORE </body> -->
 <dialog id="raw-editor-modal">
     <h2>Editor de JSON</h2>

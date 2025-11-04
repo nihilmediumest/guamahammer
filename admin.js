@@ -16,6 +16,7 @@ const deleteBtn = document.getElementById('delete-btn');
 const resetBtn = document.getElementById('reset-btn');
 const saveBtn = document.getElementById('save-btn');
 const downloadServerBtn = document.getElementById('download-server-btn');
+const backupAllBtn = document.getElementById('backup-all-btn'); // <-- ADD THIS LINE
 
 // --- Global State ---
 let currentData = null;
@@ -122,8 +123,8 @@ function attachEventListeners() {
     // --- ADD THESE TWO NEW LISTENERS FOR THE MODAL ---
     saveRawJsonBtn.addEventListener('click', handleSaveRawEditor);
     cancelRawJsonBtn.addEventListener('click', () => rawEditorModal.close());
+    backupAllBtn.addEventListener('click', handleFullBackup);
 }
-
 
 // ===================================================================================
 // --- DATA LOADING & PROCESSING ---
@@ -1078,8 +1079,6 @@ async function handleSaveToServer() {
     }
 }
 
-// ... handleSaveToServer stays the same ...
-
 // REPLACE the existing handleDownloadAsFile function
 function handleDownloadAsFile() {
     if (!currentData) return;
@@ -1095,6 +1094,85 @@ function handleDownloadAsFile() {
 
     a.click();
     URL.revokeObjectURL(url);
+}
+/**
+ * Handles the creation of a full backup of all army files and comun.js
+ * Fetches files directly from the server, creates a zip archive, and downloads it.
+ */
+async function handleFullBackup() {
+    if (typeof JSZip === 'undefined') {
+        alert("Error: La librería JSZip no se ha cargado. No se puede crear el backup.");
+        return;
+    }
+
+    backupAllBtn.disabled = true;
+    backupAllBtn.textContent = 'Generando backup... (0%)';
+
+    const filesToBackup = ARMY_REGISTRY.map(army => ({
+        fetchUrl: `/armies/${army.id}.js`,
+        zipPath: `armies/${army.id}.js`
+    }));
+    filesToBackup.push({ fetchUrl: '/comun.js', zipPath: 'comun.js' });
+
+    try {
+        const promises = filesToBackup.map(fileInfo =>
+            fetch(fileInfo.fetchUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                return response.text();
+            })
+        );
+
+        const results = await Promise.allSettled(promises);
+        const zip = new JSZip();
+        const failedFiles = [];
+        
+        backupAllBtn.textContent = `Generando backup... (Comprimiendo)`;
+
+        results.forEach((result, index) => {
+            const filePath = filesToBackup[index].zipPath;
+            if (result.status === 'fulfilled') {
+                zip.file(filePath, result.value);
+            } else {
+                failedFiles.push(`${filePath} (Motivo: ${result.reason.message})`);
+            }
+        });
+
+        // Add metadata file
+        const metadata = {
+            backupDate: new Date().toISOString(),
+            backupVersion: "1.0",
+            armyCount: ARMY_REGISTRY.length,
+            app: "Guamahammer Admin Editor"
+        };
+        zip.file('BACKUP_INFO.json', JSON.stringify(metadata, null, 2));
+
+        // Generate and download zip
+        const blob = await zip.generateAsync({ type: "blob" });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `guamahammer-backup-${getFormattedTimestamp()}.zip`;
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(a.href);
+        document.body.removeChild(a);
+
+        if (failedFiles.length > 0) {
+            alert(`Backup creado, pero los siguientes archivos no se pudieron incluir:\n\n- ${failedFiles.join('\n- ')}`);
+        } else {
+            alert(`¡Backup completo generado con éxito!`);
+        }
+
+    } catch (error) {
+        console.error('Error catastrófico durante la creación del backup:', error);
+        alert('Ocurrió un error inesperado al crear el backup. Revisa la consola para más detalles.');
+    } finally {
+        // ALWAYS reset the button state
+        backupAllBtn.disabled = false;
+        backupAllBtn.textContent = 'Descargar Backup Completo';
+    }
 }
 
 
