@@ -50,7 +50,7 @@ const FIELD_CONFIG = {
     // Common attributes for most units/mounts
     foc: { 
         label: 'FOC', type: 'select', group: 'common',
-        options: ['Lord','Hero','Core','Special','Rare','Character','Chariot','Monstrous']
+        options: ['Lord','Hero','Core','Special','Rare']
     },
     subfaction: { label: 'Subfaction', type: 'text', group: 'common' },
     
@@ -177,7 +177,7 @@ function attachEventListeners() {
         if (target.matches('.entry-title-input')) {
             handleRename(e);
         } else if (target.hasAttribute('data-db-key')) {
-            if (target.dataset.prop === 'mounts') {
+            if (target.dataset.prop === 'mounts' || target.dataset.prop === 'draft') {
                 handleStringArrayChange(e);
             } else {
                 handleDataChange(e);
@@ -399,10 +399,35 @@ function populateFactionSelector() {
  * @param {object} db - The database object (e.g., unitsDB, mountsDB).
  * @param {string} dbKey - The key for the database (e.g., 'unitsDB').
  */
+
 function buildComplexEntryUI(db, dbKey) {
     for (const entryName in db) {
         const entry = db[entryName];
-        if (activeFilters.subCategories.size > 0 && !activeFilters.subCategories.has(entry.foc)) continue;
+
+        // --- NEW SMART FILTERING LOGIC ---
+        if (activeFilters.subCategories.size > 0) {
+            let matchesFilter = false;
+            if (dbKey.startsWith('mountsDB')) {
+                const lowerCaseName = entryName.toLowerCase();
+                let category = 'Character'; // Default category
+
+                if (['carro', 'chariot', 'carruaje', 'altar', 'palanquín'].some(k => lowerCaseName.includes(k))) {
+                    category = 'Chariot';
+                } else if (['dragón', 'dragon', 'manticora', 'grifo', 'griffon', 'wyvern', 'demonio', 'daemon', 'terror', 'espectro', 'gigante'].some(k => lowerCaseName.includes(k))) {
+                    category = 'Monstrous';
+                }
+                
+                if (activeFilters.subCategories.has(category)) {
+                    matchesFilter = true;
+                }
+            } else { // This is for unitsDB
+                if (activeFilters.subCategories.has(entry.foc)) {
+                    matchesFilter = true;
+                }
+            }
+            if (!matchesFilter) continue; // Skip if it doesn't match
+        }
+        // --- END OF NEW LOGIC ---
 
         const card = document.createElement('div');
         card.className = 'entry-card';
@@ -415,16 +440,12 @@ function buildComplexEntryUI(db, dbKey) {
             </div>
         </div>`;
         
-        // --- DYNAMIC WARNING FIELD ---
         const warningField = buildAttributeFieldHtml('warning', entry, dbKey, entryName);
         const warningHtml = `<div class="warning-editor">${warningField}</div>`;
 
-        // --- PROFILE SECTION (Unchanged) ---
         let profileHtml = '';
-        if (entry.perfiles || entry.command) {
-            profileHtml = '<h4>Perfiles</h4>';
-        }
         if (entry.perfiles) {
+            profileHtml = '<h4>Perfiles</h4>';
             profileHtml += '<table><thead><tr><th>Nombre</th><th>M</th><th>HA</th><th>HP</th><th>F</th><th>R</th><th>H</th><th>I</th><th>A</th><th>L</th><th></th></tr></thead><tbody>';
             (entry.perfiles || []).forEach((p, index) => {
                 profileHtml += `<tr><td><input type="text" value="${p.nombre}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="perfiles[${index}].nombre"></td>`;
@@ -452,36 +473,21 @@ function buildComplexEntryUI(db, dbKey) {
             profileHtml += `<button class="add-row-btn" data-action="add-profile" data-db-key="${dbKey}" data-id="${entryName}">+ Add Profile</button>`;
         }
 
-        // --- DYNAMIC ATTRIBUTES SECTION ---
         let attributesHtml = '';
-        const isCompositionUnit = entry.composition && entry.composition.type === 'ratioBased';
-        if (isCompositionUnit) {
-            attributesHtml = `<h4>Atributos (Composición por Ratio)</h4> <div class="composition-editor">...</div>`; // Composition UI remains as is
-        } else {
-            const mainAttributes = Object.keys(FIELD_CONFIG)
-                .filter(key => FIELD_CONFIG[key].group === 'main')
-                .map(key => buildAttributeFieldHtml(key, entry, dbKey, entryName))
-                .join('');
-            attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">${mainAttributes}</div>`;
-        }
+        const mainAttributes = Object.keys(FIELD_CONFIG)
+            .filter(key => FIELD_CONFIG[key].group === 'main')
+            .map(key => buildAttributeFieldHtml(key, entry, dbKey, entryName))
+            .join('');
+        attributesHtml = `<h4>Atributos</h4><div class="attributes-grid">${mainAttributes}</div>`;
+        
         const commonAttributes = Object.keys(FIELD_CONFIG)
             .filter(key => FIELD_CONFIG[key].group === 'common')
             .map(key => buildAttributeFieldHtml(key, entry, dbKey, entryName))
-            .filter(Boolean) // Remove empty strings for fields that didn't meet their condition
+            .filter(Boolean)
             .join('');
         const commonAttributesHtml = `<div class="attributes-grid common-attributes">${commonAttributes}</div>`;
 
-        // --- OTHER SECTIONS (Unchanged) ---
-        let specialAddonsHtml = '';
-        if (activeFilters.mainCategory === 'units' && entry.hasOwnProperty('specialAddons')) {
-            specialAddonsHtml = '<h4>Unidades Complementarias (Addons)</h4><table>...</table>'; // Unchanged
-        }
-        const textAreasHtml = `<div>...</div>`; // Unchanged
-        let optionsHtml = '<h4>Opciones</h4><table>...</table>'; // Unchanged
-        const mountsHtml = entry.mounts ? `<div>...</div>` : ''; // Unchanged
-
-        // Re-using your exact structure for options, addons, etc. by just copying the dynamic parts in
-        // For brevity, I'm replacing the unchanged parts with "...". The code you paste should be the full function.
+        // --- NEW DRAFT FIELD AND OTHER INPUTS ---
         card.innerHTML = `${warningHtml}${header}
             <div class="unit-layout">
                 <div>
@@ -494,13 +500,20 @@ function buildComplexEntryUI(db, dbKey) {
             </div>
             <div><label>Equipo:</label><textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="equipo">${entry.equipo || ''}</textarea></div>
             <div><label>Reglas Especiales:</label><textarea data-db-key="${dbKey}" data-id="${entryName}" data-prop="reglasEspeciales">${entry.reglasEspeciales || ''}</textarea></div>
+            
+            <!-- ADDED DRAFT FIELD FOR MOUNTS -->
+            ${dbKey.startsWith('mountsDB') ? `<div><label>Tiro/Escolta (Draft - separado por coma):</label><input type="text" value="${(entry.draft || []).join(', ')}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="draft"></div>` : ''}
+
             ${buildOptionsHtml(entry, dbKey, entryName)}
             ${buildSpecialAddonsHtml(entry, dbKey, entryName)}
-            ${entry.mounts ? `<div><label>Monturas (separadas por coma):</label><input type="text" value="${(entry.mounts || []).join(', ')}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="mounts"></div>` : ''}`;
+
+            <!-- MODIFIED MOUNTS FIELD TO ONLY SHOW FOR UNITS -->
+            ${dbKey.startsWith('unitsDB') && entry.mounts ? `<div><label>Monturas (separadas por coma):</label><input type="text" value="${(entry.mounts || []).join(', ')}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="mounts"></div>` : ''}`;
             
         editorContainer.appendChild(card);
     }
 }
+
 
 // NOTE: I've broken out Options and Addons into helper functions for clarity.
 // Add these two new functions right after `buildComplexEntryUI`.
@@ -994,12 +1007,13 @@ function createNewTemplate(category) {
         };
     }
     
-    if (category === 'mounts') {
+     if (category === 'mounts') {
         return {
-            foc: "Character",
+            // foc: "Character", // <-- REMOVED THIS LINE
             points: 15,
             warning: "",
             subfaction: "",
+            draft: [], // <-- ADDED THIS LINE
             equipo: "",
             reglasEspeciales: "",
             perfiles: [{ nombre: "Nueva Montura", stats: { M: 8, HA: 3, HP: 0, F: 4, R: 4, H: 1, I: 3, A: 1, L: 6 } }]
