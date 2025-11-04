@@ -156,7 +156,7 @@ const unitsDB_nmuert = {
         foc: "Special",
         points: 55,
         min: 1,
-        max: 1,
+        max: 2,
         equipo: "Cuchillas. Los esqueletos van equipados con Lanza.",
         reglasEspeciales: "No muertos, Tirada de salvación por armadura 5+.",
         perfiles: [
@@ -170,7 +170,7 @@ const unitsDB_nmuert = {
         foc: "Special",
         points: 30,
         min: 1,
-        max: 1,
+        max:6,
         equipo: "Arma de mano.",
         reglasEspeciales: "No muertos, Volar, Hostigadores, Piel coriácea (+1 TSA), Ataque espectral, Voluntad propia.",
         perfiles: [
@@ -321,7 +321,7 @@ const unitsDB_nmuert = {
             { nombre: "Liche", stats: { M: 4, HA: 3, HP: 3, F: 3, R: 5, H: 4, I: 2, A: 1, L: 9 } }
         ],
         mounts: ["Corcel esquelético con barda", "Pesadilla Alada"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 3, type: 'count' }
     },
@@ -342,7 +342,7 @@ const unitsDB_nmuert = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Corcel esquelético con barda", "Pesadilla Alada", "Carruaje de Huesos", "Dragón Zombi", "Carro de Cadáveres"],
-        maxMagicItems: 2,
+        maxMagicItems:3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },
@@ -367,7 +367,7 @@ const unitsDB_nmuert = {
             { n: "Escudo", p: 3 }
         ],
         mounts: ["Corcel esquelético con barda", "Pesadilla Alada", "Carruaje de Huesos", "Dragón Zombi"],
-        maxMagicItems: 2,
+        maxMagicItems:3,
         maxRelics: 1
     },
 
@@ -449,7 +449,7 @@ const unitsDB_nmuert = {
             { n: "Escudo (Señor Esqueletos)", p: 2 },
             { n: "Armadura Pesada (Señor Esqueletos)", p: 2 }
         ],
-        mounts: ["Corcel esquelético con barda (Señor Esqueletos)"],
+        mounts: ["Corcel esquelético con barda"],
         maxMagicItems: 1
     },
     "Rey Necrófago": {
