@@ -939,12 +939,65 @@ function handleAddNew() {
 }
 
 function createNewTemplate(category) {
-    if (category === 'units') return { faction: "new", foc: "Core", points: 10, min: 1, max: 20, equipo: "", reglasEspeciales: "", options: [], perfiles: [{ nombre: "Nuevo Perfil", stats: { M: 4, HA: 3, HP: 3, F: 3, R: 3, H: 1, I: 3, A: 1, L: 7 } }] };
-    if (category === 'mounts') return { foc: "Character", points: 15, equipo: "", reglasEspeciales: "", perfiles: [{ nombre: "Nueva Montura", stats: { M: 8, HA: 3, HP: 0, F: 4, R: 4, H: 1, I: 3, A: 1, L: 6 } }] };
-      if (category === 'specialProfiles') return { perfiles: [{ nombre: "Nuevo Perfil", stats: {} }] };
-    if (category === 'magicItems') return { points: 5, relic: false, summary: "Nueva descripción." };
+    if (category === 'units') {
+        return {
+            faction: "new", // This likely gets overwritten, but good to have
+            foc: "Core",
+            points: 10,
+            min: 1,
+            max: 20,
+            warning: "",
+            subfaction: "",
+            equipo: "",
+            reglasEspeciales: "",
+            options: [],
+            specialAddons: [], // Add this for completeness
+            perfiles: [{ nombre: "Nuevo Perfil", stats: { M: 4, HA: 3, HP: 3, F: 3, R: 3, H: 1, I: 3, A: 1, L: 7 } }],
+            
+            // --- NEW: Add all potentially relevant fields with default values ---
+            // These will be shown/hidden by the UI, but now they exist on the object
+            maxMagicItems: 0,
+            maxRelics: 0,
+            magicBanner: 0,
+            champItems: 0,
+            maxRegalos: 0,
+            maxIconos: 0,
+
+            // For object-based fields, create an empty object so the edit button appears
+            battleStandard: {}, 
+            champSkills: {},
+            focos: {}
+        };
+    }
+    
+    if (category === 'mounts') {
+        // Also add warning/subfaction to mounts for consistency
+        return {
+            foc: "Character",
+            points: 15,
+            warning: "",
+            subfaction: "",
+            equipo: "",
+            reglasEspeciales: "",
+            perfiles: [{ nombre: "Nueva Montura", stats: { M: 8, HA: 3, HP: 0, F: 4, R: 4, H: 1, I: 3, A: 1, L: 6 } }]
+        };
+    }
+      
+    if (category === 'specialProfiles') {
+        return { 
+            perfiles: [{ nombre: "Nuevo Perfil", stats: {} }] 
+        };
+    }
+
+    if (category === 'magicItems') {
+        return { points: 5, relic: false, summary: "Nueva descripción." };
+    }
+    
+    // Default for simple types
     return { points: 5, summary: "Nueva descripción." };
 }
+
+
 
 function handleReset() {
     if (confirm("Are you sure you want to discard all changes since the last save?")) {
