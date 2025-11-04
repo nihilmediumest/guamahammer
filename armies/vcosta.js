@@ -309,9 +309,9 @@ const unitsDB_vcosta = {
         magicOptions: [{ level: 2, cost: 35 }],
         magicLores: ["Nigromancia", "Muerte", "Sombras"],
         mounts: ["Pesadilla", "Corcel Infernal", "Terror Abisal (montura)"], // Custom mount name needed for data lookup
-        maxMagicItems: { limit: 100, type: 'points', excludedCategories: ["Arma Mágica", "Armadura Mágica"]}, // Max 100 points, excluding weapon/armor
+         maxMagicItems: 3, // Max 100 points, excluding weapon/armor
         maxRelics: 1,
-        maxSkills: { limit: 50, type: 'points', skillSource: 'Sobrenombres de Alta Mar' } // Max 50 points
+        maxSkills: { limit: 50, type: 'points'} // Max 50 points
     },
 
     // === HEROES ===
@@ -337,8 +337,8 @@ const unitsDB_vcosta = {
         magicLores: ["Nigromancia", "Muerte", "Sombras"],
         mounts: ["Pesadilla", "Corcel Infernal"],
         battleStandard: { name: "Portaestandarte de Batalla", cost: 25 },
-        maxMagicItems: { limit: 50, type: 'points', excludedCategories: ["Arma Mágica", "Armadura Mágica"]}, // Max 50 points, excluding weapon/armor
-        maxSkills: { limit: 25, type: 'points', skillSource: 'Sobrenombres de Alta Mar' } // Max 25 points
+         maxMagicItems: 2, // Max 50 points, excluding weapon/armor
+        maxSkills: { limit: 25, type: 'points'} // Max 25 points
     },
     "Maestro Artillero Tumulario": {
         faction: "vcosta",
@@ -354,7 +354,7 @@ const unitsDB_vcosta = {
             { n: "Mosquete de repetición", p: 5 },
             { n: "Trabuco", p: 5 }
         ],
-        maxMagicItems: { limit: 25, type: 'points' } // Max 25 points
+        maxMagicItems: 2,
     },
     "Tumulario Comodoro": {
         faction: "vcosta",
@@ -374,7 +374,7 @@ const unitsDB_vcosta = {
         ],
         mounts: ["Corcel Esquelético"],
         battleStandard: { name: "Portaestandarte de Batalla", cost: 25 },
-        maxMagicItems: { limit: 50, type: 'points' } // Max 50 points
+        maxMagicItems: 2,
     },
     "Sirena Espectral": {
         faction: "vcosta",
@@ -389,7 +389,7 @@ const unitsDB_vcosta = {
         magicLevel: 0,
         magicOptions: [{ level: 1, cost: 30 }],
         magicLores: ["Nigromancia", "Muerte", "Sombras"],
-        maxMagicItems: { limit: 25, type: 'points' } // Max 25 points
+        maxMagicItems: 1,
     }
 };
 
