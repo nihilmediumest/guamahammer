@@ -352,7 +352,38 @@ function updateSubFilters() {
     switch (activeFilters.mainCategory) {
         case 'units': filters = ['Lord', 'Hero', 'Core', 'Special', 'Rare']; break;
         case 'mounts': filters = ['Character', 'Chariot', 'Monstrous']; break; // Example filters for mounts
-        case 'magicItems': filters = ['Arma Mágica', 'Armadura Mágica', 'Talismán', 'Artefacto Arcano', 'Objeto Hechizado', 'Estandarte Mágico']; break;
+      case 'magicItems': { // Use block scope for safety
+            filters = ['Arma Mágica', 'Armadura Mágica', 'Talismán', 'Artefacto Arcano', 'Objeto Hechizado', 'Estandarte Mágico'];
+            const subfactions = new Set();
+            if (currentData?.magicItemsDB) {
+                Object.values(currentData.magicItemsDB).forEach(category => {
+                    Object.values(category).forEach(item => {
+                        if (item.subfaction) subfactions.add(item.subfaction);
+                    });
+                });
+            }
+            html = `<strong>Categoría:</strong><br>` + filters.map(f => createCheckboxHtml(f)).join('');
+            if (subfactions.size > 0) {
+                html += `<hr><strong>Subfacción:</strong><br>` + [...subfactions].sort().map(sf => createCheckboxHtml(sf)).join('');
+            }
+            break;
+        }
+        case 'armySkills': { // Use block scope
+            if (currentData?.armySkillsDB) {
+                filters = [...new Set(Object.values(currentData.armySkillsDB).map(s => s.type))];
+            }
+            const subfactions = new Set();
+             if (currentData?.armySkillsDB) {
+                Object.values(currentData.armySkillsDB).forEach(skill => {
+                    if (skill.subfaction) subfactions.add(skill.subfaction);
+                });
+            }
+            html = `<strong>Tipo:</strong><br>` + filters.map(f => createCheckboxHtml(f)).join('');
+            if (subfactions.size > 0) {
+                 html += `<hr><strong>Subfacción:</strong><br>` + [...subfactions].sort().map(sf => createCheckboxHtml(sf)).join('');
+            }
+            break;
+        }
         case 'demonicGifts':
             html = `<strong>Regalos:</strong>`;
             ['Regalo Mayor', 'Regalo Menor'].forEach(f => html += createCheckboxHtml(f));
@@ -593,65 +624,133 @@ function buildSpecialAddonsHtml(entry, dbKey, entryName) {
 
 
 function buildMagicItemsUI(magicItemsDB) {
+    // A helper set of all possible magic item categories for filtering
+    const allItemTypes = new Set(['Arma Mágica', 'Armadura Mágica', 'Talismán', 'Artefacto Arcano', 'Objeto Hechizado', 'Estandarte Mágico']);
+
     for (const categoryName in magicItemsDB) {
-        if (activeFilters.subCategories.size > 0 && !activeFilters.subCategories.has(categoryName)) continue;
+        // OLD filter line is removed from here.
+
         const categoryItems = magicItemsDB[categoryName];
         const categoryHeader = document.createElement('h2');
         categoryHeader.textContent = categoryName;
-        editorContainer.appendChild(categoryHeader);
+        
+        let hasVisibleItems = false; // Flag to check if we should show the header
+        const fragment = document.createDocumentFragment(); // Use a fragment for performance
+
         for (const itemName in categoryItems) {
             const item = categoryItems[itemName];
+            
+            // --- NEW ITEM-LEVEL FILTERING LOGIC ---
+            if (activeFilters.subCategories.size > 0) {
+                const activeItemTypes = new Set([...activeFilters.subCategories].filter(f => allItemTypes.has(f)));
+                const activeSubfactions = new Set([...activeFilters.subCategories].filter(f => !allItemTypes.has(f)));
+
+                // An item must match the active type filter (if any are selected)
+                const typeMatch = activeItemTypes.size === 0 || activeItemTypes.has(categoryName);
+
+                // An item must match the active subfaction filter (if any are selected)
+                const subfactionMatch = activeSubfactions.size === 0 || (item.subfaction && activeSubfactions.has(item.subfaction));
+
+                // If it fails either check, we skip rendering this item.
+                if (!typeMatch || !subfactionMatch) {
+                    continue;
+                }
+            }
+            // --- END OF NEW FILTERING LOGIC ---
+
+            hasVisibleItems = true; // If we reach here, at least one item will be shown for this category
+
             const card = document.createElement('div');
             card.className = 'entry-card';
             const dbKey = getDbKeyForCategory('magicItems');
 
-    card.innerHTML = `
-            <div class="entry-header">
-                <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">
-                <div class="header-buttons">
-                    <button class="raw-edit-btn" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">{...}</button>
-                    <label class="delete-label"><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}"> Borrar</label>
+            // --- MODIFIED card.innerHTML ---
+            card.innerHTML = `
+                <div class="entry-header">
+                    <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">
+                    <div class="header-buttons">
+                        <button class="raw-edit-btn" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">{...}</button>
+                        <label class="delete-label"><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}"> Borrar</label>
+                    </div>
                 </div>
-            </div>
-    <div class="attributes-grid">
-        <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="points"></label>
-        <label>Relic: <select data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="relic">
-            <option value="true" ${item.relic === true ? 'selected' : ''}>Yes</option>
-            <option value="false" ${item.relic !== true ? 'selected' : ''}>No</option>
-        </select></label>
-    </div>
-    <label>Summary:</label>
-    <textarea data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>
-`;
+                <div class="attributes-grid">
+                    <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="points"></label>
+                    
+                    <!-- ADDED SUFACTION INPUT -->
+                    <label>Subfaction: <input type="text" value="${item.subfaction || ''}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="subfaction" placeholder="e.g., Orco"></label>
 
-            editorContainer.appendChild(card);
+                    <label>Relic: <select data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="relic">
+                        <option value="true" ${item.relic === true ? 'selected' : ''}>Yes</option>
+                        <option value="false" ${item.relic !== true ? 'selected' : ''}>No</option>
+                    </select></label>
+                </div>
+                <label>Summary:</label>
+                <textarea data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>
+            `;
+            fragment.appendChild(card);
+        }
+
+        // Only add the header and the items to the DOM if there's something to show
+        if (hasVisibleItems) {
+            editorContainer.appendChild(categoryHeader);
+            editorContainer.appendChild(fragment);
         }
     }
 }
 
+
 function buildSimpleUI(db, dbKey) {
-     for (const itemName in db) {
+    // --- NEW: Define known skill types for smart filtering ---
+    let skillTypes = new Set();
+    if (dbKey === 'armySkillsDB' && currentData?.armySkillsDB) {
+        skillTypes = new Set(Object.values(currentData.armySkillsDB).map(s => s.type).filter(Boolean));
+    }
+
+    for (const itemName in db) {
         const item = db[itemName];
-        
-        if (activeFilters.mainCategory === 'demonicGifts') {
-            const type = dbKey === 'regalosDemoniacosDB' ? item.type : `Icono ${item.type}`;
-            if (activeFilters.subCategories.size > 0 && !activeFilters.subCategories.has(type)) continue;
+
+        // --- MODIFIED/NEW: Smart Filtering Logic ---
+        if (activeFilters.subCategories.size > 0) {
+            if (dbKey === 'armySkillsDB') {
+                const activeSkillTypes = new Set([...activeFilters.subCategories].filter(f => skillTypes.has(f)));
+                const activeSubfactions = new Set([...activeFilters.subCategories].filter(f => !skillTypes.has(f)));
+                
+                const typeMatch = activeSkillTypes.size === 0 || (item.type && activeSkillTypes.has(item.type));
+                const subfactionMatch = activeSubfactions.size === 0 || (item.subfaction && activeSubfactions.has(item.subfaction));
+
+                if (!typeMatch || !subfactionMatch) {
+                    continue;
+                }
+            } else if (dbKey.includes('Demoniacos')) { // Handle demonic gifts
+                const type = dbKey === 'regalosDemoniacosDB' ? item.type : `Icono ${item.type}`;
+                if (activeFilters.subCategories.size > 0 && !activeFilters.subCategories.has(type)) continue;
+            }
         }
+        // --- END FILTERING ---
 
         const card = document.createElement('div');
         card.className = 'entry-card';
-        card.innerHTML = `<div class="entry-header">
-            <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-id="${itemName}">
-            <div class="header-buttons">
-                <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${itemName}">{...}</button>
-                <label class="delete-label"><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Borrar</label>
+
+        const subfactionInputHtml = (dbKey === 'armySkillsDB') 
+            ? `<label>Subfaction: <input type="text" value="${item.subfaction || ''}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="subfaction" placeholder="e.g., Orco"></label>` 
+            : '';
+
+        card.innerHTML = `
+            <div class="entry-header">
+                <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-id="${itemName}">
+                <div class="header-buttons">
+                    <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${itemName}">{...}</button>
+                    <label class="delete-label"><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Borrar</label>
+                </div>
             </div>
-        </div>
-<label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="points"></label>
-<label>Summary:</label><textarea data-db-key="${dbKey}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>`;
+            <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="points"></label>
+            ${subfactionInputHtml}
+            <label>Summary:</label><textarea data-db-key="${dbKey}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>
+        `;
         editorContainer.appendChild(card);
     }
 }
+
 
 // ===================================================================================
 // --- DATA MANIPULATION ---
@@ -1026,11 +1125,10 @@ function createNewTemplate(category) {
         };
     }
 
-    if (category === 'magicItems') {
-        return { points: 5, relic: false, summary: "Nueva descripción." };
+   if (category === 'armySkills') {
+        return { points: 5, summary: "Nueva descripción.", subfaction: "" };
     }
     
-    return { points: 5, summary: "Nueva descripción." };
 }
 
 function handleReset() {
