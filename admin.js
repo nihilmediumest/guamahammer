@@ -407,11 +407,11 @@ function buildComplexEntryUI(db, dbKey) {
         const card = document.createElement('div');
         card.className = 'entry-card';
 
-        const header = `<div class="entry-header">
+         const header = `<div class="entry-header">
             <input type="text" class="entry-title-input" value="${entryName}" data-db-key="${dbKey}" data-id="${entryName}">
             <div class="header-buttons">
                 <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${entryName}">{...}</button>
-                <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${entryName}"> Borrar</label>
+                <label class="delete-label"><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${entryName}"> Borrar</label>
             </div>
         </div>`;
         
@@ -506,7 +506,8 @@ function buildComplexEntryUI(db, dbKey) {
 // Add these two new functions right after `buildComplexEntryUI`.
 function buildOptionsHtml(entry, dbKey, entryName) {
     let html = '<h4>Opciones</h4>';
-    const head = `<table><thead><tr><th>Nombre (n)</th><th>Coste (p)</th><th>Resumen (summary)</th><th>Exclusive Group</th><th></th></tr></thead><tbody>`;
+    // Add new header for Cost Type
+    const head = `<table><thead><tr><th>Nombre (n)</th><th>Coste (p)</th><th>Resumen (summary)</th><th>Exclusive Group</th><th>Coste Tipo</th><th></th></tr></thead><tbody>`;
     const options = entry.options || [];
     let body = '';
 
@@ -524,11 +525,22 @@ function buildOptionsHtml(entry, dbKey, entryName) {
         });
         const createRow = (opt) => {
             const index = opt.originalIndex;
+            const costType = opt.costType || 'perModel'; // Default to perModel if undefined
+
             return `<tr>
                 <td><input type="text" value="${opt.n || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].n"></td>
                 <td><input type="number" value="${opt.p || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].p" style="width: 70px;"></td>
                 <td><input type="text" value="${opt.summary || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].summary"></td>
                 <td><input type="text" value="${opt.exclusiveGroup || ''}" placeholder="e.g., chaosMark" data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].exclusiveGroup"></td>
+                
+                <!-- NEW COST TYPE DROPDOWN -->
+                <td>
+                    <select data-db-key="${dbKey}" data-id="${entryName}" data-prop="options[${index}].costType">
+                        <option value="perModel" ${costType === 'perModel' ? 'selected' : ''}>Por Miniatura</option>
+                        <option value="flat" ${costType === 'flat' ? 'selected' : ''}>Global (flat)</option>
+                    </select>
+                </td>
+
                 <td><button class="delete-row-btn" data-action="delete-option" data-db-key="${dbKey}" data-id="${entryName}" data-index="${index}">Delete</button></td>
             </tr>`;
         };
@@ -544,6 +556,7 @@ function buildOptionsHtml(entry, dbKey, entryName) {
     html += `<button class="add-row-btn" data-action="add-option" data-db-key="${dbKey}" data-id="${entryName}">+ Add Option</button>`;
     return html;
 }
+
 
 function buildSpecialAddonsHtml(entry, dbKey, entryName) {
     if (activeFilters.mainCategory !== 'units' || !entry.hasOwnProperty('specialAddons')) return '';
@@ -579,14 +592,14 @@ function buildMagicItemsUI(magicItemsDB) {
             card.className = 'entry-card';
             const dbKey = getDbKeyForCategory('magicItems');
 
-   card.innerHTML = `
-    <div class="entry-header">
-        <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">
-        <div class="header-buttons">
-            <button class="raw-edit-btn" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">{...}</button>
-            <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}"> Borrar</label>
-        </div>
-    </div>
+    card.innerHTML = `
+            <div class="entry-header">
+                <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">
+                <div class="header-buttons">
+                    <button class="raw-edit-btn" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}">{...}</button>
+                    <label class="delete-label"><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}"> Borrar</label>
+                </div>
+            </div>
     <div class="attributes-grid">
         <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="points"></label>
         <label>Relic: <select data-db-key="${dbKey}" data-category="${categoryName}" data-id="${itemName}" data-prop="relic">
@@ -614,13 +627,13 @@ function buildSimpleUI(db, dbKey) {
 
         const card = document.createElement('div');
         card.className = 'entry-card';
-       card.innerHTML = `<div class="entry-header">
-    <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-id="${itemName}">
-    <div class="header-buttons">
-        <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${itemName}">{...}</button>
-        <label><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Borrar</label>
-    </div>
-</div>
+        card.innerHTML = `<div class="entry-header">
+            <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-id="${itemName}">
+            <div class="header-buttons">
+                <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${itemName}">{...}</button>
+                <label class="delete-label"><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Borrar</label>
+            </div>
+        </div>
 <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="points"></label>
 <label>Summary:</label><textarea data-db-key="${dbKey}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>`;
         editorContainer.appendChild(card);
@@ -632,41 +645,46 @@ function buildSimpleUI(db, dbKey) {
 // ===================================================================================
 
 // --- In the DATA MANIPULATION section ---
-
-// REPLACE the existing handleDataChange function with this corrected version.
 // The only change is the line that processes the 'prop' string to handle arrays correctly.
+
 function handleDataChange(event) {
     const input = event.target;
     const { dbKey, category, id, prop } = input.dataset;
     let value = input.value;
 
+    const keys = prop.replace(/\[(\d+)\]/g, '.$1').split('.');
+    let parent = category ? currentData[dbKey]?.[category]?.[id] : currentData[dbKey]?.[id];
+    if (!parent) return;
+
+    // Traverse to the parent of the target property
+    for (let i = 0; i < keys.length - 1; i++) {
+        // Safety check to create nested objects if they don't exist
+        if (!parent[keys[i]]) {
+            if (!isNaN(parseInt(keys[i + 1], 10))) {
+                parent[keys[i]] = [];
+            } else {
+                parent[keys[i]] = {};
+            }
+        }
+        parent = parent[keys[i]];
+    }
+
+    const finalKey = keys[keys.length - 1];
+
+    // ** Special Handling for costType **
+    // If the user selects the default 'perModel', we remove the property from the object
+    // to keep the data file clean, as per the data schema design.
+    if (prop.endsWith('.costType') && value === 'perModel') {
+        delete parent[finalKey];
+        return; // Action complete, no need to set the value.
+    }
+
+    // Standard value processing
     if (input.type === 'number') value = parseFloat(input.value) || 0;
     if (input.tagName === 'SELECT' && input.value === 'true') value = true;
     if (input.tagName === 'SELECT' && input.value === 'false') value = false;
-    
-    // OLD, INCORRECT LINE:
-    // const keys = prop.replace(/$$(\d+)$$/g, '.\$1').split('.');
-    
-    // NEW, CORRECTED LINE: This correctly handles array paths like "perfiles[0].nombre"
-    const keys = prop.replace(/\[(\d+)\]/g, '.$1').split('.');
 
-    let target = category ? currentData[dbKey]?.[category]?.[id] : currentData[dbKey]?.[id];
-    if (!target) return;
-
-    // This loop now works correctly with the fixed 'keys' array
-    for (let i = 0; i < keys.length - 1; i++) {
-        // Safety check to create nested objects if they don't exist
-        if (!target[keys[i]]) {
-            // Check if the next key is a number, if so, create an array
-            if (!isNaN(parseInt(keys[i+1], 10))) {
-                 target[keys[i]] = [];
-            } else {
-                 target[keys[i]] = {};
-            }
-        }
-        target = target[keys[i]];
-    }
-    target[keys[keys.length - 1]] = value;
+    parent[finalKey] = value;
 }
 
 /**
