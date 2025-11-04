@@ -384,12 +384,30 @@ function updateSubFilters() {
             }
             break;
         }
-        case 'demonicGifts':
+        case 'demonicGifts': { // Use block scope for safety
             html = `<strong>Regalos:</strong>`;
             ['Regalo Mayor', 'Regalo Menor'].forEach(f => html += createCheckboxHtml(f));
             html += `<br><strong>Iconos:</strong>`;
             ['Icono Mayor', 'Icono Menor'].forEach(f => html += createCheckboxHtml(f));
+            
+            const subfactions = new Set();
+            // Check both databases for subfactions
+            if (currentData?.regalosDemoniacosDB) {
+                Object.values(currentData.regalosDemoniacosDB).forEach(item => {
+                    if (item.subfaction) subfactions.add(item.subfaction);
+                });
+            }
+            if (currentData?.iconosDemoniacosDB) {
+                 Object.values(currentData.iconosDemoniacosDB).forEach(item => {
+                    if (item.subfaction) subfactions.add(item.subfaction);
+                });
+            }
+
+            if (subfactions.size > 0) {
+                html += `<hr><strong>Subfacción:</strong><br>` + [...subfactions].sort().map(sf => createCheckboxHtml(sf)).join('');
+            }
             break;
+        }
         case 'armySkills':
             if (currentData?.armySkillsDB) {
                 filters = [...new Set(Object.values(currentData.armySkillsDB).map(s => s.type))];
@@ -605,7 +623,7 @@ function buildOptionsHtml(entry, dbKey, entryName) {
 function buildSpecialAddonsHtml(entry, dbKey, entryName) {
     if (activeFilters.mainCategory !== 'units' || !entry.hasOwnProperty('specialAddons')) return '';
     let html = '<h4>Unidades Complementarias (Addons)</h4><table><thead><tr><th>Nombre (name)</th><th>Coste (points)</th><th>Max (max)</th><th>Clave de Perfil (profileKey)</th><th></th></tr></thead><tbody>';
-    (entry.specialAddons || []).forEach((addon, index) => {
+    (entry.specialAddons || [createNewTemplate]).forEach((addon, index) => {
         html += `<tr>
             <td><input type="text" value="${addon.name || ''}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].name"></td>
             <td><input type="number" value="${addon.points || 0}" data-db-key="${dbKey}" data-id="${entryName}" data-prop="specialAddons[${index}].points" style="width: 70px;"></td>
@@ -700,16 +718,18 @@ function buildMagicItemsUI(magicItemsDB) {
 
 
 function buildSimpleUI(db, dbKey) {
-    // --- NEW: Define known skill types for smart filtering ---
+     // --- NEW: Define known types for smart filtering ---
     let skillTypes = new Set();
     if (dbKey === 'armySkillsDB' && currentData?.armySkillsDB) {
         skillTypes = new Set(Object.values(currentData.armySkillsDB).map(s => s.type).filter(Boolean));
     }
+    const giftIconTypes = new Set(['Regalo Mayor', 'Regalo Menor', 'Icono Mayor', 'Icono Menor']);
+
 
     for (const itemName in db) {
         const item = db[itemName];
-
-        // --- MODIFIED/NEW: Smart Filtering Logic ---
+        
+        // --- MODIFIED FILTERING LOGIC ---
         if (activeFilters.subCategories.size > 0) {
             if (dbKey === 'armySkillsDB') {
                 const activeSkillTypes = new Set([...activeFilters.subCategories].filter(f => skillTypes.has(f)));
@@ -721,9 +741,18 @@ function buildSimpleUI(db, dbKey) {
                 if (!typeMatch || !subfactionMatch) {
                     continue;
                 }
-            } else if (dbKey.includes('Demoniacos')) { // Handle demonic gifts
-                const type = dbKey === 'regalosDemoniacosDB' ? item.type : `Icono ${item.type}`;
-                if (activeFilters.subCategories.size > 0 && !activeFilters.subCategories.has(type)) continue;
+            } else if (dbKey.includes('Demoniacos')) { // Handle demonic gifts & icons
+                const activeTypes = new Set([...activeFilters.subCategories].filter(f => giftIconTypes.has(f)));
+                const activeSubfactions = new Set([...activeFilters.subCategories].filter(f => !giftIconTypes.has(f)));
+
+                const itemType = dbKey === 'regalosDemoniacosDB' ? item.type : `Icono ${item.type}`;
+                
+                const typeMatch = activeTypes.size === 0 || activeTypes.has(itemType);
+                const subfactionMatch = activeSubfactions.size === 0 || (item.subfaction && activeSubfactions.has(item.subfaction));
+
+                if (!typeMatch || !subfactionMatch) {
+                    continue; // Skip if it doesn't match
+                }
             }
         }
         // --- END FILTERING ---
@@ -731,25 +760,25 @@ function buildSimpleUI(db, dbKey) {
         const card = document.createElement('div');
         card.className = 'entry-card';
 
-        const subfactionInputHtml = (dbKey === 'armySkillsDB') 
-            ? `<label>Subfaction: <input type="text" value="${item.subfaction || ''}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="subfaction" placeholder="e.g., Orco"></label>` 
+        // Add subfaction input conditionally for army skills AND demonic items
+        const subfactionInputHtml = (dbKey === 'armySkillsDB' || dbKey.includes('Demoniacos')) 
+            ? `<label>Subfaction: <input type="text" value="${item.subfaction || ''}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="subfaction" placeholder="e.g., Khorne"></label>` 
             : '';
 
-        card.innerHTML = `
-            <div class="entry-header">
-                <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-id="${itemName}">
-                <div class="header-buttons">
-                    <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${itemName}">{...}</button>
-                    <label class="delete-label"><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Borrar</label>
-                </div>
+        card.innerHTML = `<div class="entry-header">
+            <input type="text" class="entry-title-input" value="${itemName}" data-db-key="${dbKey}" data-id="${itemName}">
+            <div class="header-buttons">
+                <button class="raw-edit-btn" data-db-key="${dbKey}" data-id="${itemName}">{...}</button>
+                <label class="delete-label"><input type="checkbox" class="delete-checkbox" data-db-key="${dbKey}" data-id="${itemName}"> Borrar</label>
             </div>
-            <label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="points"></label>
-            ${subfactionInputHtml}
-            <label>Summary:</label><textarea data-db-key="${dbKey}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>
-        `;
+        </div>
+<label>Points: <input type="number" value="${item.points}" data-db-key="${dbKey}" data-id="${itemName}" data-prop="points"></label>
+${subfactionInputHtml}
+<label>Summary:</label><textarea data-db-key="${dbKey}" data-id="${itemName}" data-prop="summary">${item.summary || ''}</textarea>`;
         editorContainer.appendChild(card);
     }
 }
+
 
 
 // ===================================================================================
@@ -1124,7 +1153,10 @@ function createNewTemplate(category) {
             perfiles: [{ nombre: "Nuevo Perfil", stats: {} }] 
         };
     }
-
+ if (category === 'magicItems') {
+        // ADD subfaction here
+        return { points: 5, relic: false, summary: "Nueva descripción.", subfaction: "" };
+    }
    if (category === 'armySkills') {
         return { points: 5, summary: "Nueva descripción.", subfaction: "" };
     }
