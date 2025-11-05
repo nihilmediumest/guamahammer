@@ -33,7 +33,7 @@ const unitsDB_ginf = {
             { n: "Arma de mano adicional", p: 5 }, { n: "Arma a dos manos", p: 8 },
             { n: "Armadura ligera", p: 5 }, { n: "Nivel de Magia 4", p: 35 }
         ],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
     "Minotauro de la Condenación": {
@@ -50,7 +50,7 @@ const unitsDB_ginf = {
             { n: "Consagración a Khorne", p: 10 }, { n: "Consagración a Nurgle", p: 10 },
             { n: "Consagración al Caos Absoluto", p: 8 }
         ],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 3, type: 'count' }
     },

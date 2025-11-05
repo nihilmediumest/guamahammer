@@ -321,7 +321,7 @@ const unitsDB_nehk = {
             { n: "Escudo", p: 3 }
         ],
         mounts: ["Carro de guerra", "Esfinge de guerra de Nehekhara"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
     "Sumo Sacerdote Funerario": {
@@ -341,7 +341,7 @@ const unitsDB_nehk = {
             // Needs Lore Selection logic (Nehekhara, Death, Light)
         ],
         mounts: ["Corcel esquelético", "Arca de las Almas"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 

@@ -437,7 +437,7 @@ const unitsDB_ecaos = {
             { n: "Sangre de Hashut", p: 15, costType: "flat" },
             { n: "Nivel de magia 2", p: 35, costType: "flat" }
         ],
-        maxMagicItems: 2
+        maxMagicItems: 3
     },
     "Castellano Infernal": {
         faction: "ecaos",

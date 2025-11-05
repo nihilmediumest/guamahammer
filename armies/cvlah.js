@@ -297,7 +297,7 @@ const unitsDB_cvlah = {
             { n: "Nivel de Magia 3", p: 35 }
         ],
         mounts: ["Pesadilla con barda", "Dragón Zombi", "Pesadilla Alada", "Trono del Aquelarre"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },
@@ -318,7 +318,7 @@ const unitsDB_cvlah = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Corcel esquelético con barda", "Pesadilla Alada"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },

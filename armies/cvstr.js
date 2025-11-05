@@ -306,7 +306,7 @@ const unitsDB_cvstr = {
             { n: "Nivel de Magia 3", p: 35 }
         ],
         mounts: ["Engendro del Terror"],
-        maxMagicItems: 2, // Cannot take Weapon/Armor
+        maxMagicItems: 3, // Cannot take Weapon/Armor
         maxRelics: 1,
         maxSkills: { limit: 3, type: 'count', skillSource: 'Poderes Vampíricos Strigoi' } // 3 + Odio Eterno (free)
     },
@@ -327,7 +327,7 @@ const unitsDB_cvstr = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Corcel esquelético con barda", "Pesadilla Alada"], // Cannot take other mounts listed in core NM book
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 

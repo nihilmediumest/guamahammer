@@ -467,7 +467,7 @@ const unitsDB_nors = {
             { n: "Marca del Caos Absoluto", p: 15, exclusiveGroup: "chaosMarkLord", summary: "Carga Devastadora, +1L." }
         ],
         mounts: ["Caballo de guerra", "Corcel del Caos", "Carruaje de Guerra", "Mamut"], // Barda is option on mount
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count', skillSource: ['Recompensas del Caos', 'Sagas Nórdicas'] } // Can choose 1 Saga (if no Mark) OR up to 2 Recompensas (1 if no Mark, 2 if Marked)
     },
@@ -495,7 +495,7 @@ const unitsDB_nors = {
         magicOptions: [{ level: 4, cost: 35 }],
         magicLores: ["Muerte", "Hielo", "Fuego", "Bestias"], // Base lores, marks add more
         mounts: ["Caballo de guerra", "Corcel del Caos", "Carruaje de Guerra", "Mamut"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count', skillSource: 'Recompensas del Caos' } // Can choose 1 (if no Mark) or 2 (if Marked)
     },

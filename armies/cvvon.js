@@ -381,7 +381,7 @@ const unitsDB_cvvon = {
         { n: "Transformación bestial", p: 65, summary: "Infantería monstruosa, +1F+R+H+A, Volar, Terror" }
     ],
     mounts: ["Pesadilla con barda", "Dragón Zombi", "Pesadilla Alada"],
-    maxMagicItems: 2,
+    maxMagicItems: 3,
     maxRelics: 1,
     maxSkills: { limit: 2, type: 'count' }
     },
@@ -402,7 +402,7 @@ const unitsDB_cvvon = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Corcel esquelético con barda", "Pesadilla Alada"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },

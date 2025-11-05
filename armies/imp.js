@@ -467,7 +467,7 @@ const unitsDB_imp = {
             { n: "Armadura de placas", p: 6, summary: "Sustituye armadura ligera" }
         ],
         mounts: ["Caballo de guerra con barda", "Pegaso", "Grifo"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
     "Gran Hechicero": {
@@ -488,7 +488,7 @@ const unitsDB_imp = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Caballo de guerra con barda", "Pegaso", "Grifo (Sólo Colegio Ámbar)"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
     "Maestre Templario": {
@@ -513,7 +513,7 @@ const unitsDB_imp = {
             { n: "Caballeros Pantera", p: 5, summary: "Odio" }
         ],
         mounts: ["Caballo de guerra con barda"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
     "Archilector": {
@@ -535,7 +535,7 @@ const unitsDB_imp = {
             { n: "Armadura de placas", p: 6, summary: "Sustituye armadura ligera" }
         ],
         mounts: ["Caballo de guerra con barda", "Altar de Guerra"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 

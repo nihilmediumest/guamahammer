@@ -337,7 +337,7 @@ const unitsDB_vcosta = {
         magicLores: ["Nigromancia", "Muerte", "Sombras"],
         mounts: ["Pesadilla", "Corcel Infernal"],
         battleStandard: { name: "Portaestandarte de Batalla", cost: 25 },
-         maxMagicItems: 2, // Max 50 points, excluding weapon/armor
+         maxMagicItems: 3, // Max 50 points, excluding weapon/armor
         maxSkills: { limit: 25, type: 'points'} // Max 25 points
     },
     "Maestro Artillero Tumulario": {

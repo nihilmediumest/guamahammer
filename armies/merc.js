@@ -359,7 +359,7 @@ const unitsDB_merc = {
         perfiles: [ { nombre: "General Mercenario", stats: { M: 4, HA: 6, HP: 6, F: 4, R: 4, H: 3, I: 6, A: 4, L: 9 } } ],
         options: [ { n: "Arma de mano adicional", p: 2 }, { n: "Arma a dos manos", p: 4 }, { n: "Alabarda", p: 5 }, { n: "Lanza", p: 1 }, { n: "Lanza de caballería", p: 6 }, { n: "Pistola", p: 5 }, { n: "Ristra de pistolas", p: 10 }, { n: "Arco largo", p: 5 }, { n: "Ballesta", p: 3 }, { n: "Arcabuz", p: 3 }, { n: "Escudo", p: 3 }, { n: "Sustituir Armadura ligera por pesada", p: 3 } ],
         mounts: ["Caballo de guerra", "Caballo de guerra con barda", "Pegaso", "Pegaso con barda", "Grifo"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },
@@ -373,7 +373,7 @@ const unitsDB_merc = {
         perfiles: [ { nombre: "Gran Hechicero", stats: { M: 4, HA: 3, HP: 3, F: 3, R: 4, H: 3, I: 4, A: 1, L: 8 } } ],
         options: [ { n: "Arma de mano adicional", p: 2 }, { n: "Arma a dos manos", p: 4 }, { n: "Nivel de Magia 4", p: 35 } ],
         mounts: ["Caballo de guerra", "Caballo de guerra con barda", "Pegaso"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
     // === HEROES ===

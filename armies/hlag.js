@@ -439,7 +439,7 @@ const unitsDB_hlag = {
             { n: "Marca Sagrada de los Ancestrales", p: 20 }
         ],
         mounts: ["Gélido", "Carnosaurio", "Carnosaurio Alfa"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 
@@ -476,7 +476,7 @@ const unitsDB_hlag = {
             { n: "Marca Sagrada de los Ancestrales", p: 20 }
         ],
         mounts: ["Gélido Cornudo", "Terradón", "Destripadáctilo", "Troglodón", "Estegadón", "Estegadón Anciano"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 

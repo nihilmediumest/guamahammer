@@ -395,7 +395,7 @@ const unitsDB_esil = {
             { n: "Flechas de Hada", p: 2, exclusiveGroup: "arrowType" }
         ],
         mounts: ["Corcel élfico", "Carro de Guerra", "Águila gigante", "Gran Venado", "Halcón de Guerra", "Dragón Forestal"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 1, type: 'count', skillSource: 'Estirpes (Biennacido)' }
     },
@@ -419,7 +419,7 @@ const unitsDB_esil = {
         magicOptions: [{ level: 4, cost: 35 }],
         magicLores: ["Alta Magia", "Vida", "Bestias", "Sombras", "Cielos"],
         mounts: ["Corcel élfico", "Carro de Guerra", "Águila gigante", "Unicornio", "Halcón de Guerra", "Dragón Forestal"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 1, type: 'count', skillSource: 'Estirpes (Mago)' }
     },
@@ -466,7 +466,7 @@ const unitsDB_esil = {
         ],
         mounts: ["Corcel élfico", "Carro de Guerra", "Halcón de Guerra", "Águila gigante", "Gran Venado"],
         battleStandard: { name: "Portaestandarte de Batalla", cost: 25 },
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxSkills: { limit: 1, type: 'count', skillSource: 'Estirpes (Noble)' }
     },
     "Cantor de los Árboles": {

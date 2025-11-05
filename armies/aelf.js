@@ -293,7 +293,7 @@ const unitsDB_aelf = {
             { n: "Escudo", p: 3 }
         ],
         mounts: ["Corcel élfico con barda de Ithilmar", "Carro de Tiranoc", "Carro de Leones", "Águila gigante", "Pegaso", "Grifo", "Dragón Solar", "Dragón Lunar", "Dragón Estelar"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 1, type: 'count' }
     },
@@ -316,7 +316,7 @@ const unitsDB_aelf = {
             { n: "Nivel de magia 4", p: 35 }
         ],
         mounts: ["Corcel élfico con barda de Ithilmar", "Carro de Tiranoc", "Águila gigante", "Pegaso", "Dragón Solar", "Dragón Lunar"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 1, type: 'count' }
     },
@@ -331,7 +331,7 @@ const unitsDB_aelf = {
         perfiles: [
             { nombre: "Señor del Conocimiento", stats: { M: 5, HA: 7, HP: 4, F: 4, R: 3, H: 3, I: 7, A: 3, L: 10 } }
         ],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 1, type: 'count' }
     },

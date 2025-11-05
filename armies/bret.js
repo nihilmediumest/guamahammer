@@ -345,7 +345,7 @@ const unitsDB_bret = {
             { n: "Mayal", p: 4 }
         ],
         mounts: ["Corcel de Guerra Bretoniano con barda", "Pegaso", "Hipogrifo"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 1, type: 'count' } // Virtues
     },
@@ -366,7 +366,7 @@ const unitsDB_bret = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Corcel Bretoniano", "Corcel Bretoniano con barda", "Unicornio", "Pegaso"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
     "Sumo Sacerdote de Taal": {
@@ -390,7 +390,7 @@ const unitsDB_bret = {
             { n: "Escudo", p: 3 }
         ],
         mounts: ["Caballo de Guerra"],
-        maxMagicItems: 2
+        maxMagicItems: 3
     },
 
     // === HEROES ===

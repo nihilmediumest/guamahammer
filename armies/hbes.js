@@ -27,7 +27,7 @@ const unitsDB_hbes = {
             { n: "Consagración a Tzeentch", p: 10, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
         ],
         mounts: ["Carro de tuskgors (Caudillo)", "Carro de garragors (Caudillo)"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },
@@ -47,7 +47,7 @@ const unitsDB_hbes = {
             { n: "Consagración a Tzeentch", p: 10, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
         ],
         mounts: ["Carro de tuskgors (Gran Chamán)", "Carro de garragors (Gran Chamán)"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },
@@ -117,7 +117,7 @@ const unitsDB_hbes = {
             { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
         ],
         mounts: ["Carro de tuskgors (Beligor)", "Carro de garragors (Beligor)"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 0,
         maxSkills: { limit: 1, type: 'count' },
         battleStandard: { name: "Portaestandarte de Batalla", cost: 25 }

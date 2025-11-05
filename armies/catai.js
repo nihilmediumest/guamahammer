@@ -339,7 +339,7 @@ const unitsDB_catai = {
             { n: "Pistola", p: 5 }
         ],
         mounts: ["Caballo de guerra con barda", "Logma de Jade", "Dragon Lunar"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
     "Sangre de Dragon Señor de la Hueste Celestial": {
@@ -363,7 +363,7 @@ const unitsDB_catai = {
             // Needs Lore Selection logic here (8 Lores + Yin/Yang)
         ],
         mounts: ["Caballo de guerra con barda", "Logma de Jade", "Dragon Lunar"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
     "Señor Magistrado": {
@@ -387,7 +387,7 @@ const unitsDB_catai = {
             { n: "Fusil Grulla", p: 10 } // Removed exclusiveGroup
         ],
         mounts: ["Linterna de los Cielos"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
     "Astromante de la Corte": {
@@ -410,7 +410,7 @@ const unitsDB_catai = {
             // Needs Lore Selection logic here (Heavens only)
         ],
         mounts: ["Caballo de guerra con barda"],
-        maxMagicItems: 2
+        maxMagicItems: 3
     },
 
     // === HEROES ===

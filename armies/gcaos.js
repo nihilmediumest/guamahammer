@@ -130,7 +130,7 @@ const unitsDB_gcaos = {
             { n: "Marca de Slaanesh", p: 10, summary: "Inmune a Pánico." }
         ],
         mounts: ["Corcel del Caos con barda", "Dragón del Caos", "Manticora", "Quimera", "Carruaje del Caos", "Montura demoníaca"],
-        maxMagicItems: 2, maxRelics: 1, maxSkills: { limit: 100, type: 'points' }
+        maxMagicItems: 3, maxRelics: 1, maxSkills: { limit: 100, type: 'points' }
     },
     "Príncipe Demonio": {
         faction: "gcaos", foc: "Lord", points: 225,
@@ -160,7 +160,7 @@ const unitsDB_gcaos = {
             { n: "Marca de Slaanesh", p: 10, summary: "Inmune a Pánico." }
         ],
         mounts: ["Corcel del Caos con barda", "Dragón del Caos", "Manticora", "Quimera", "Carruaje del Caos", "Montura demoníaca", "Disco de Tzeentch", "Palanquín de Nurgle", "Corcel de Slaanesh"],
-        maxMagicItems: 2, maxRelics: 1, maxSkills: { limit: 100, type: 'points' }
+        maxMagicItems: 3, maxRelics: 1, maxSkills: { limit: 100, type: 'points' }
     },
     // === HEROES ===
     "Paladín del Caos": {

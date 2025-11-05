@@ -399,7 +399,7 @@ const unitsDB_skav = {
             { n: "Esfera Mortal", p: 20 }
         ],
         mounts: ["Rata Ogro Quebrantahuesos", "Gran Rata Pestilente", "Palanquin de alimañas"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
        
     },
@@ -425,7 +425,7 @@ const unitsDB_skav = {
             { n: "Fragmento adicional de Piedra bruja", p: 10, costType: 'flat', max: 3 }
         ],
         mounts: ["Palanquin de alimañas", "Campana Gritona"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
        
     },
@@ -472,7 +472,7 @@ const unitsDB_skav = {
             { n: "Arma de Cola", p: 6 }
         ],
         mounts: ["Palanquín de Alimañas", "Gran Rata Pestilente"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 0,
         battleStandard: { name: "Portaestandarte de batalla", cost: 25 }
     },

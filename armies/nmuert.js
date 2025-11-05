@@ -390,7 +390,7 @@ const unitsDB_nmuert = {
             { n: "Convertir en no muerto", p: 15 }
         ],
         mounts: ["Corcel esquelético con barda", "Carruaje de Huesos", "Carro de Cadáveres"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxSkills: { limit: 1, type: 'count' }
     },
     "Señor Tumulario": {

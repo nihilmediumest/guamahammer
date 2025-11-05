@@ -304,7 +304,7 @@ const unitsDB_ogros = {
             { n: "Gnoblar de la suerte (hasta 2)", p: 5 }
         ],
         mounts: ["Bestia de las montañas", "Cuernos pétreos"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },
@@ -327,7 +327,7 @@ const unitsDB_ogros = {
             { n: "Gnoblars marmitones (hasta 3)", p: 5 },
             { n: "Gnoblar de la suerte", p: 5 }
         ],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 

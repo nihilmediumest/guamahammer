@@ -493,7 +493,7 @@ const unitsDB_goblins = {
         perfiles: [ { nombre: "Gran jefe Goblin", stats: { M: 4, HA: 4, HP: 3, F: 4, R: 4, H: 2, I: 5, A: 3, L: 7 } } ],
         options: [ { n: "Arma a dos manos", p: 3 }, { n: "Arma de mano adicional", p: 2 }, { n: "Lanza", p: 1 }, { n: "Arco corto", p: 3 }, { n: "Armadura pesada", p: 3 }, { n: "Escudo", p: 2 } ],
         mounts: ["Lobo Gigante", "Karro de lobos", "Troll Amaeztrado"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 0,
         battleStandard: { name: "Portaestandarte de Batalla", cost: 25 }
     },

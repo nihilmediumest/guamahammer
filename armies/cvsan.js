@@ -301,7 +301,7 @@ const unitsDB_cvsan = {
             { n: "Nivel de Magia 2", p: 35 }
         ],
         mounts: ["Pesadilla con barda", "Dragón Zombi", "Pesadilla Alada"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },
@@ -322,7 +322,7 @@ const unitsDB_cvsan = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Corcel esquelético con barda", "Pesadilla Alada"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },

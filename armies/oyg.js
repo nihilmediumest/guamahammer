@@ -693,7 +693,7 @@ const unitsDB_oyg = {
         reglasEspeciales: "Armado hazta loz piñoz, inmune a psicología, Dizziplina, Loz mejorez",
         perfiles: [ { nombre: "Kaudillo Orco Negro", stats: { M: 4, HA: 7, HP: 3, F: 5, R: 5, H: 3, I: 4, A: 4, L: 10 } } ],
         mounts: ["Jabalí de guerra"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 
@@ -713,7 +713,7 @@ const unitsDB_oyg = {
             { n: "Escudo", p: 3 }
         ],
         mounts: ["Jabalí de guerra", "Serpiente alada"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 
@@ -733,7 +733,7 @@ const unitsDB_oyg = {
             { n: "Escudo", p: 3 }
         ],
         mounts: ["Jabalí de guerra", "Carro de jabalíes", "Serpiente alada"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 
@@ -755,7 +755,7 @@ const unitsDB_oyg = {
             { n: "Escudo", p: 3 }
         ],
         mounts: ["Lobo gigante", "Karro de lobos", "Serpiente alada", "Troll Amacztrado"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 
@@ -775,7 +775,7 @@ const unitsDB_oyg = {
             { n: "Escudo", p: 3 }
         ],
         mounts: ["Araña gigante", "Araña gigantesca", "Serpiente alada", "Troll de río"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 
@@ -799,7 +799,7 @@ const unitsDB_oyg = {
             { n: "Escudo", p: 3 }
         ],
         mounts: ["Garrapato cavernícola gigante", "Serpiente alada", "Troll amacztrado de piedra", "Palanquin de guerra"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 
@@ -818,7 +818,7 @@ const unitsDB_oyg = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Jabalí de guerra", "Serpiente alada"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 
@@ -837,7 +837,7 @@ const unitsDB_oyg = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Jabalí de guerra", "Carro de jabalíes", "Serpiente alada"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 
@@ -856,7 +856,7 @@ const unitsDB_oyg = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Lobo gigante", "Karro de lobos"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 
@@ -876,7 +876,7 @@ const unitsDB_oyg = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Araña gigante", "Araña gigantesca", "Araña Aracnarock"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
 
@@ -896,7 +896,7 @@ const unitsDB_oyg = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Garrapato cavernícola gigante"],
-        maxMagicItems: 2,
+        maxMagicItems: 3,
         maxRelics: 1
     },
     // Adding Heroes to unitsDB_oyg (insert this before the closing brace of unitsDB_oyg)
