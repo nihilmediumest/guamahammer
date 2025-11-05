@@ -674,23 +674,38 @@ function addEventListeners() {
         }
     });
 
-    dom.armyListContainer.addEventListener('click', (e) => {
+
+dom.armyListContainer.addEventListener('click', (e) => {
     const unitEntry = e.target.closest('.unit-entry');
     if (!unitEntry) return;
     const id = parseInt(unitEntry.dataset.id);
-    const action = e.target.dataset.action;
 
-    if (action === 'setGeneral') {
+    // --- START OF FIX ---
+    // This new logic specifically handles clicks on the 'General' checkbox by its class.
+    if (e.target.classList.contains('general-checkbox')) {
+        // If the box is checked, this unit becomes the general.
+        // If it's unchecked, there is no general.
         generalId = e.target.checked ? id : null;
+        
+        // The master UI update will re-render the list, ensuring only one box
+        // can be checked at a time and all rules are re-evaluated.
         updateMasterUI();
-    } else if (action === 'duplicate') {
+        return; // Stop here to prevent the click from also triggering an edit.
+    }
+    // --- END OF FIX ---
+
+    // The rest of the logic for other buttons remains the same.
+    const action = e.target.dataset.action;
+    if (action === 'duplicate') {
         duplicateUnit(id);
     } else if (action === 'remove') {
         removeUnitFromList(id);
     } else if (!e.target.closest('button, input')) {
+        // If the click was not on a button or any input (like our checkbox), start editing the unit.
         startEdit(id);
     }
 });
+
 
     dom.modalCloseBtn.addEventListener('click', () => dom.modal.classList.add('hidden'));
     dom.modalConfirmBtn.addEventListener('click', () => {
