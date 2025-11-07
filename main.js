@@ -84,6 +84,7 @@ function getCurrentAppState() {
         armyList: armyList,
         nextId: nextId,
         armyId: currentArmyData?.FACTION_ID || null,
+        currentArmyData: currentArmyData, // <-- THIS IS THE FIX
         battlePoints: parseInt(dom.battlePointsInput.value),
         armyListName: dom.armyListNameInput.value,
         generalId: generalId,
