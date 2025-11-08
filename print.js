@@ -8,6 +8,15 @@
  * Generates the HTML for a single unit card in the print view.
  */
 function generatePrintUnitHtml(unit, currentArmyData, mainHostFaction = null, chaosHostData = {}) {
+    // Add this at the very start of the function
+    console.log(`=== PRINTING UNIT ===`, {
+        name: unit.name,
+        id: unit.id,
+        isManual: unit.isManual,
+        hasUnitData: !!unit.unitData,
+        faction: unit.faction
+    });
+
     if (unit.isManual) { // This is a child unit
         return `
             <div class="unit-card">
@@ -20,9 +29,9 @@ function generatePrintUnitHtml(unit, currentArmyData, mainHostFaction = null, ch
         `;
     }
 
-    // --- FIX: PROPERLY HANDLE UNIT DATA LOOKUP FOR ALL ARMIES ---
+    // --- DEBUG VERSION: PROPERLY HANDLE UNIT DATA LOOKUP FOR ALL ARMIES ---
     let unitData = null;
-    
+
     if (mainHostFaction && chaosHostData) {
         // For Chaos Host armies, search through all loaded factions
         for (const factionId in chaosHostData) {
@@ -33,10 +42,37 @@ function generatePrintUnitHtml(unit, currentArmyData, mainHostFaction = null, ch
             }
         }
     }
-    
+
     // If not found in Chaos Host or not a Chaos Host army, try the main army data
     if (!unitData && currentArmyData?.unitsDB) {
         unitData = currentArmyData.unitsDB[unit.name];
+    }
+
+    // --- ADD DEBUG LOGS RIGHT HERE ---
+    if (!unitData) {
+        console.warn(`=== PRINT DEBUG - UNIT DATA NOT FOUND ===`);
+        console.warn(`Unit name from army list: "${unit.name}"`);
+        console.warn(`Unit object:`, unit);
+        console.warn(`Current army data FACTION_ID:`, currentArmyData?.FACTION_ID);
+        console.warn(`Available unit keys in unitsDB:`, Object.keys(currentArmyData?.unitsDB || {}));
+        
+        // Check if there are similar keys
+        const similarKeys = Object.keys(currentArmyData?.unitsDB || {}).filter(key => 
+            key.toLowerCase().includes(unit.name.toLowerCase().split(' ')[0])
+        );
+        if (similarKeys.length > 0) {
+            console.warn(`Similar keys found:`, similarKeys);
+        }
+        
+        // Check if this is a manual unit
+        if (unit.isManual) {
+            console.warn(`This is a manual child unit`);
+        }
+        
+        // Check if unit has unitData property
+        if (unit.unitData) {
+            console.warn(`Unit has unitData property:`, unit.unitData);
+        }
     }
 
     // If still no unit data found, create a basic display
@@ -158,7 +194,6 @@ function generatePrintUnitHtml(unit, currentArmyData, mainHostFaction = null, ch
         </div>
     `;
 }
-
 
 /**
  * The main exported function. It takes all necessary data and opens a new window with the print view.
