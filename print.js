@@ -7,7 +7,7 @@
 /**
  * Generates the HTML for a single unit card in the print view.
  */
-function generatePrintUnitHtml(unit, currentArmyData) {
+function generatePrintUnitHtml(unit, currentArmyData, mainHostFaction = null, chaosHostData = {}) {
     if (unit.isManual) { // This is a child unit
         return `
             <div class="unit-card">
@@ -20,23 +20,76 @@ function generatePrintUnitHtml(unit, currentArmyData) {
         `;
     }
 
-    const unitData = currentArmyData.unitsDB[unit.name];
-    if (!unitData) return '';
+    // --- FIX: PROPERLY HANDLE UNIT DATA LOOKUP FOR ALL ARMIES ---
+    let unitData = null;
+    
+    if (mainHostFaction && chaosHostData) {
+        // For Chaos Host armies, search through all loaded factions
+        for (const factionId in chaosHostData) {
+            if (chaosHostData[factionId]?.unitsDB[unit.name]) {
+                unitData = chaosHostData[factionId].unitsDB[unit.name];
+                currentArmyData = chaosHostData[factionId]; // Use the correct army data for this unit
+                break;
+            }
+        }
+    }
+    
+    // If not found in Chaos Host or not a Chaos Host army, try the main army data
+    if (!unitData && currentArmyData?.unitsDB) {
+        unitData = currentArmyData.unitsDB[unit.name];
+    }
+
+    // If still no unit data found, create a basic display
+    if (!unitData) {
+        console.warn(`Unit data not found for: ${unit.name}`);
+        let title;
+        if (unit.label) {
+            title = `"${unit.label}"`;
+        } else if (typeof unit.qty === 'object') {
+            title = `${unit.qty.primary}x ${unit.name}`;
+        } else {
+            title = `${unit.qty > 1 || unit.qty === 0 ? unit.qty + 'x ' : ''}${unit.name}`;
+        }
+
+        const upgradesHtml = unit.displayOptions.length 
+            ? `<ul>${unit.displayOptions.map(opt => `<li>${opt.replace(/<i>/g, '(').replace(/<\/i>/g, ')')}</li>`).join('')}</ul>`
+            : 'Ninguna';
+
+        return `
+            <div class="unit-card">
+                <h4>${title} (${unit.points} pts)</h4>
+                <div class="unit-details">
+                    <p><b>Equipo:</b> Información no disponible</p>
+                    <p><b>Reglas:</b> Información no disponible</p>
+                    <div>
+                        <b>Mejoras:</b>
+                        ${upgradesHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 
     let allProfiles = [...(unitData.perfiles || [])];
     
-    if (unit.selections.mount) {
-        const mountData = currentArmyData.mountsDB[unit.selections.mount.name];
+    if (unit.selections?.mount) {
+        let mountData = null;
+        if (mainHostFaction && chaosHostData[unit.faction]) {
+            mountData = chaosHostData[unit.faction].mountsDB?.[unit.selections.mount.name];
+        } else {
+            mountData = currentArmyData.mountsDB?.[unit.selections.mount.name];
+        }
+        
         if (mountData && mountData.perfiles) {
             allProfiles.push(...mountData.perfiles);
         }
     }
     
-    if(unit.selections.specialAddons) {
+    if(unit.selections?.specialAddons) {
         Object.entries(unit.selections.specialAddons).forEach(([name, qty]) => {
             if (name === 'points' || qty === 0) return;
-            const addonData = unitData.specialAddons.find(a => a.name === name);
-            if(addonData && currentArmyData.specialProfilesDB[addonData.profileKey]) {
+            const addonData = unitData.specialAddons?.find(a => a.name === name);
+            if(addonData && currentArmyData.specialProfilesDB?.[addonData.profileKey]) {
                 const profile = currentArmyData.specialProfilesDB[addonData.profileKey].perfiles[0];
                 allProfiles.push({ ...profile, nombre: `${qty}x ${profile.nombre}` });
             }
@@ -66,10 +119,15 @@ function generatePrintUnitHtml(unit, currentArmyData) {
     }
 
     let rulesText = unitData.reglasEspeciales || '';
-    if (unit.selections.mount) {
-        const mountData = currentArmyData.mountsDB[unit.selections.mount.name];
-        if (mountData.reglasEspeciales) {
-            rulesText += `, ${mountData.reglasEspeciales}`;
+    if (unit.selections?.mount) {
+        let mountData = null;
+        if (mainHostFaction && chaosHostData[unit.faction]) {
+            mountData = chaosHostData[unit.faction].mountsDB?.[unit.selections.mount.name];
+        } else {
+            mountData = currentArmyData.mountsDB?.[unit.selections.mount.name];
+        }
+        if (mountData?.reglasEspeciales) {
+            rulesText += rulesText ? `, ${mountData.reglasEspeciales}` : mountData.reglasEspeciales;
         }
     }
 
@@ -90,8 +148,8 @@ function generatePrintUnitHtml(unit, currentArmyData) {
             </table>` : ''}
             
             <div class="unit-details">
-                <p><b>Equipo:</b> ${unitData.equipo}</p>
-                <p><b>Reglas:</b> ${rulesText}</p>
+                <p><b>Equipo:</b> ${unitData.equipo || 'No especificado'}</p>
+                <p><b>Reglas:</b> ${rulesText || 'No especificado'}</p>
                 <div>
                     <b>Mejoras:</b>
                     ${upgradesHtml}
@@ -105,17 +163,13 @@ function generatePrintUnitHtml(unit, currentArmyData) {
 /**
  * The main exported function. It takes all necessary data and opens a new window with the print view.
  */
-
-// REPLACE this function in print.js
 export function generatePrintView(armyList, currentArmyData, armyListName, totalPoints, battlePoints, focPoints, mainHostFaction, chaosHostData, resolvedArmyList) {
-    // --- THIS IS THE FIX ---
-    // The broken "const resolvedArmyList = getResolvedArmyList();" line has been removed.
-    // The function now receives "resolvedArmyList" as an argument.
     const characters = resolvedArmyList.filter(u => u.resolvedFoc === 'Lord' || u.resolvedFoc === 'Hero');
     const troops = resolvedArmyList.filter(u => u.resolvedFoc !== 'Lord' && u.resolvedFoc !== 'Hero');
-    // --- END OF FIX ---
     
-    const charactersHtml = characters.map(unit => generatePrintUnitHtml(unit, currentArmyData, resolvedArmyList)).join('');
+    const charactersHtml = characters.map(unit => 
+        generatePrintUnitHtml(unit, currentArmyData, mainHostFaction, chaosHostData)
+    ).join('');
 
     const focOrder = ['Core', 'Special', 'Rare'];
     let troopsHtml = '';
@@ -133,7 +187,9 @@ export function generatePrintView(armyList, currentArmyData, armyListName, total
         const unitsInFoc = groupedTroops[foc];
         if (unitsInFoc.length > 0) {
             troopsHtml += `<h2>${currentArmyData.FOC_CONFIG[foc].label.toUpperCase()}</h2>`;
-            troopsHtml += unitsInFoc.map(unit => generatePrintUnitHtml(unit, currentArmyData, resolvedArmyList)).join('');
+            troopsHtml += unitsInFoc.map(unit => 
+                generatePrintUnitHtml(unit, currentArmyData, mainHostFaction, chaosHostData)
+            ).join('');
         }
     });
     
