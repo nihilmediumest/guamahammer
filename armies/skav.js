@@ -32,8 +32,8 @@ const unitsDB_skav = {
         magicBanner: 25,
         specialAddons: [
             { name: "Lanzallamas de Disformidad", points: 25, max: 1, profileKey: "Lanzallamas de Disformidad" },
-            { name: "Mortero de Viento Envenenado", points: 25, max: 1, profileKey: "Mortero de Viento Envenenado" },
-            { name: "Picadora de Condenación", points: 25, max: 1, profileKey: "Picadora de Condenación" },
+            { name: "Mortero de Viento Envenenado", points: 15, max: 1, profileKey: "Mortero de Viento Envenenado" },
+            { name: "Picadora de Condenación", points: 15, max: 1, profileKey: "Picadora de Condenación" },
             { name: "Amerratadora", points: 30, max: 1, profileKey: "Amerratadora" }
         ]
     },
@@ -87,7 +87,7 @@ const unitsDB_skav = {
         champItems: 25,
         specialAddons: [
             { name: "Lanzallamas de Disformidad", points: 25, max: 1, profileKey: "Lanzallamas de Disformidad" },
-            { name: "Mortero de Viento Envenenado", points: 25, max: 1, profileKey: "Mortero de Viento Envenenado" },
+            { name: "Mortero de Viento Envenenado", points: 15, max: 1, profileKey: "Mortero de Viento Envenenado" },
             { name: "Picadora de Condenación", points: 25, max: 1, profileKey: "Picadora de Condenación" },
             { name: "Amerratadora", points: 30, max: 1, profileKey: "Amerratadora" }
         ]
@@ -181,7 +181,7 @@ const unitsDB_skav = {
         champItems: 25,
         specialAddons: [
             { name: "Lanzallamas de Disformidad", points: 25, max: 1, profileKey: "Lanzallamas de Disformidad" },
-            { name: "Mortero de Viento Envenenado", points: 25, max: 1, profileKey: "Mortero de Viento Envenenado" },
+            { name: "Mortero de Viento Envenenado", points: 15, max: 1, profileKey: "Mortero de Viento Envenenado" },
             { name: "Picadora de Condenación", points: 25, max: 1, profileKey: "Picadora de Condenación" },
             { name: "Amerratadora", points: 30, max: 1, profileKey: "Amerratadora" }
         ]
@@ -348,7 +348,7 @@ const unitsDB_skav = {
     "Garrapulta de Plaga": {
         faction: "skav",
         foc: "Rare",
-        points: 80,
+        points: 65,
         min: 1,
         max: 1,
         equipo: "Dos armas de mano (Monjes de Plaga).",

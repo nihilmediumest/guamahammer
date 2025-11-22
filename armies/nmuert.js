@@ -70,7 +70,7 @@ const unitsDB_nmuert = {
         faction: "nmuert",
         foc: "Core",
         warning: "Sólo puedes incluir una unidad de hueste espectral por cada unidad de esqueletos o zombis de tu ejército.",
-        points: 40,
+        points: 36,
         min: 1,
         max: 6,
         equipo: "Arma de mano.",
@@ -235,7 +235,7 @@ const unitsDB_nmuert = {
     "Catapulta Lanzacráneos": {
         faction: "nmuert",
         foc: "Special",
-        points: 80,
+        points: 65,
         min: 1,
         max: 1,
         equipo: "Los esqueletos están equipados con arma de mano y armadura ligera.",

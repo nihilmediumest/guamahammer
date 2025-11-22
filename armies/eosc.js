@@ -165,7 +165,7 @@ const unitsDB_eosc = {
     "Caballeros Gélidos": {
         faction: "eosc",
         foc: "Special",
-        points: 32,
+        points: 31,
         min: 5,
         max: 15,
         equipo: "Arma de mano, Lanza de Caballería, Armadura Pesada y Escudo.",
@@ -200,7 +200,7 @@ const unitsDB_eosc = {
     "Carro Cazador": {
         faction: "eosc",
         foc: "Special",
-        points: 75,
+        points: 70,
         min: 1,
         max: 2,
         equipo: "Los aurigas llevan armas de mano, lanzas y ballestas de repetición. Cuchillas en ruedas.",

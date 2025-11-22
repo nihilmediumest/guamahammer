@@ -5,7 +5,7 @@
 import { commonMagicItemsDB } from '../comun.js';
 // --- FACTION-SPECIFIC DATABASES ---
 
-const unitsDB_goblins = {
+const unitsDB_gobs = {
     // === CORE UNITS ===
     "Goblins": {
         faction: "gobs",
@@ -303,7 +303,7 @@ const unitsDB_goblins = {
     "Lanzapiedroz": {
         faction: "gobs",
         foc: "Special",
-        points: 70,
+        points: 55,
         min: 1,
         max: 1,
         equipo: "Rebanadora y Armadura ligera (dotación).",
@@ -317,7 +317,7 @@ const unitsDB_goblins = {
     "Katapulta Lanzarredez": {
         faction: "gobs",
         foc: "Special",
-        points: 60,
+        points: 45,
         min: 1,
         max: 1,
         equipo: "Arma de mano (dotación).",
@@ -331,7 +331,7 @@ const unitsDB_goblins = {
     "Katapulta de Goblinz Voladorez": {
         faction: "gobs",
         foc: "Special",
-        points: 80,
+        points: 65,
         min: 1,
         max: 1,
         equipo: "Arma de mano y armadura ligera (dotación).",
@@ -566,7 +566,7 @@ const unitsDB_goblins = {
     }
 };
 
-const mountsDB_goblins = {
+const mountsDB_gobs = {
     "Lobo Gigante": { faction: "gobs", points: 12, perfiles: [ { nombre: "Lobo", stats: { M: 9, HA: 3, HP: 0, F: 4, R: 3, H: 1, I: 4, A: 1, L: 6 } } ], reglasEspeciales: "Bestia. Cambia el tipo del jinete a Caballería. Caballería rápida." },
     "Araña Gigante": { faction: "gobs", points: 12, perfiles: [ { nombre: "Araña gigante", stats: { M: 7, HA: 3, HP: 0, F: 3, R: 3, H: 1, I: 4, A: 1, L: 2 } } ], reglasEspeciales: "Bestia. Cambia a Caballería. Caballería rápida, Trepamuros, Cruzar bosques, At. envenenados, Poder de penetración, Cruzar obstáculos, Telarañas (Redes), Piel quitinosa (+2 a TSA del jinete)." },
     "Araña Gigantesca": { faction: "gobs", points: 75, perfiles: [ { nombre: "Araña gigantesca", stats: { M: 7, HA: 4, HP: 0, F: 5, R: 5, H: 4, I: 4, A: "4+1", L: 4 } } ], reglasEspeciales: "Bestia Monstruosa. Cambia a Caballería monstruosa. Cab. rápida, Trepamuros, Cruzar bosques, At. envenenados, Poder penetración, Cruzar obstáculos, Miedo, Telarañas (Redes), Piel quitinosa (+2 a TSA), Mordisco venenoso (Heridas múltiples 1D3)." },
@@ -580,7 +580,7 @@ const mountsDB_goblins = {
     "Araña Aracnarock con Templo": { faction: "gobs", points: 280, perfiles: [ { nombre: "Araña Aracnarock", stats: { M: 7, HA: 4, HP: 3, F: 5, R: 6, H: 8, I: 3, A: "7+1", L: 0 } }, { nombre: "Dotación goblins (8)", stats: { M: 0, HA: 2, HP: 3, F: 3, R: 0, H: 0, I: 3, A: 8, L: 6 } } ], reglasEspeciales: "Monstruo. Ver unidad. Templo Arácnido (+30 pts): El chamán se convierte en Señor del Conocimiento (Pequeño Waaagh!) y hechiceros amigos a 12\" +1 a canalizar." }
 };
 
-const magicItemsDB_goblins = {
+const magicItemsDB_gobs = {
     "Arma Mágica": {
         "Hacha de chafar taponez": { points: 30, faction: "gobs", relic: true, summary: "Arma de mano. +1F, +1A, Poder de penetración. +1F y +1A adicional vs Enanos."},
         "Tranka enorme de Gimlug": { points: 35, faction: "gobs", relic: false, summary: "Garrote (+1F, a dos manos). Heridas múltiples (1D3) y Odio." },
@@ -639,7 +639,7 @@ const magicItemsDB_goblins = {
     }
 };
 
-const specialProfilesDB_goblins = {
+const specialProfilesDB_gobs = {
     "Fanático": {
         perfiles: [{ nombre: "Fanático", stats: { M: "2D6", HA: 0, HP: 0, F: 5, R: 3, H: 1, I: 4, A: 0, L: 6 } }]
     },
@@ -659,9 +659,9 @@ export default {
         Special: { label: "Especiales", min: 0, max: 0.50, color: "bg-blue-500" },
         Rare: { label: "Singulares", min: 0, max: 0.25, color: "bg-purple-600" },
     },
-    unitsDB: unitsDB_goblins,
-    mountsDB: mountsDB_goblins,
-    magicItemsDB: magicItemsDB_goblins,
-    specialProfilesDB: specialProfilesDB_goblins,
+    unitsDB: unitsDB_gobs,
+    mountsDB: mountsDB_gobs,
+    magicItemsDB: magicItemsDB_gobs,
+    specialProfilesDB: specialProfilesDB_gobs,
     armySkillsDB: {}, // Goblins do not have this
 };

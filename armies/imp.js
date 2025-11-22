@@ -296,7 +296,7 @@ const unitsDB_imp = {
     "Mortero": {
         faction: "imp",
         foc: "Special",
-        points: 65,
+        points: 55,
         min: 1,
         max: 1,
         equipo: "La dotación va equipada con arma de mano.",
@@ -399,7 +399,7 @@ const unitsDB_imp = {
     "Batería de Cohetes": {
         faction: "imp",
         foc: "Rare",
-        points: 110,
+        points: 100,
         min: 1,
         max: 1,
         equipo: "La dotación va equipada con arma de mano.",
@@ -413,7 +413,7 @@ const unitsDB_imp = {
         faction: "imp",
         foc: "Rare",
         warning: "0-1. Sólo con al menos un regimiento de halflings.",
-        points: 55,
+        points: 45,
         min: 1,
         max: 1,
         equipo: "La dotación va equipada con arma de mano.",

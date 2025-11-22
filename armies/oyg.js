@@ -478,7 +478,7 @@ const unitsDB_oyg = {
     "Lanzapiedroz": {
         faction: "oyg",
         foc: "Special",
-        points: 70,
+        points: 55,
         min: 1,
         max: 1,
         equipo: "La dotación: Rebanadora y Armadura ligera.",
@@ -572,7 +572,7 @@ const unitsDB_oyg = {
     "Katapulta de Goblinz Voladorez": {
         faction: "oyg",
         foc: "Rare",
-        points: 80,
+        points: 65,
         min: 1,
         max: 1,
         equipo: "La dotación: Arma de mano y Armadura ligera.",

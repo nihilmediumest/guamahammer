@@ -206,7 +206,7 @@ const unitsDB_ogros = {
     "Tirasobras Gnoblar": {
         faction: "ogros",
         foc: "Special",
-        points: 125,
+        points: 110,
         min: 1,
         max: 1,
         equipo: "Los carroñeros gnoblar están equipados con Armas de mano.",
@@ -239,7 +239,7 @@ const unitsDB_ogros = {
     "Escupehierros": {
         faction: "ogros",
         foc: "Rare",
-        points: 160,
+        points: 150,
         min: 1,
         max: 1,
         equipo: "El Sueltafuegos está equipado con Maza ogra y el carroñero gnoblar está equipado con Arma de mano. Cañón de los Titanes de los Cielos.",

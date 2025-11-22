@@ -60,8 +60,8 @@ const unitsDB_aelf = {
         options: [
             { n: "Arcos élficos", p: 2 },
             { n: "Lanzas", p: 2 },
-            { n: "Escudos", p: 1, exclusiveGroup: "escudoBarda" },
-            { n: "Barda de Ithilmar para corceles", p: 2, exclusiveGroup: "escudoBarda" }
+            { n: "Escudos", p: 1},
+            { n: "Barda de Ithilmar para corceles", p: 2}
         ],
         command: { c: { n: "Oficial", p: 6 }, s: { n: "Portaestandarte", p: 6 }, m: { n: "Músico", p: 6 } },
         magicBanner: 25
@@ -215,7 +215,7 @@ const unitsDB_aelf = {
             { nombre: "Corcel élfico", stats: { M: 9, HA: 3, HP: 0, F: 4, R: 3, H: 1, I: 3, A: 1, L: 6 } }
         ],
         command: { c: { n: "Oficial", p: 8 }, s: { n: "Portaestandarte", p: 8 }, m: { n: "Músico", p: 8 } },
-        magicBanner: 999,
+        magicBanner: 100,
         champItems: 25
     },
     "Águilas Gigantes de las Anulii": {

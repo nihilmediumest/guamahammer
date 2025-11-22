@@ -1,5 +1,5 @@
 // ===================================================================================
-// --- GUAMAHAMMER ARMY MODULE: CONDES VAMPIROS LAHMIA ---
+// --- GUAMAHAMMER ARMY MODULE: CONDENS VAMPIROS LAHMIA ---
 // ===================================================================================
 // Last Updated: 2025-10-25 - v4.1
 import { commonMagicItemsDB } from '../comun.js';
@@ -297,7 +297,7 @@ const unitsDB_cvlah = {
             { n: "Nivel de Magia 3", p: 35 }
         ],
         mounts: ["Pesadilla con barda", "Dragón Zombi", "Pesadilla Alada", "Trono del Aquelarre"],
-        maxMagicItems: 3,
+        maxMagicItems: 2,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },
@@ -318,7 +318,7 @@ const unitsDB_cvlah = {
             { n: "Nivel de Magia 4", p: 35 }
         ],
         mounts: ["Corcel esquelético con barda", "Pesadilla Alada"],
-        maxMagicItems: 3,
+        maxMagicItems: 2,
         maxRelics: 1,
         maxSkills: { limit: 2, type: 'count' }
     },

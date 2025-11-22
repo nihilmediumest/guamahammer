@@ -59,7 +59,7 @@ const unitsDB_cvnec = {
         faction: "cvnec",
         foc: "Core",
         warning: "Sólo puedes incluir una unidad de hueste espectral por cada unidad de esqueletos o zombis de tu ejército.",
-        points: 40,
+        points:36,
         min: 1,
         max: 6,
         equipo: "Arma de mano.",

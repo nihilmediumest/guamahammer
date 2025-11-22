@@ -201,7 +201,7 @@ const unitsDB_ecaos = {
     "Lanzacohetes": {
         faction: "ecaos",
         foc: "Rare",
-        points: 90,
+        points: 75,
         min: 1,
         max: 1,
         equipo: "La dotación va equipada con arma de mano y armadura pesada.",
@@ -217,7 +217,7 @@ const unitsDB_ecaos = {
     "Cañón de Magma": {
         faction: "ecaos",
         foc: "Rare",
-        points: 125,
+        points: 110,
         min: 1,
         max: 1,
         equipo: "La dotación va equipada con arma de mano y armadura pesada.",

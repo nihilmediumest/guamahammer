@@ -493,14 +493,15 @@ const magicItemsDB_ginf = {
         "Collar de cabezas de brujo": { points: 35, faction: "ginf", relic: false, summary: "Portahechizos(1D6+1). Lanza un hechizo aleatorio de una tabla." },
         "Ojo Brujo": { points: 30, faction: "ginf", relic: false, summary: "Portahechizos(5). Potenciación a 12\". Efecto aleatorio 1D6 sobre F y R." },
         "Gema de Cristal Oscuro": { points: 25, faction: "ginf", relic: false, summary: "Un solo uso. En una Disfunción, tira 2D6 y elige el resultado." },
-        "Relicario del Mar de las Garras": { points: 20, faction: "ginf", relic: false, summary: "Unidad Inmune a Fuego. Ataques flamígeros -F a la mitad." },
+        "Relicario del Mar de las Garras": { points: 20, faction: "ginf", relic: false, summary: "Portador pero no la unidad Inmune a Fuego. Ataques flamígeros -F a la mitad." },
         "Icono de Fortaleza Inquebrantable": { points: 20, faction: "ginf", relic: false, summary: "Impactos por Carga contra la unidad se resuelven contra el atacante." },
         "Amuleto de piedra de disformidad": { points: 10, faction: "ginf", relic: false, summary: "Un solo uso. Repite una tirada." }
     },
     "Estandarte Mágico": {
+        "Totem del horror": { points: 30, faction: "ginf", relic: true, summary: "Solo Ogros del Caos. +1 al res. combate. Turno que la unidad carga, unidad enemiga reduce bonificador por filas a la mitad (redondeando hacia abajo) hasta final de la fase de combate cuerpo a cuerpo." },
         "Estandarte del Vacio Infinito": { points: 45, faction: "ginf", relic: true, summary: "Objetos mágicos en contacto (amigo/enemigo) se consideran mundanos." },
         "Estandarte de la Gran Bestia del Norte": { points: 40, faction: "ginf", relic: false, summary: "Un solo uso. Amigos a 12\" ganan Odio. Amigos a 24\" reagrupan auto." },
-        "Tótem de la Tormenta": { points: 30, faction: "ginf", relic: false, summary: "Enemigos en contacto I a 0." },
+        "Tótem de la Tormenta": { points: 25, faction: "ginf", relic: false, summary: "Un solo uso. mEnemigos en contacto I a 0." },
         "Tótem de la Muerte": { points: 25, faction: "ginf", relic: false, summary: "Unidad gana Furia asesina y Carga devastadora." },
         "Estandarte de los Vientos del Caos": { points: 25, faction: "ginf", relic: false, summary: "Unidad +1M y Veloz." },
         "Estandarte de Piel de Demonio": { points: 25, faction: "ginf", relic: false, summary: "Unidad gana Odio (Todo el mundo) y es Odiada." },

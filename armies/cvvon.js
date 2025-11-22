@@ -114,7 +114,7 @@ const unitsDB_cvvon = {
         faction: "cvvon",
         foc: "Core",
         warning: "Sólo puedes incluir una unidad de hueste espectral si incluyes al menos un personaje del clan Necrarca en tu ejército.",
-        points: 40,
+        points: 36,
         min: 1,
         max: 6,
         equipo: "Arma de mano.",

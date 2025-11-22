@@ -206,7 +206,7 @@ const unitsDB_merc = {
     "Catapulta": {
         faction: "merc",
         foc: "Special",
-        points: 75,
+        points: 60,
         min: 1,
         max: 1,
         equipo: "Arma de mano y armadura ligera (dotación).",
@@ -300,7 +300,7 @@ const unitsDB_merc = {
     "Condotieros Montados": {
         faction: "merc",
         foc: "Rare",
-        points: 22,
+        points: 21,
         min: 5,
         max: 10,
         equipo: "Arma de mano, Armadura pesada.",
@@ -351,6 +351,7 @@ const unitsDB_merc = {
     // === LORDS ===
     "General Mercenario": {
         faction: "merc",
+        warning:" Si quieres anadir Buenos Contactos y Creyente devoto en el mismo personaje hazlo uno a uno o el army se traba",
         foc: "Lord",
         points: 95,
         min: 1, max: 1,
@@ -379,6 +380,7 @@ const unitsDB_merc = {
     // === HEROES ===
     "Capitán Mercenario": {
         faction: "merc",
+       warning: " Si quieres anadir Buenos Contactos y Creyente devoto en el mismo personaje hazlo uno a uno o el army se traba",
         foc: "Hero",
         points: 45,
         min: 1, max: 1,

@@ -111,10 +111,10 @@ const unitsDB_hbes = {
             { n: "Alabarda", p: 4 },
             { n: "Escudo", p: 2 },
             { n: "Armadura ligera", p: 2 },
-            { n: "Consagración a Khorne", p: 5, subfaction: "Khorne", summary: "Gana Furia Asesina." },
-            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología." },
-            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
+            { n: "Consagración a Khorne", p: 5, subfaction: "Khorne", summary: "Gana Furia Asesina.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1.", exclusiveGroup: "consagrado"}
         ],
         mounts: ["Carro de tuskgors (Beligor)", "Carro de garragors (Beligor)"],
         maxMagicItems: 3,
@@ -133,9 +133,9 @@ const unitsDB_hbes = {
             { n: "Nivel de Magia 2", p: 35 },
             { n: "Arma a dos manos", p: 2 },
             { n: "Arma de mano adicional", p: 1 },
-            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología." },
-            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
+            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1.", exclusiveGroup: "consagrado"}
         ],
         mounts: ["Carro de tuskgors (Chamán)", "Carro de garragors (Chamán)"],
         maxMagicItems: 2,
@@ -154,10 +154,10 @@ const unitsDB_hbes = {
             { n: "Arma de mano adicional", p: 4 },
             { n: "Escudo", p: 2 },
             { n: "Armadura ligera", p: 4 },
-            { n: "Consagración a Khorne", p: 10, subfaction: "Khorne", summary: "Gana Furia Asesina." },
-            { n: "Consagración a Slaanesh", p: 10, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología." },
-            { n: "Consagración a Nurgle", p: 10, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 10, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
+           { n: "Consagración a Khorne", p: 5, subfaction: "Khorne", summary: "Gana Furia Asesina.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1.", exclusiveGroup: "consagrado"}
         ],
         maxMagicItems: 1,
         maxRelics: 0,
@@ -178,10 +178,10 @@ const unitsDB_hbes = {
             { n: "Hachas arrojadizas", p: 2 },
             { n: "Escudo", p: 3 },
             { n: "Armadura ligera", p: 3 },
-            { n: "Consagración a Khorne", p: 8, subfaction: "Khorne", summary: "Gana Furia Asesina." },
-            { n: "Consagración a Slaanesh", p: 8, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología." },
-            { n: "Consagración a Nurgle", p: 8, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 8, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
+           { n: "Consagración a Khorne", p: 5, subfaction: "Khorne", summary: "Gana Furia Asesina.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1.", exclusiveGroup: "consagrado"}
         ],
         maxMagicItems: 2,
         maxRelics: 0,
@@ -206,10 +206,10 @@ const unitsDB_hbes = {
         options: [
             { n: "Escudo y Lanza", p: 1 },
             { n: "Arma a dos manos", p: 2 },
-            { n: "Consagración a Khorne", p: 2, subfaction: "Khorne", summary: "Gana Furia Asesina." },
-            { n: "Consagración a Slaanesh", p: 1, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología." },
-            { n: "Consagración a Nurgle", p: 1, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 1, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
+           { n: "Consagración a Khorne", p: 5, subfaction: "Khorne", summary: "Gana Furia Asesina.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1.", exclusiveGroup: "consagrado"}
         ],
         command: { c: { n: "Oficial", p: 5 }, s: { n: "Portaestandarte", p: 5 }, m: { n: "Músico", p: 5 } },
         magicBanner: 25
@@ -230,10 +230,10 @@ const unitsDB_hbes = {
         options: [
             { n: "Escudo y Lanza", p: 1 },
             { n: "Arma a dos manos", p: 2 },
-            { n: "Consagración a Khorne", p: 1, subfaction: "Khorne", summary: "Gana Furia Asesina." },
-            { n: "Consagración a Slaanesh", p: 1, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología." },
-            { n: "Consagración a Nurgle", p: 1, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 1, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
+           { n: "Consagración a Khorne", p: 5, subfaction: "Khorne", summary: "Gana Furia Asesina.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1.", exclusiveGroup: "consagrado"}
         ],
         command: { c: { n: "Oficial", p: 5 }, s: { n: "Portaestandarte", p: 5 }, m: { n: "Músico", p: 5 } },
         magicBanner: 25
@@ -343,10 +343,10 @@ const unitsDB_hbes = {
             { nombre: "Campeón Saqueagor", stats: { M: 5, HA: 4, HP: 2, F: 3, R: 4, H: 1, I: 3, A: 2, L: 7 } }
         ],
         options: [
-            { n: "Consagración a Khorne", p: 1, subfaction: "Khorne", summary: "Gana Furia Asesina." },
-            { n: "Consagración a Slaanesh", p: 1, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología." },
-            { n: "Consagración a Nurgle", p: 1, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 1, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
+           { n: "Consagración a Khorne", p: 5, subfaction: "Khorne", summary: "Gana Furia Asesina.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1.", exclusiveGroup: "consagrado"}
         ],
         command: { c: { n: "Campeón", p: 5 }, m: { n: "Músico", p: 5 } },
     },
@@ -368,10 +368,10 @@ const unitsDB_hbes = {
         ],
         options: [
             { n: "Alabarda", p: 1 },
-            { n: "Consagración a Khorne", p: 2, subfaction: "Khorne", summary: "Gana Furia Asesina." },
-            { n: "Consagración a Slaanesh", p: 2, subfaction: "Slaanesh", summary: "Mantiene Inmunidad a Psicología (sin coste adicional de puntos)." },
-            { n: "Consagración a Nurgle", p: 2, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 2, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
+            { n: "Consagración a Khorne", p: 5, subfaction: "Khorne", summary: "Gana Furia Asesina.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1.", exclusiveGroup: "consagrado"}
         ],
         command: { c: { n: "Oficial", p: 6 }, s: { n: "Portaestandarte", p: 6 }, m: { n: "Músico", p: 6 } },
         magicBanner: 50,
@@ -395,10 +395,10 @@ const unitsDB_hbes = {
             { n: "Arma de mano adicional", p: 3 },
             { n: "Arma a dos manos", p: 5 },
             { n: "Armadura ligera", p: 2 },
-            { n: "Consagración a Khorne", p: 2, subfaction: "Khorne", summary: "Gana Furia Asesina." },
-            { n: "Consagración a Slaanesh", p: 2, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología." },
-            { n: "Consagración a Nurgle", p: 2, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 2, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
+           { n: "Consagración a Khorne", p: 5, subfaction: "Khorne", summary: "Gana Furia Asesina.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1.", exclusiveGroup: "consagrado"}
         ],
         command: { c: { n: "Oficial", p: 8 }, s: { n: "Portaestandarte", p: 8 }, m: { n: "Músico", p: 8 } },
         magicBanner: 50,
@@ -412,7 +412,7 @@ const unitsDB_hbes = {
         points: 22,
         min: 5,
         max: 15,
-        equipo: "Arma de mano.",
+        equipo: "Armadura ligera, Arma de mano.",
         reglasEspeciales: "Cruzar bosques, Caballería rápida, Piel escamosa (6+), Astados, Corpulentos (PU 2), Ojo de los Dioses (sólo el Oficial), Borrachos.",
         perfiles: [
             { nombre: "Centigor", stats: { M: 8, HA: 4, HP: 3, F: 4, R: 4, H: 2, I: 2, A: 1, L: 7 } },
@@ -424,12 +424,11 @@ const unitsDB_hbes = {
             { n: "Jabalinas", p: 1 },
             { n: "Hachas arrojadizas", p: 1 },
             { n: "Escudo", p: 1 },
-            { n: "Armadura ligera", p: 2 },
             { n: "0-1 Hostigadores", p: 2 },
-            { n: "Consagración a Khorne", p: 2, subfaction: "Khorne", summary: "Gana Furia Asesina." },
-            { n: "Consagración a Slaanesh", p: 2, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología." },
-            { n: "Consagración a Nurgle", p: 2, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 2, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1." }
+            { n: "Consagración a Khorne", p: 5, subfaction: "Khorne", summary: "Gana Furia Asesina.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Slaanesh", p: 5, subfaction: "Slaanesh", summary: "Gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 5, subfaction: "Nurgle", summary: "Gana +1 a la Resistencia.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 5, subfaction: "Tzeentch", summary: "Gana TSE(6+) o mejora la que tenga en +1.", exclusiveGroup: "consagrado"}
         ],
         command: { c: { n: "Oficial", p: 6 }, s: { n: "Portaestandarte", p: 6 }, m: { n: "Músico", p: 6 } },
         magicBanner: 25,
@@ -452,10 +451,10 @@ const unitsDB_hbes = {
             { nombre: "Tuskgors (2)", stats: { M: 7, HA: 3, HP: "-", F: 4, R: "-", H: "-", I: 2, A: 1, L: 4 } }
         ],
         options: [
-            { n: "Consagración a Khorne", p: 3, subfaction: "Khorne", summary: "Tripulación gana Furia Asesina." },
-            { n: "Consagración a Slaanesh", p: 3, subfaction: "Slaanesh", summary: "Tripulación gana Inmunidad a Psicología." },
-            { n: "Consagración a Nurgle", p: 3, subfaction: "Nurgle", summary: "Carro gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 3, subfaction: "Tzeentch", summary: "Carro gana TSE(6+)." }
+            { n: "Consagración a Khorne", p: 3, subfaction: "Khorne", summary: "Tripulación gana Furia Asesina.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Slaanesh", p: 3, subfaction: "Slaanesh", summary: "Tripulación gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 3, subfaction: "Nurgle", summary: "Carro gana +1 a la Resistencia.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 3, subfaction: "Tzeentch", summary: "Carro gana TSE(6+).", exclusiveGroup: "consagrado"}
         ]
     },
     "Engendros del Caos": {
@@ -468,11 +467,11 @@ const unitsDB_hbes = {
         reglasEspeciales: "Indesmoralizables, Miedo, Movimiento aleatorio, Ataques aleatorios, Aura demoníaca (5+ especial contra no mágicos), Hostigadores.",
         perfiles: [{ nombre: "Engendro del Caos", stats: { M: "2D6", HA: 3, HP: 0, F: 5, R: 5, H: 3, I: 3, A: "1D6+1", L: 10 } }],
         options: [
-            { n: "Marca de Khorne", p: 5, subfaction: "Khorne", summary: "Odio (todos), RM(1)" },
-            { n: "Marca de Nurgle", p: 10, subfaction: "Nurgle", summary: "Ataques envenenados, -1 para impactarles" },
-            { n: "Marca de Tzeentch", p: 10, subfaction: "Tzeentch", summary: "+1 a la TSE, ataques flamígeros" },
-            { n: "Marca de Slaanesh", p: 3, subfaction: "Slaanesh", summary: "Poder de penetración" },
-            { n: "Marca del Caos Absoluto", p: 4, subfaction: "Absoluto", summary: "Piel escamosa (5+)" }
+            { n: "Marca de Khorne", p: 5, subfaction: "Khorne", summary: "Odio (todos), RM(1)", exclusiveGroup: "consagrado"},
+            { n: "Marca de Nurgle", p: 10, subfaction: "Nurgle", summary: "Ataques envenenados, -1 para impactarles", exclusiveGroup: "consagrado"},
+            { n: "Marca de Tzeentch", p: 10, subfaction: "Tzeentch", summary: "+1 a la TSE, ataques flamígeros", exclusiveGroup: "consagrado"},
+            { n: "Marca de Slaanesh", p: 3, subfaction: "Slaanesh", summary: "Poder de penetración", exclusiveGroup: "consagrado"},
+            { n: "Marca del Caos Absoluto", p: 4, subfaction: "Absoluto", summary: "Piel escamosa (5+)", exclusiveGroup: "consagrado"}
         ]
     },
     "0-1 Garragors": {
@@ -492,7 +491,7 @@ const unitsDB_hbes = {
     "Cigor": {
         faction: "hbes",
         foc: "Rare",
-        points: 180,
+        points: 170,
         min: 1,
         max: 1,
         equipo: "Arma de mano y piedras enormes.",
@@ -534,10 +533,10 @@ const unitsDB_hbes = {
             { nombre: "Garragor", stats: { M: 7, HA: 3, HP: "-", F: 5, R: "-", H: "-", I: 2, A: 3, L: 6 } }
         ],
         options: [
-            { n: "Consagración a Khorne", p: 3, subfaction: "Khorne", summary: "Tripulación gana Furia Asesina." },
-            { n: "Consagración a Slaanesh", p: 3, subfaction: "Slaanesh", summary: "Tripulación gana Inmunidad a Psicología." },
-            { n: "Consagración a Nurgle", p: 3, subfaction: "Nurgle", summary: "Carro gana +1 a la Resistencia." },
-            { n: "Consagración a Tzeentch", p: 3, subfaction: "Tzeentch", summary: "Carro gana TSE(6+)." }
+            { n: "Consagración a Khorne", p: 3, subfaction: "Khorne", summary: "Tripulación gana Furia Asesina.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Slaanesh", p: 3, subfaction: "Slaanesh", summary: "Tripulación gana Inmunidad a Psicología.", exclusiveGroup: "consagrado"},
+            { n: "Consagración a Nurgle", p: 3, subfaction: "Nurgle", summary: "Carro gana +1 a la Resistencia." , exclusiveGroup: "consagrado"},
+            { n: "Consagración a Tzeentch", p: 3, subfaction: "Tzeentch", summary: "Carro gana TSE(6+).", exclusiveGroup: "consagrado"}
         ]
     },
     "Gigante del Caos": {
